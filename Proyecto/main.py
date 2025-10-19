@@ -16,7 +16,6 @@ sensors = {
     "fuego": {"estado": "Operativo", "bateria": 85, "humo": 10, "ultima_revision": "2025-10-01", "activo": True},
     "termostato": {"temp_actual": 23, "temp_objetivo": 22, "humedad": 40, "hvac": "Enfriando", "activo": True},
     "luz": {"nivel": 75, "consumo": 15, "encendido": True},
-    "humedad": {"humedad": 45, "temperatura": 22, "aire": "Bueno", "deshumidificador": False}
 }
 
 # --- Usuarios de mantenimiento ---
@@ -225,7 +224,6 @@ class VentanaPrincipal(QWidget):
         self.tabs.addTab(self.crear_tab_fuego(), "🔥 Humo")
         self.tabs.addTab(self.crear_tab_termostato(), "🌡️ Termostato")
         self.tabs.addTab(self.crear_tab_luz(), "💡 Luz")
-        self.tabs.addTab(self.crear_tab_humedad(), "💧 Humedad")
         main_layout.addWidget(self.tabs)
 
         # Botón volver (solo director)
@@ -304,21 +302,7 @@ class VentanaPrincipal(QWidget):
         tab.setLayout(l)
         return tab
 
-    # --- Humedad ---
-    def crear_tab_humedad(self):
-        tab = QWidget()
-        l = QVBoxLayout()
-        s = sensors["humedad"]
-        l.addWidget(QLabel(f"Humedad: {s['humedad']}%"))
-        l.addWidget(QLabel(f"Temperatura: {s['temperatura']}°C"))
-        l.addWidget(QLabel(f"Calidad del aire: {s['aire']}"))
-        if self.rol != "estudiante":
-            chk = QCheckBox("Deshumidificador encendido")
-            chk.setChecked(s["deshumidificador"])
-            chk.stateChanged.connect(lambda: self.toggle(chk, "humedad", "deshumidificador"))
-            l.addWidget(chk)
-        tab.setLayout(l)
-        return tab
+
 
     # --- Acciones comunes ---
     def toggle(self, chk, sensor, key):
