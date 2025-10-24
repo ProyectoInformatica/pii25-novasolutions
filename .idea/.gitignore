@@ -1,5 +1,20 @@
-# Default ignored files
+# Ignorar la configuración de IntelliJ IDEA / JetBrains
+.idea/
+*.iml
+
+# Archivos temporales del IDE
 /shelf/
 /workspace.xml
-# Editor-based HTTP Client requests
 /httpRequests/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de compilación o temporales
+/out/
+/build/
+/dist/
+/venv/
+/__pycache__/
+/*.pyc
