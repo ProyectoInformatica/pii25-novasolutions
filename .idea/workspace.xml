@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25c135c1-383c-49b3-b245-8230227b26e3" name="Changes" comment="" />
+    <list default="true" id="25c135c1-383c-49b3-b245-8230227b26e3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/control/controlador_luces.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/control/controlador_rociadores.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/control/controlador_temperatura.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/control/gestor_usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/proyecto informatica.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/proyecto informatica.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,14 +57,14 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/danie/Desktop/proyecto informatica&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/marca/OneDrive/Documentos/pii25-novasolutions&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
+        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
       </set>
     </attachedChunks>
   </component>
