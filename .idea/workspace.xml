@@ -5,13 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25c135c1-383c-49b3-b245-8230227b26e3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/control/controlador_luces.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/control/controlador_rociadores.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/control/controlador_temperatura.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/control/gestor_usuario.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/proyecto informatica.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/proyecto informatica.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_luces.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/basedatos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_rociadores.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_temperatura.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/controlador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/gestor_usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/automatizacion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/gestion_usuarios.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/base_datos.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/inicio.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/climatizador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_director.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/luz.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ventana_principal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/permiso.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/rociador.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/rol.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/interfaz_usuario.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/vista_admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/vista_estudiante.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/vista_mantenimiento.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
