@@ -1,6 +1,33 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-/idea/
+# ----------------------------------------------------------------------
+# Configuraciones del IDE (IntelliJ, PyCharm, WebStorm, etc.)
+# Esto es la causa principal del "desorden" y debe IGNORARSE.
+# ----------------------------------------------------------------------
+.idea/                          # Carpeta de configuración del IDE
+*.iml                           # Archivos de módulo del IDE (e.g., Proyecto.iml)
+*.ipr                           # Archivos de proyecto del IDE
+*.iws                           # Archivos de espacio de trabajo del IDE
+vcs.xml                         # Configuración de control de versiones del IDE
+misc.xml                        # Configuración miscelánea del IDE
+modules.xml                     # Configuración de módulos del IDE
+inspectionProfiles/             # Perfiles de inspección del IDE (si no están en .idea/)
+
+# ----------------------------------------------------------------------
+# Entornos y Dependencias de Python
+# ----------------------------------------------------------------------
+venv/                           # Entornos virtuales de Python
+env/
+.venv/
+bin/                            # Binarios de entornos virtuales (a veces)
+
+# ----------------------------------------------------------------------
+# Archivos de Compilación y Caché de Python
+# ----------------------------------------------------------------------
+__pycache__/                    # Carpeta de caché de bytecodes
+*.pyc                           # Archivos de bytecode compilado
+.pytest_cache/                  # Caché de Pytest
+
+# ----------------------------------------------------------------------
+# Archivos del Sistema Operativo
+# ----------------------------------------------------------------------
+.DS_Store                       # macOS
+Thumbs.db                       # Windows
