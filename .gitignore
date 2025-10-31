@@ -30,4 +30,4 @@ __pycache__/                    # Carpeta de caché de bytecodes
 # Archivos del Sistema Operativo
 # ----------------------------------------------------------------------
 .DS_Store                       # macOS
-Thumbs.db                       # Windows
+Thumbs.db                       # Windows.idea/
