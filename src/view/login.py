@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
 from PySide6.QtCore import Qt
-
+#hola
 class Login(QWidget):
     def __init__(self):
         super().__init__()
