@@ -1,6 +1,8 @@
+# src/view/login.py
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
 from PySide6.QtCore import Qt
-#si
+from src.control.controlador_usuarios import ControladorUsuarios
+
 class Login(QWidget):
     def __init__(self):
         super().__init__()
@@ -8,10 +10,11 @@ class Login(QWidget):
         self.setGeometry(200, 150, 400, 300)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
+        self.ctrl_usuarios = ControladorUsuarios()
+
         layout = QVBoxLayout()
         lbl = QLabel("Ingrese sus credenciales")
         lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        lbl.setStyleSheet("font-size:16px; margin-bottom:10px;")
         layout.addWidget(lbl)
 
         self.usuario = QLineEdit()
@@ -24,23 +27,39 @@ class Login(QWidget):
         layout.addWidget(self.clave)
 
         btn_entrar = QPushButton("Entrar")
-        btn_entrar.setStyleSheet("background-color:#4CAF50; color:white; font-size:16px; padding:10px; border-radius:10px;")
         btn_entrar.clicked.connect(self.intentar_login)
         layout.addWidget(btn_entrar)
 
         btn_volver = QPushButton("Volver")
-        btn_volver.setStyleSheet("background-color:#E67E22; color:white; font-size:16px; padding:10px; border-radius:10px;")
         btn_volver.clicked.connect(self.volver_inicio)
         layout.addWidget(btn_volver)
 
         self.setLayout(layout)
 
     def intentar_login(self):
-        # De momento no hay usuarios definidos
-        QMessageBox.information(self, "Información", "El sistema de usuarios aún no está configurado.")
+        usuario_texto = self.usuario.text()
+        clave_texto = self.clave.text()
+        usuario = self.ctrl_usuarios.autenticar(usuario_texto, clave_texto)
+
+        if not usuario:
+            QMessageBox.warning(self, "Error", "Usuario o contraseña incorrectos.")
+            return
+
+        # Abrir la ventana correspondiente según el rol
+        if usuario.es_director():
+            from src.view.menu_director import MenuDirector
+            self.vista = MenuDirector(usuario)
+        elif usuario.es_mantenimiento():
+            from src.view.ventana_principal import VentanaPrincipal
+            self.vista = VentanaPrincipal(usuario)
+        else:
+            from src.view.ventana_principal import VentanaPrincipal
+            self.vista = VentanaPrincipal(usuario)
+
+        self.vista.show()
+        self.close()
 
     def volver_inicio(self):
-        # Importar aquí para evitar el ciclo circular
         from src.view.inicio import Inicio
         self.inicio = Inicio()
         self.inicio.show()
