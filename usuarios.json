@@ -1,0 +1,17 @@
+[
+    {
+        "nombre_usuario": "director",
+        "contrasena": "1234",
+        "rol": "director"
+    },
+    {
+        "nombre_usuario": "mantenimiento",
+        "contrasena": "abcd",
+        "rol": "mantenimiento"
+    },
+    {
+        "nombre_usuario": "jefe primero",
+        "contrasena": "1234",
+        "rol": "mantenimiento"
+    }
+]
