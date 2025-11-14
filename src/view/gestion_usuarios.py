@@ -3,17 +3,18 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 from src.control.controlador_usuarios import ControladorUsuarios
+from src.model import usuario
 
 
 class GestionUsuariosDirector(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, usuario=None):
+        super().__init__()
+        self.usuario_actual = usuario
         self.setWindowTitle("Gestión de Usuarios (Director)")
         self.setGeometry(250, 200, 500, 400)
         self.setStyleSheet("background-color:#252526; color:white;")
 
         self.ctrl_usuarios = ControladorUsuarios()
-        self.usuario_actual = parent.usuario if parent else None
 
         layout = QVBoxLayout()
 
@@ -37,9 +38,9 @@ class GestionUsuariosDirector(QWidget):
         layout.addWidget(btn_registrar)
 
         # Botón de volver al menú del director
-        btn_volver = QPushButton("Volver al menú del director")
-        btn_volver.clicked.connect(self.volver_menu_director)
-        layout.addWidget(btn_volver)
+        #btn_volver = QPushButton("Volver al menú del director")
+        #btn_volver.clicked.connect(self.volver_menu_director)
+        #layout.addWidget(btn_volver)
 
         # Lista de usuarios actuales
         lbl_lista = QLabel("Usuarios registrados:")
