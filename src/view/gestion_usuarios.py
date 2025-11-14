@@ -51,6 +51,11 @@ class GestionUsuariosDirector(QWidget):
         layout.addWidget(self.lista_usuarios)
         self.actualizar_lista_usuarios()
 
+        btn_eliminar = QPushButton("Eliminar usuario seleccionado")
+        btn_eliminar.setStyleSheet("background-color:#AA3333; color:white;")
+        btn_eliminar.clicked.connect(self.eliminar_usuario)
+        layout.addWidget(btn_eliminar)
+
 
 
         self.setLayout(layout)
@@ -84,3 +89,34 @@ class GestionUsuariosDirector(QWidget):
         self.menu = MenuDirector(self.usuario_actual)
         self.menu.show()
         self.close()
+
+    def eliminar_usuario(self):
+        """Elimina un usuario seleccionado de la lista."""
+        item = self.lista_usuarios.currentItem()
+
+        if not item:
+            QMessageBox.warning(self, "Error", "Seleccione un usuario para eliminar.")
+            return
+
+        # Extraemos solo el nombre antes del rol
+        nombre_usuario = item.text().split(" (")[0]
+
+        # Evitar eliminar al director
+        if nombre_usuario.lower() == "director":
+            QMessageBox.warning(self, "Error", "No se puede eliminar al usuario director.")
+            return
+
+        confirm = QMessageBox.question(
+            self,
+            "Confirmar",
+            f"¿Está seguro de eliminar al usuario '{nombre_usuario}'?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if confirm == QMessageBox.Yes:
+            exito = self.ctrl_usuarios.eliminar_usuario(nombre_usuario)
+            if exito:
+                QMessageBox.information(self, "Éxito", f"Usuario '{nombre_usuario}' eliminado.")
+                self.actualizar_lista_usuarios()
+            else:
+                QMessageBox.warning(self, "Error", "No fue posible eliminar el usuario.")

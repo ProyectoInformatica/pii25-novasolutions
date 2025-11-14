@@ -56,3 +56,12 @@ class ControladorUsuarios:
         self.guardar_usuarios()
         print(f"✅ Usuario '{nombre_usuario}' registrado correctamente.")
         return True
+
+    def eliminar_usuario(self, nombre_usuario):
+        """Elimina un usuario por nombre y guarda el JSON."""
+        for usuario in self.usuarios:
+            if usuario.nombre_usuario == nombre_usuario:
+                self.usuarios.remove(usuario)
+                self.guardar_usuarios()
+                return True
+        return False
