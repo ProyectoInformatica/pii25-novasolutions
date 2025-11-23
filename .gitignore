@@ -3,6 +3,7 @@
 # Esto es la causa principal del "desorden" y debe IGNORARSE.
 # ----------------------------------------------------------------------
 .idea/                          # Carpeta de configuración del IDE
+.vscode/
 *.iml                           # Archivos de módulo del IDE (e.g., Proyecto.iml)
 *.ipr                           # Archivos de proyecto del IDE
 *.iws                           # Archivos de espacio de trabajo del IDE
@@ -15,6 +16,8 @@ inspectionProfiles/             # Perfiles de inspección del IDE (si no están 
 # Entornos y Dependencias de Python
 # ----------------------------------------------------------------------
 venv/                           # Entornos virtuales de Python
+ENV/
+venv.bak/
 env/
 .venv/
 bin/                            # Binarios de entornos virtuales (a veces)
@@ -23,8 +26,17 @@ bin/                            # Binarios de entornos virtuales (a veces)
 # Archivos de Compilación y Caché de Python
 # ----------------------------------------------------------------------
 __pycache__/                    # Carpeta de caché de bytecodes
+*/__pycache__/
 *.pyc                           # Archivos de bytecode compilado
 .pytest_cache/                  # Caché de Pytest
+build/
+dist/
+.eggs/
+*.egg
+*.egg-info/
+*.pyo
+*.py[cod]
+
 
 # ----------------------------------------------------------------------
 # Archivos del Sistema Operativo
