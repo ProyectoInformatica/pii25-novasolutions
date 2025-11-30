@@ -56,8 +56,8 @@ class Login(QWidget):
             from src.view.menu_director import MenuDirector
             self.vista = MenuDirector(usuario)
         elif usuario.es_mantenimiento():
-            from src.view.ventana_principal import VentanaPrincipal
-            self.vista = VentanaPrincipal(usuario)
+            from src.view.menu_mantenimiento import MenuMantenimiento
+            self.vista = MenuMantenimiento(usuario)
         else:
             from src.view.ventana_principal import VentanaPrincipal
             self.vista = VentanaPrincipal(usuario)

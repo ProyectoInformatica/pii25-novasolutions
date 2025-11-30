@@ -28,7 +28,7 @@ class MenuDirector(QWidget):
     def abrir_gestion_usuarios(self):
         """Abre la ventana de gestión de usuarios sin cerrar el menú del director."""
         from src.view.gestion_usuarios import GestionUsuariosDirector
-        self.gestion = GestionUsuariosDirector(parent=self)
+        self.gestion = GestionUsuariosDirector(usuario=self.usuario)
         self.gestion.show()
 
     def cerrar_sesion(self):
