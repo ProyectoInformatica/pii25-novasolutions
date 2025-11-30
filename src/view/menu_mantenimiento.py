@@ -25,8 +25,8 @@ class MenuMantenimiento(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
-        # -------- MODELO + CONTROLADORES ----------
-        # ... (Mantener la inicialización de sensores y actuadores igual) ...
+        # MODELO + CONTROLADORES
+        # Mantener la inicialización de sensores y actuadores igual
         self.sensors = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
@@ -42,7 +42,7 @@ class MenuMantenimiento(QWidget):
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
-        # -------- LAYOUT PRINCIPAL ----------
+        # LAYOUT PRINCIPAL
         layout = QVBoxLayout()
 
         titulo = QLabel(f"Bienvenido Jefe de Mantenimiento: {usuario.nombre_usuario}")
