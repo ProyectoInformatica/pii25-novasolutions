@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/actuador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/actuador.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_director.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_director.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +21,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Daniel-Perezmella" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -34,12 +34,12 @@
     &quot;assignee&quot;: &quot;Sebasmsz&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ProyectoInformatica/pii25-novasolutions.git&quot;,
-    &quot;accountId&quot;: &quot;aac67a9a-20e8-407d-bddf-7bff02bec1fd&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ProyectoInformatica/pii25-novasolutions.git",
+    "accountId": "e852d795-8172-4815-96d4-88206df35ac5"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
@@ -124,7 +124,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
       </set>
     </attachedChunks>
   </component>
