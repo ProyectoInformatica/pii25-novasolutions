@@ -1,7 +1,7 @@
 # src/model/sistema.py
 
 from typing import Optional, List, Dict
-from src.model.sensor import Sensor
+from src.model.sensor import Sensor # La clase Sensor ahora es un QObject
 from src.model.actuador import Actuador
 
 
