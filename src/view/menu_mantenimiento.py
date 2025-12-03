@@ -1,5 +1,7 @@
 # src/view/menu_mantenimiento.py
 
+# src/view/menu_mantenimiento.py
+
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
     QCheckBox, QDoubleSpinBox, QGroupBox, QGridLayout
@@ -7,9 +9,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QTimer, Qt
 
 # Importar las clases necesarias
-from src.model.sensor import Sensor
-from src.model.actuador import Ventilador, Rociador, LuzExterior, Actuador
 from src.model.sistema import Sistema
+from src.model.sensor import Sensor
+from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador
 from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
 
@@ -25,24 +27,28 @@ class MenuMantenimiento(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
-        # -------- MODELO + CONTROLADORES ----------
-        # ... (Mantener la inicialización de sensores y actuadores igual) ...
+        # MODELO + CONTROLADORES
+        # Sensores: Distancia incluida
         self.sensors = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
-            Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file)
+            Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
+            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file)
         ]
+
+        # Actuadores: Ventilador, Rociador, LuzExterior, LuzPasillo
         self.actuators = [
-            Ventilador(id="calentador1"),
+            Ventilador(id="fan1"),
             Rociador(id="rociador1"),
-            LuzExterior(id="luzext1")
+            LuzExterior(id="luzext1"),
+            LuzPasillo(id="luzpasillo1") # <-- NUEVO ACTUADOR
         ]
 
         self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
-        # -------- LAYOUT PRINCIPAL ----------
+        # LAYOUT PRINCIPAL
         layout = QVBoxLayout()
 
         titulo = QLabel(f"Bienvenido Jefe de Mantenimiento: {usuario.nombre_usuario}")
@@ -55,8 +61,8 @@ class MenuMantenimiento(QWidget):
         status_layout = QGridLayout()
         status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
 
-        # Lecturas de Sensores
-        status_layout.addWidget(QLabel("--- SENSORES ---"), 0, 0, 1, 2)
+        # 1. Lecturas de Sensores
+        status_layout.addWidget(QLabel("SENSORES"), 0, 0, 1, 2)
 
         self.lbl_temp = QLabel("Temperatura: -- °C")
         self.lbl_temp.setStyleSheet("font-weight: bold; padding: 5px;")
@@ -71,8 +77,12 @@ class MenuMantenimiento(QWidget):
         status_layout.addWidget(QLabel("💡 Luz"), 3, 0)
         status_layout.addWidget(self.lbl_luz, 3, 1)
 
+        self.lbl_distancia = QLabel("Distancia: -- cm")
+        status_layout.addWidget(QLabel("📏 Distancia"), 4, 0)
+        status_layout.addWidget(self.lbl_distancia, 4, 1)
+
         # 2. Estado de Actuadores
-        status_layout.addWidget(QLabel("--- ACTUADORES ---"), 4, 0, 1, 2)
+        status_layout.addWidget(QLabel("ACTUADORES"), 5, 0, 1, 2)
 
         self.actuator_labels = {}
         for i, actuator in enumerate(self.actuators):
@@ -80,14 +90,14 @@ class MenuMantenimiento(QWidget):
             lbl_state = QLabel("🔴 OFF")
             self.actuator_labels[actuator.id] = lbl_state
 
-            row = i + 5
+            row = i + 6
             status_layout.addWidget(lbl_name, row, 0)
             status_layout.addWidget(lbl_state, row, 1)
 
         status_group.setLayout(status_layout)
         layout.addWidget(status_group)
 
-        # CONTROLES MANUALES
+        # CONTROLES MANUALES (se mantienen igual)
         controls = QGroupBox("Control Manual de Temperatura")
         controls_layout = QHBoxLayout()
 
@@ -138,7 +148,6 @@ class MenuMantenimiento(QWidget):
             self.btn_modo.setText("Cambiar a MANUAL")
 
     def cambiar_manual(self, state):
-        """Activa/Desactiva el control manual de temperatura."""
         enabled = bool(state)
         self.sistema.manual_enabled = enabled
 
@@ -147,26 +156,27 @@ class MenuMantenimiento(QWidget):
             self.btn_modo.setText("Cambiar a AUTO")
 
     def actualizar_target(self, value):
-        """Actualiza el valor objetivo de temperatura en el sistema."""
         self.sistema.manual_target = float(value)
 
     def actualizar(self):
-        """Lee sensores, aplica control y actualiza la UI cada segundo."""
 
         def safe_read(sensor_type):
             try:
                 return self.sistema.get_sensor_reading(sensor_type)
             except RuntimeError:
-                return None  # Devolvemos None si falla la lectura del JSON
+                return None
 
         temp = safe_read("temperature")
         smoke = safe_read("smoke")
         light = safe_read("light")
+        distance = safe_read("distance")
 
         # Actualización de etiquetas
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
         self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
         self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
+        self.lbl_distancia.setText(
+            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
 
         # 2. Aplicar control
         self.ctrl_sistema.update()

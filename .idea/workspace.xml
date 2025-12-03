@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1">
-      <change afterPath="$PROJECT_DIR$/simulation_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/actuador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/actuador.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
@@ -55,10 +55,15 @@
     &quot;Python.run.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Sebastian-Marcano&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;developer&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\danie\Desktop\PROYECTO INFORMATICA\pii25-novasolutions\src\control" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.run">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pii25-novasolutions" />
