@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt
 from src.view.login import Login
-from src.view.ventana_principal import VentanaPrincipal
+
 
 class Inicio(QWidget):
     def __init__(self):
@@ -34,6 +34,9 @@ class Inicio(QWidget):
         self.close()
 
     def ir_estudiante(self):
-        self.main = VentanaPrincipal()
+        from src.view.menu_invitado import MenuInvitado
+        self.main = MenuInvitado()
         self.main.show()
         self.close()
+
+
