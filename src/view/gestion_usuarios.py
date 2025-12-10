@@ -37,11 +37,6 @@ class GestionUsuariosDirector(QWidget):
         btn_registrar.clicked.connect(self.registrar_usuario_mantenimiento)
         layout.addWidget(btn_registrar)
 
-        # Botón de volver al menú del director
-        #btn_volver = QPushButton("Volver al menú del director")
-        #btn_volver.clicked.connect(self.volver_menu_director)
-        #layout.addWidget(btn_volver)
-
         # Lista de usuarios actuales
         lbl_lista = QLabel("Usuarios registrados:")
         lbl_lista.setAlignment(Qt.AlignmentFlag.AlignCenter)

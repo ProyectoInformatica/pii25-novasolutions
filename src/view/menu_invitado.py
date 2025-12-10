@@ -40,7 +40,7 @@ class MenuInvitado(QWidget):
         self.setLayout(layout)
 
         # --- Sensores (MISMO que mantenimiento) ---
-        data_file = "data/json/sensores.json"
+        data_file = "simulation_data.json"
 
         self.sensors = [
             Sensor(id="temperature1", sensor_type="temperature", data_file=data_file),
