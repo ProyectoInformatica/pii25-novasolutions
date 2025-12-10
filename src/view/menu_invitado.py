@@ -12,7 +12,7 @@ class MenuInvitado(QWidget):
     def __init__(self):
         super().__init__()
 
-        # --- Ventana ---
+        # Ventana
         self.setWindowTitle("Modo Invitado – Solo Lectura")
         self.setGeometry(200, 150, 500, 300)
         self.setStyleSheet("background-color:#1E1E1E; color:white; font-size:18px;")
@@ -39,7 +39,7 @@ class MenuInvitado(QWidget):
 
         self.setLayout(layout)
 
-        # --- Sensores (MISMO que mantenimiento) ---
+        # Sensores (MISMO que mantenimiento)
         data_file = "simulation_data.json"
 
         self.sensors = [

@@ -57,7 +57,7 @@ class MenuDirector(QWidget):
         titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
         layout.addWidget(titulo)
 
-        # 1. BOTONES DE GESTIÓN
+        # BOTONES DE GESTIÓN
         gestion_group = QGroupBox("Opciones de Dirección")
         gestion_layout = QHBoxLayout()
         gestion_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
@@ -73,7 +73,7 @@ class MenuDirector(QWidget):
         layout.addWidget(gestion_group)
 
 
-        # 2. SECCIÓN DE MONITOREO
+        # SECCIÓN DE MONITOREO
         status_group = QGroupBox("Estado del Sistema en Tiempo Real")
         status_layout = QGridLayout()
         status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
