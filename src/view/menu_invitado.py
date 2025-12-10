@@ -47,11 +47,11 @@ class MenuInvitado(QWidget):
             Sensor(id="airQ1", sensor_type="airQuality", data_file=data_file),
         ]
 
-        # --- Sistema y controlador ---
+        # Sistema y controlador
         self.sistema = Sistema(sensors=self.sensors)
         self.ctrl = Controlador_Sensores(self.sistema.sensors)
 
-        # --- Timer de actualización ---
+        # Timer de actualización
         self.timer = QTimer()
         self.timer.timeout.connect(self.actualizar)
         self.timer.start(1000)

@@ -154,7 +154,6 @@ class MenuMantenimiento(QWidget):
         self.timer.start()
 
     # Funciones
-
     def cambiar_modo(self):
         if self.sistema.mode == "auto":
             self.sistema.set_mode("manual")

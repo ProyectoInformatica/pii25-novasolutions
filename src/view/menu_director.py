@@ -1,5 +1,3 @@
-# src/view/menu_director.py (Sustituye a la implementación anterior del MenuDirector)
-
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
     QGroupBox, QGridLayout
@@ -146,14 +144,14 @@ class MenuDirector(QWidget):
         light = safe_read("light")
         distance = safe_read("distance")
 
-        # 1. Actualizacion de etiquetas de sensores
+        # Actualizacion de etiquetas de sensores
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
         self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
         self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
         self.lbl_distancia.setText(
             f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
 
-        # 2. Actualizar el estado de los actuadores en la UI
+        # Actualizar el estado de los actuadores en la UI
         for actuator in self.actuators:
             label = self.actuator_labels.get(actuator.id)
             if label:
