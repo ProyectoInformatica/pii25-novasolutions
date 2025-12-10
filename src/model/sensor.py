@@ -1,7 +1,5 @@
 # src/model/sensor.py
 
-# src/model/sensor.py
-
 from PySide6.QtCore import QObject, Signal, QTimer
 from pathlib import Path
 import json
@@ -17,7 +15,8 @@ DEFAULT_SIM_DATA = {
     "temperature": 22.0,  # Temperatura segura
     "smoke": 0.0,         # Sin humo
     "light": 500.0,       # Luz media
-    "distance": 100.0     # NUEVO: Distancia por defecto (cm)
+    "distance": 100.0,    # NUEVO: Distancia por defecto (cm)
+    "airQuality": 15.0    # Calidad de aire
 }
 
 
