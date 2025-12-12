@@ -1,20 +1,20 @@
-# src/view/menu_mantenimiento.py
-
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
     QCheckBox, QDoubleSpinBox, QGroupBox, QGridLayout
 )
 from PySide6.QtCore import QTimer, Qt
+from typing import List, Dict
 
 from src.model.sistema import Sistema
 from src.model.sensor import Sensor
 from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
+from src.model.usuario import Usuario
 
 
 class MenuMantenimiento(QWidget):
-    def __init__(self, usuario, sensor_data_file="data/json/sensores.json"):
+    def __init__(self, usuario: Usuario, sensor_data_file="simulation_data.json"):
         super().__init__()
 
         self.usuario = usuario
@@ -27,7 +27,7 @@ class MenuMantenimiento(QWidget):
         # ==========================
         #   CREACIÓN DE SENSORES
         # ==========================
-        self.sensors = [
+        self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
             Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
@@ -49,6 +49,12 @@ class MenuMantenimiento(QWidget):
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
+        # 🔔 CONEXIÓN DE SEÑALES ESPECÍFICAS (AirQuality a texto)
+        for s in self.sensors:
+            if s.type == "airQuality":
+                s.air_quality_text_actualizada.connect(self.update_air_quality_text)
+                break
+
         # ==========================
         #   LAYOUT PRINCIPAL
         # ==========================
@@ -60,7 +66,7 @@ class MenuMantenimiento(QWidget):
         layout.addWidget(titulo)
 
         # ==========================
-        #      GRUPO SENSORES
+        #      GRUPO SENSORES/ACTUADORES
         # ==========================
         status_group = QGroupBox("Estado del Sistema")
         status_group.setStyleSheet(
@@ -68,16 +74,15 @@ class MenuMantenimiento(QWidget):
         )
         status_layout = QGridLayout()
 
-        # ---- Creamos DOS columnas (la solución REAL) ----
+        # ====== SENSORES (Layouts para dos columnas) ======
         sensores_left = QVBoxLayout()
         sensores_right = QVBoxLayout()
 
-        # ====== SENSORES ======
         self.lbl_temp = QLabel("Temperatura: -- °C")
         self.lbl_humo = QLabel("Nivel de Humo: --")
         self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
         self.lbl_distancia = QLabel("Distancia: -- cm")
-        self.lbl_airq = QLabel("Calidad del Aire: --")
+        self.lbl_airq = QLabel("Calidad del Aire: Esperando lectura...")
 
         # Estilo uniforme de valores
         for lbl in [self.lbl_temp, self.lbl_humo, self.lbl_luz, self.lbl_distancia, self.lbl_airq]:
@@ -96,19 +101,16 @@ class MenuMantenimiento(QWidget):
         sensores_right.addWidget(self.lbl_humo)
         sensores_right.addWidget(self.lbl_luz)
         sensores_right.addWidget(self.lbl_distancia)
-        sensores_right.addWidget(self.lbl_airq)
+        sensores_right.addWidget(self.lbl_airq)  # Este valor se llenará con texto.
 
-        # Insertar columnas al grid
         status_layout.addLayout(sensores_left, 0, 0)
         status_layout.addLayout(sensores_right, 0, 1)
 
-        # ==========================
-        #      GRUPO ACTUADORES
-        # ==========================
+        # ====== ACTUADORES (Layouts para dos columnas) ======
         actuadores_left = QVBoxLayout()
         actuadores_right = QVBoxLayout()
 
-        self.actuator_labels = {}
+        self.actuator_labels: Dict[str, QLabel] = {}
 
         for actuator in self.actuators:
             name = QLabel(f"{actuator.name}:")
@@ -122,7 +124,6 @@ class MenuMantenimiento(QWidget):
 
             self.actuator_labels[actuator.id] = estado
 
-        # Añadimos actuadores debajo de sensores
         status_layout.addLayout(actuadores_left, 1, 0)
         status_layout.addLayout(actuadores_right, 1, 1)
 
@@ -132,14 +133,16 @@ class MenuMantenimiento(QWidget):
         # ==========================
         #   CONTROL MANUAL
         # ==========================
-        controls = QGroupBox("Control Manual de Temperatura")
+        controls = QGroupBox("Control de Temperatura")
         controls_layout = QHBoxLayout()
 
         self.btn_modo = QPushButton("Cambiar a MANUAL")
         self.btn_modo.clicked.connect(self.cambiar_modo)
         controls_layout.addWidget(self.btn_modo)
 
-        self.cb_manual = QCheckBox("Control manual activado")
+        self.cb_manual = QCheckBox("Habilitar control manual (Ventilador)")
+        self.cb_manual.setChecked(False)
+        self.cb_manual.setEnabled(False)  # Deshabilitado si el modo es AUTO
         self.cb_manual.stateChanged.connect(self.cambiar_manual)
         controls_layout.addWidget(self.cb_manual)
 
@@ -147,6 +150,7 @@ class MenuMantenimiento(QWidget):
         self.spin_target.setRange(5.0, 40.0)
         self.spin_target.setValue(self.sistema.manual_target)
         self.spin_target.setSingleStep(0.1)
+        self.spin_target.setEnabled(False)  # Deshabilitado si el modo es AUTO
         self.spin_target.valueChanged.connect(self.actualizar_target)
 
         controls_layout.addWidget(QLabel("Objetivo (°C):"))
@@ -154,6 +158,8 @@ class MenuMantenimiento(QWidget):
 
         controls.setLayout(controls_layout)
         layout.addWidget(controls)
+
+        self._update_mode_ui(self.sistema.mode)  # Inicializar la UI
 
         # ==========================
         #   BOTÓN SALIR
@@ -173,32 +179,60 @@ class MenuMantenimiento(QWidget):
         self.timer.start()
 
     # -----------------------------------
-    #   FUNCIONES DE CONTROL
+    #   FUNCIONES DE CONTROL Y UI
     # -----------------------------------
 
+    def _update_mode_ui(self, mode: str):
+        """Actualiza el estado visual de los controles de modo."""
+        is_manual = mode == "manual"
+
+        self.btn_modo.setText("Cambiar a AUTO" if is_manual else "Cambiar a MANUAL")
+        self.cb_manual.setEnabled(is_manual)
+        self.spin_target.setEnabled(is_manual and self.cb_manual.isChecked())
+
     def cambiar_modo(self):
+        # Cambia el modo en el modelo
         if self.sistema.mode == "auto":
-            self.sistema.set_mode("manual")
-            self.btn_modo.setText("Cambiar a AUTO")
+            self.sistema.mode = "manual"
+            # Si cambiamos a manual, el control se activa por defecto
+            self.sistema.manual_enabled = True
+            self.cb_manual.setChecked(True)
         else:
-            self.sistema.set_mode("auto")
+            self.sistema.mode = "auto"
+            self.sistema.manual_enabled = False  # Desactivar control en modo AUTO
             self.cb_manual.setChecked(False)
-            self.btn_modo.setText("Cambiar a MANUAL")
+
+        self._update_mode_ui(self.sistema.mode)
 
     def cambiar_manual(self, state):
+        """Alterna si el controlador_sistema debe actuar en modo manual."""
         enabled = bool(state)
         self.sistema.manual_enabled = enabled
-        if enabled:
-            self.sistema.set_mode("manual")
-            self.btn_modo.setText("Cambiar a AUTO")
+
+        # Habilitar/Deshabilitar el spinbox solo si el control manual está activado y estamos en modo 'manual'
+        self.spin_target.setEnabled(enabled and self.sistema.mode == "manual")
 
     def actualizar_target(self, value):
+        """Actualiza la temperatura objetivo en el modelo."""
         self.sistema.manual_target = float(value)
 
+    def update_air_quality_text(self, text_value: str):
+        """Método llamado por la señal air_quality_text_actualizada (desde sensor.py)."""
+        self.lbl_airq.setText(f"Calidad del Aire: {text_value}")
+
     def actualizar(self):
+        """Método llamado por el QTimer."""
+
+        # 1. Ejecutar el controlador del sistema
+        self.ctrl_sistema.update()
 
         def safe_read(tipo):
             try:
+                # La lectura de AirQuality NO se usa aquí, se usa la señal asíncrona.
+                if tipo == "airQuality":
+                    return None
+
+                # Lee el valor numérico de los demás sensores
                 return self.sistema.get_sensor_reading(tipo)
             except RuntimeError:
                 return None
@@ -207,30 +241,22 @@ class MenuMantenimiento(QWidget):
         humo = safe_read("smoke")
         luz = safe_read("light")
         dist = safe_read("distance")
-        air = safe_read("airQuality")
 
+        # 2. Actualización de etiquetas de sensores (Numéricos)
         self.lbl_temp.setText(
             f"Temperatura: {temp:.2f} °C" if temp is not None else "⚠️ ERROR"
         )
-
         self.lbl_humo.setText(
             f"Nivel de Humo: {humo:.2f}" if humo is not None else "⚠️ ERROR"
         )
-
         self.lbl_luz.setText(
             f"Nivel de Luz: {luz:.2f} Lux" if luz is not None else "⚠️ ERROR"
         )
-
         self.lbl_distancia.setText(
             f"Distancia: {dist:.2f} cm" if dist is not None else "⚠️ ERROR"
         )
 
-        self.lbl_airq.setText(
-            f"Calidad del Aire: {air:.2f}" if air is not None else "⚠️ ERROR"
-        )
-
-        self.ctrl_sistema.update()
-
+        # 3. Actualización de etiquetas de actuadores
         for actuator in self.actuators:
             lbl = self.actuator_labels[actuator.id]
             lbl.setText("🟢 ON" if actuator.state else "🔴 OFF")

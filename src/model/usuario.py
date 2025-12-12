@@ -1,5 +1,5 @@
 class Usuario:
-    #Representa cualquier usuario que quiera entrar al sistema.
+    """Representa cualquier usuario que quiera entrar al sistema."""
 
     def __init__(self, nombre_usuario, contrasena, rol):
         self.nombre_usuario = nombre_usuario.lower().strip()
@@ -7,7 +7,7 @@ class Usuario:
         self.rol = rol.lower().strip()
 
     def verificar_credenciales(self, usuario, clave):
-        #Comprueba si las credenciales son verdaderas.
+        """Comprueba si las credenciales son verdaderas."""
         return self.nombre_usuario == usuario.lower().strip() and self.contrasena == clave.strip()
 
     def es_director(self):

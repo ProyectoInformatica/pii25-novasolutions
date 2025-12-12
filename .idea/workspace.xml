@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c1b18488-d287-4a31-a94d-0c24a7923c8a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/json/sensores.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/json/sensores.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_sensores.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sensores.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_usuarios.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/actuador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/actuador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/gestion_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/gestion_usuarios.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/inicio.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/inicio.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_director.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_director.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_invitado.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_invitado.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/ventana_principal.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ventana_principal.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.inicio.executor": "Run",
+    "Python.run.executor": "Run",
+    "Python.sensor.executor": "Run",
+    "git-widget-placeholder": "developer"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+</project>

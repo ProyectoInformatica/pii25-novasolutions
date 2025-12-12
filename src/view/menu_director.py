@@ -1,45 +1,41 @@
-# src/view/menu_director.py (Sustituye a la implementación anterior del MenuDirector)
-
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
     QGroupBox, QGridLayout
 )
 from PySide6.QtCore import QTimer, Qt
+from typing import List
 
-# Importar las clases necesarias del modelo y control
-# ASUME que estas rutas son correctas y accesibles desde este archivo
 from src.model.sistema import Sistema
 from src.model.sensor import Sensor
-from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador
+from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
+from src.model.usuario import Usuario
+from src.view.gestion_usuarios import GestionUsuariosDirector  # Importado
 
-
-# from src.view.gestion_usuarios import GestionUsuariosDirector # Necesario para el botón de gestión
-# from src.view.inicio import Inicio # Necesario para cerrar sesión
 
 class MenuDirector(QWidget):
-    def __init__(self, usuario, sensor_data_file="simulation_data.json"):
+    def __init__(self, usuario: Usuario, sensor_data_file="simulation_data.json"):
         super().__init__()
 
         self.usuario = usuario
         self.sensor_data_file = sensor_data_file
 
         self.setWindowTitle("Panel del Director")
-        # Ajustamos el tamaño para el contenido de monitoreo + gestión
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
         # ----------------------------------------
-        # MODELO + CONTROLADORES (IDÉNTICO a Mantenimiento para la lectura de datos)
+        # MODELO + CONTROLADORES
         # ----------------------------------------
 
-        # Sensores: Distancia incluida
-        self.sensors = [
+        # Sensores: Distancia y AirQuality incluidos
+        self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
             Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
-            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file)
+            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file),
+            Sensor(id="airQ1", sensor_type="airQuality", data_file=self.sensor_data_file)
         ]
 
         # Actuadores
@@ -54,8 +50,13 @@ class MenuDirector(QWidget):
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
-        # LAYOUT PRINCIPAL
+        # 🔔 CONEXIÓN DE SEÑALES ESPECÍFICAS
+        for s in self.sensors:
+            if s.type == "airQuality":
+                s.air_quality_text_actualizada.connect(self.update_air_quality_text)
+                break
 
+        # LAYOUT PRINCIPAL
         layout = QVBoxLayout()
 
         titulo = QLabel(f"Bienvenido Director General: {usuario.nombre_usuario}")
@@ -73,11 +74,11 @@ class MenuDirector(QWidget):
         gestion_layout.addWidget(btn_usuarios)
 
         btn_reportes = QPushButton("📈 Ver Reportes Históricos")
+        btn_reportes.setEnabled(False)  # Función no implementada
         gestion_layout.addWidget(btn_reportes)
 
         gestion_group.setLayout(gestion_layout)
         layout.addWidget(gestion_group)
-
 
         # 2. SECCIÓN DE MONITOREO
 
@@ -105,8 +106,13 @@ class MenuDirector(QWidget):
         status_layout.addWidget(QLabel("📏 Distancia"), 4, 0)
         status_layout.addWidget(self.lbl_distancia, 4, 1)
 
+        self.lbl_airq = QLabel("Calidad del Aire: Esperando lectura...")
+        self.lbl_airq.setStyleSheet("font-weight: bold; padding: 5px; color: #7FDBFF;")
+        status_layout.addWidget(QLabel("🌬️ Calidad Aire"), 5, 0)
+        status_layout.addWidget(self.lbl_airq, 5, 1)
+
         # Estado de Actuadores
-        status_layout.addWidget(QLabel("### ⚙️ ESTADO DE ACTUADORES"), 5, 0, 1, 2)
+        status_layout.addWidget(QLabel("### ⚙️ ESTADO DE ACTUADORES"), 6, 0, 1, 2)
 
         self.actuator_labels = {}
         for i, actuator in enumerate(self.actuators):
@@ -114,7 +120,7 @@ class MenuDirector(QWidget):
             lbl_state = QLabel("🔴 OFF")
             self.actuator_labels[actuator.id] = lbl_state
 
-            row = i + 6
+            row = i + 7
             status_layout.addWidget(lbl_name, row, 0)
             status_layout.addWidget(lbl_state, row, 1)
 
@@ -128,7 +134,6 @@ class MenuDirector(QWidget):
 
         self.setLayout(layout)
 
-
         # TIMER DE ACTUALIZACIÓN
 
         self.timer = QTimer(self)
@@ -136,8 +141,11 @@ class MenuDirector(QWidget):
         self.timer.timeout.connect(self.actualizar)
         self.timer.start()
 
-
     # MÉTODOS
+
+    def update_air_quality_text(self, text_value: str):
+        """Método llamado por la señal air_quality_text_actualizada (desde sensor.py)."""
+        self.lbl_airq.setText(f"Calidad del Aire: {text_value}")
 
     def actualizar(self):
 
@@ -146,6 +154,9 @@ class MenuDirector(QWidget):
 
         def safe_read(sensor_type):
             try:
+                # Evitar leer airQuality ya que se actualiza por señal
+                if sensor_type == "airQuality":
+                    return None
                 return self.sistema.get_sensor_reading(sensor_type)
             except RuntimeError:
                 return None
@@ -170,13 +181,10 @@ class MenuDirector(QWidget):
                 label.setText(state_text)
 
     def abrir_gestion_usuarios(self):
-        # Se necesita importar la clase 'GestionUsuariosDirector'
-        from src.view.gestion_usuarios import GestionUsuariosDirector
         self.gestion = GestionUsuariosDirector(usuario=self.usuario)
         self.gestion.show()
 
     def cerrar_sesion(self):
-        # Se necesita importar la clase 'Inicio'
         from src.view.inicio import Inicio
         self.inicio = Inicio()
         self.inicio.show()

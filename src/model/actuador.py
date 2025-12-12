@@ -1,7 +1,3 @@
-# src/model/actuador.py
-
-# src/model/actuador.py
-
 from typing import Optional
 
 class Actuador:
@@ -15,14 +11,16 @@ class Actuador:
         return self._state
 
     def on(self):
-        self._state = True
-        # Lógica real de encendido (por ahora solo simulación)
-        print(f"[Actuador] {self.name} -> ON")
+        if not self._state:
+            self._state = True
+            # Lógica real de encendido (por ahora solo simulación)
+            print(f"[Actuador] {self.name} -> ON")
 
     def off(self):
-        self._state = False
-        # Lógica real de apagado (por ahora solo simulación)
-        print(f"[Actuador] {self.name} -> OFF")
+        if self._state:
+            self._state = False
+            # Lógica real de apagado (por ahora solo simulación)
+            print(f"[Actuador] {self.name} -> OFF")
 
     # Mantener set_state para compatibilidad con Controlador_Sistema
     def set_state(self, on: bool):
@@ -35,7 +33,7 @@ class Actuador:
         return f"<Actuador id={self.id}, name={self.name}, state={'ON' if self.state else 'OFF'}>"
 
 class Ventilador(Actuador):
-    def __init__(self, id: str = "fan1"): # Cambiado a fan1 por claridad
+    def __init__(self, id: str = "fan1"):
         super().__init__(id, name="Ventilador")
 
 
@@ -45,7 +43,7 @@ class Rociador(Actuador):
 
 
 class LuzExterior(Actuador):
-    def __init__(self, id: str = "lightext1"): # Cambiado a lightext1
+    def __init__(self, id: str = "lightext1"):
         super().__init__(id, name="Luz Exterior")
 
 class LuzPasillo(Actuador):

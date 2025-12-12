@@ -3,11 +3,11 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 from src.control.controlador_usuarios import ControladorUsuarios
-from src.model import usuario
+from src.model.usuario import Usuario
 
 
 class GestionUsuariosDirector(QWidget):
-    def __init__(self, usuario=None):
+    def __init__(self, usuario: Usuario = None):
         super().__init__()
         self.usuario_actual = usuario
         self.setWindowTitle("Gestión de Usuarios (Director)")
@@ -20,6 +20,7 @@ class GestionUsuariosDirector(QWidget):
 
         titulo = QLabel("Registrar nuevo usuario de mantenimiento")
         titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        titulo.setStyleSheet("font-size: 16px; margin-bottom: 10px;")
         layout.addWidget(titulo)
 
         # Campos de entrada
@@ -34,20 +35,18 @@ class GestionUsuariosDirector(QWidget):
 
         # Botón para registrar
         btn_registrar = QPushButton("Registrar usuario de mantenimiento")
+        btn_registrar.setStyleSheet("background-color:#3489e2; color:white;")
         btn_registrar.clicked.connect(self.registrar_usuario_mantenimiento)
         layout.addWidget(btn_registrar)
-
-        # Botón de volver al menú del director
-        #btn_volver = QPushButton("Volver al menú del director")
-        #btn_volver.clicked.connect(self.volver_menu_director)
-        #layout.addWidget(btn_volver)
 
         # Lista de usuarios actuales
         lbl_lista = QLabel("Usuarios registrados:")
         lbl_lista.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        lbl_lista.setStyleSheet("margin-top: 15px;")
         layout.addWidget(lbl_lista)
 
         self.lista_usuarios = QListWidget()
+        self.lista_usuarios.setStyleSheet("background-color:#1E1E1E; color:white;")
         layout.addWidget(self.lista_usuarios)
         self.actualizar_lista_usuarios()
 
@@ -55,8 +54,6 @@ class GestionUsuariosDirector(QWidget):
         btn_eliminar.setStyleSheet("background-color:#AA3333; color:white;")
         btn_eliminar.clicked.connect(self.eliminar_usuario)
         layout.addWidget(btn_eliminar)
-
-
 
         self.setLayout(layout)
 
@@ -82,13 +79,6 @@ class GestionUsuariosDirector(QWidget):
         self.lista_usuarios.clear()
         for usuario in self.ctrl_usuarios.usuarios:
             self.lista_usuarios.addItem(f"{usuario.nombre_usuario} ({usuario.rol})")
-
-    def volver_menu_director(self):
-        """Vuelve al panel del director."""
-        from src.view.menu_director import MenuDirector
-        self.menu = MenuDirector(self.usuario_actual)
-        self.menu.show()
-        self.close()
 
     def eliminar_usuario(self):
         """Elimina un usuario seleccionado de la lista."""
