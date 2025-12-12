@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="c1b18488-d287-4a31-a94d-0c24a7923c8a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" afterDir="false" />
@@ -22,12 +23,23 @@
       <change beforePath="$PROJECT_DIR$/src/view/menu_invitado.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_invitado.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/ventana_principal.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ventana_principal.py" afterDir="false" />
+=======
+    <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/actuador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/actuador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_director.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_director.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_invitado.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_invitado.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -42,4 +54,154 @@
   <component name="TaskManager">
     <servers />
   </component>
+=======
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Sebastian-Subra" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Sebasmsz&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ProyectoInformatica/pii25-novasolutions.git&quot;,
+    &quot;accountId&quot;: &quot;290ce86f-c954-45ca-adf8-4dad7b17b02a&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="34q3MsznoPHR1rXULTVDZ3TE3aA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.main.executor": "Run",
+    "Python.run.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Sebastian-Subra",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\danie\Desktop\PROYECTO INFORMATICA\pii25-novasolutions\src\control" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.run">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pii25-novasolutions" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pii25-novasolutions" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.run" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.run" />
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="" />
+      <created>1761927234637</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761927234637</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Registro de usuarios V1">
+      <option name="closed" value="true" />
+      <created>1762965783133</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762965783133</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Registro de usuarios V1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Registro de usuarios V1" />
+  </component>
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
 </project>

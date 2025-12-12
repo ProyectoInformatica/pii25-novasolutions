@@ -13,6 +13,11 @@ from src.control.controlador_sensores import Controlador_Sensores
 from src.model.usuario import Usuario
 from src.view.gestion_usuarios import GestionUsuariosDirector  # Importado
 
+<<<<<<< HEAD
+=======
+# from src.view.gestion_usuarios import GestionUsuariosDirector # Necesario para el botón de gestión
+# from src.view.inicio import Inicio # Necesario para cerrar sesión
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
 
 class MenuDirector(QWidget):
     def __init__(self, usuario: Usuario, sensor_data_file="simulation_data.json"):
@@ -25,12 +30,17 @@ class MenuDirector(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
+<<<<<<< HEAD
         # ----------------------------------------
         # MODELO + CONTROLADORES
         # ----------------------------------------
 
         # Sensores: Distancia y AirQuality incluidos
         self.sensors: List[Sensor] = [
+=======
+        # Sensores
+        self.sensors = [
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
             Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
@@ -50,12 +60,15 @@ class MenuDirector(QWidget):
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
+<<<<<<< HEAD
         # 🔔 CONEXIÓN DE SEÑALES ESPECÍFICAS
         for s in self.sensors:
             if s.type == "airQuality":
                 s.air_quality_text_actualizada.connect(self.update_air_quality_text)
                 break
 
+=======
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
         # LAYOUT PRINCIPAL
         layout = QVBoxLayout()
 
@@ -64,7 +77,7 @@ class MenuDirector(QWidget):
         titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
         layout.addWidget(titulo)
 
-        # 1. BOTONES DE GESTIÓN
+        # BOTONES DE GESTIÓN
         gestion_group = QGroupBox("Opciones de Dirección")
         gestion_layout = QHBoxLayout()
         gestion_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
@@ -80,8 +93,13 @@ class MenuDirector(QWidget):
         gestion_group.setLayout(gestion_layout)
         layout.addWidget(gestion_group)
 
+<<<<<<< HEAD
         # 2. SECCIÓN DE MONITOREO
 
+=======
+
+        # SECCIÓN DE MONITOREO
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
         status_group = QGroupBox("Estado del Sistema en Tiempo Real")
         status_layout = QGridLayout()
         status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
@@ -135,21 +153,25 @@ class MenuDirector(QWidget):
         self.setLayout(layout)
 
         # TIMER DE ACTUALIZACIÓN
-
         self.timer = QTimer(self)
         self.timer.setInterval(1000)  # 1 segundo
         self.timer.timeout.connect(self.actualizar)
         self.timer.start()
 
+<<<<<<< HEAD
     # MÉTODOS
 
     def update_air_quality_text(self, text_value: str):
         """Método llamado por la señal air_quality_text_actualizada (desde sensor.py)."""
         self.lbl_airq.setText(f"Calidad del Aire: {text_value}")
 
+=======
+
+    # METODOS
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
     def actualizar(self):
 
-        # El Director solo monitorea; el sistema sigue en modo automático
+        # El Director solo monitorea; el sistema sigue en modo automatico
         self.ctrl_sistema.update()
 
         def safe_read(sensor_type):
@@ -166,14 +188,14 @@ class MenuDirector(QWidget):
         light = safe_read("light")
         distance = safe_read("distance")
 
-        # 1. Actualización de etiquetas de sensores
+        # Actualizacion de etiquetas de sensores
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
         self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
         self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
         self.lbl_distancia.setText(
             f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
 
-        # 2. Actualizar el estado de los actuadores en la UI
+        # Actualizar el estado de los actuadores en la UI
         for actuator in self.actuators:
             label = self.actuator_labels.get(actuator.id)
             if label:

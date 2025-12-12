@@ -16,7 +16,7 @@ class MenuInvitado(QWidget):
     def __init__(self):
         super().__init__()
 
-        # --- Ventana ---
+        # Ventana
         self.setWindowTitle("Modo Invitado – Solo Lectura")
         self.setGeometry(200, 150, 500, 450)
         self.setStyleSheet("background-color:#1E1E1E; color:white; font-size:18px;")
@@ -28,6 +28,7 @@ class MenuInvitado(QWidget):
         # 1. DEFINICIÓN Y CONFIGURACIÓN DE SENSORES
         # ======================================
 
+<<<<<<< HEAD
         # Sensores del Municipio (Exterior/General)
         self.municipio_sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=data_file),
@@ -102,6 +103,36 @@ class MenuInvitado(QWidget):
         # ======================================
         # 3. TIMER DE ACTUALIZACIÓN
         # ======================================
+=======
+        self.lbl_temp = QLabel("Temperatura: -- °C")
+        self.lbl_temp.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.lbl_temp)
+
+        self.lbl_air = QLabel("Calidad del aire: --")
+        self.lbl_air.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.lbl_air)
+
+        btn = QPushButton("Cerrar sesión")
+        btn.clicked.connect(self.cerrar_sesion)
+        btn.setStyleSheet("font-size:16px; margin-top:25px;")
+        layout.addWidget(btn)
+
+        self.setLayout(layout)
+
+        # Sensores (MISMO que mantenimiento)
+        data_file = "simulation_data.json"
+
+        self.sensors = [
+            Sensor(id="temperature1", sensor_type="temperature", data_file=data_file),
+            Sensor(id="airQ1", sensor_type="airQuality", data_file=data_file),
+        ]
+
+        # Sistema y controlador
+        self.sistema = Sistema(sensors=self.sensors)
+        self.ctrl = Controlador_Sensores(self.sistema.sensors)
+
+        # Timer de actualización
+>>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
         self.timer = QTimer()
         self.timer.timeout.connect(self.actualizar)
         self.timer.start(1000)
