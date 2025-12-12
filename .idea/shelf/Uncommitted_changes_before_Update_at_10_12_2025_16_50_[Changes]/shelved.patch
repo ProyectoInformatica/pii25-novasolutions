@@ -1,0 +1,890 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+deleted file mode 100644
+--- a/.idea/workspace.xml	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ /dev/null	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
+@@ -1,165 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="AutoImportSettings">
+-    <option name="autoReloadType" value="SELECTIVE" />
+-  </component>
+-  <component name="ChangeListManager">
+-    <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/simulation_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_data.json" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/model/actuador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/actuador.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/model/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
+-    </list>
+-    <option name="SHOW_DIALOG" value="false" />
+-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+-    <option name="LAST_RESOLUTION" value="IGNORE" />
+-  </component>
+-  <component name="FileTemplateManagerImpl">
+-    <option name="RECENT_TEMPLATES">
+-      <list>
+-        <option value="Python Script" />
+-      </list>
+-    </option>
+-  </component>
+-  <component name="Git.Settings">
+-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+-  </component>
+-  <component name="GitHubPullRequestSearchHistory">{
+-  &quot;lastFilter&quot;: {
+-    &quot;state&quot;: &quot;OPEN&quot;,
+-    &quot;assignee&quot;: &quot;Sebasmsz&quot;
+-  }
+-}</component>
+-  <component name="GithubPullRequestsUISettings">{
+-  &quot;selectedUrlAndAccountId&quot;: {
+-    &quot;url&quot;: &quot;https://github.com/ProyectoInformatica/pii25-novasolutions.git&quot;,
+-    &quot;accountId&quot;: &quot;aac67a9a-20e8-407d-bddf-7bff02bec1fd&quot;
+-  }
+-}</component>
+-  <component name="ProjectColorInfo">{
+-  &quot;customColor&quot;: &quot;&quot;,
+-  &quot;associatedIndex&quot;: 7
+-}</component>
+-  <component name="ProjectId" id="34q3MsznoPHR1rXULTVDZ3TE3aA" />
+-  <component name="ProjectViewState">
+-    <option name="hideEmptyMiddlePackages" value="true" />
+-    <option name="showLibraryContents" value="true" />
+-  </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+-    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;developer&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+-  }
+-}</component>
+-  <component name="RecentsManager">
+-    <key name="MoveFile.RECENT_KEYS">
+-      <recent name="C:\Users\danie\Desktop\PROYECTO INFORMATICA\pii25-novasolutions\src\control" />
+-    </key>
+-  </component>
+-  <component name="RunManager" selected="Python.run">
+-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+-      <module name="pii25-novasolutions" />
+-      <option name="ENV_FILES" value="" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+-      <option name="IS_MODULE_SDK" value="true" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+-      <option name="PARAMETERS" value="" />
+-      <option name="SHOW_COMMAND_LINE" value="false" />
+-      <option name="EMULATE_TERMINAL" value="false" />
+-      <option name="MODULE_MODE" value="false" />
+-      <option name="REDIRECT_INPUT" value="false" />
+-      <option name="INPUT_FILE" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+-      <module name="pii25-novasolutions" />
+-      <option name="ENV_FILES" value="" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="SDK_NAME" value="Python 3.12 (pii25-novasolutions)" />
+-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+-      <option name="IS_MODULE_SDK" value="false" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
+-      <option name="PARAMETERS" value="" />
+-      <option name="SHOW_COMMAND_LINE" value="false" />
+-      <option name="EMULATE_TERMINAL" value="false" />
+-      <option name="MODULE_MODE" value="false" />
+-      <option name="REDIRECT_INPUT" value="false" />
+-      <option name="INPUT_FILE" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <list>
+-      <item itemvalue="Python.main" />
+-      <item itemvalue="Python.run" />
+-    </list>
+-    <recent_temporary>
+-      <list>
+-        <item itemvalue="Python.run" />
+-        <item itemvalue="Python.main" />
+-      </list>
+-    </recent_temporary>
+-  </component>
+-  <component name="SharedIndexes">
+-    <attachedChunks>
+-      <set>
+-        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+-      </set>
+-    </attachedChunks>
+-  </component>
+-  <component name="TaskManager">
+-    <task active="true" id="Default" summary="Default task">
+-      <changelist id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="" />
+-      <created>1761927234637</created>
+-      <option name="number" value="Default" />
+-      <option name="presentableId" value="Default" />
+-      <updated>1761927234637</updated>
+-    </task>
+-    <task id="LOCAL-00001" summary="Registro de usuarios V1">
+-      <option name="closed" value="true" />
+-      <created>1762965783133</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1762965783133</updated>
+-    </task>
+-    <option name="localTasksCounter" value="2" />
+-    <servers />
+-  </component>
+-  <component name="Vcs.Log.Tabs.Properties">
+-    <option name="TAB_STATES">
+-      <map>
+-        <entry key="MAIN">
+-          <value>
+-            <State />
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
+-  </component>
+-  <component name="VcsManagerConfiguration">
+-    <MESSAGE value="Registro de usuarios V1" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Registro de usuarios V1" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: simulation_data.json
+===================================================================
+diff --git a/simulation_data.json b/simulation_data.json
+deleted file mode 100644
+--- a/simulation_data.json	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ /dev/null	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
+@@ -1,6 +0,0 @@
+-{
+-    "temperature": 21.0,
+-    "smoke": 0.0,
+-    "light": 310.0,
+-    "distance": 100.0
+-}
+\ No newline at end of file
+Index: .idea/pii25-novasolutions.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/.venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.12 (pii25-novasolutions)\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/pii25-novasolutions.iml b/.idea/pii25-novasolutions.iml
+--- a/.idea/pii25-novasolutions.iml	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ b/.idea/pii25-novasolutions.iml	(date 1764873467782)
+@@ -4,7 +4,7 @@
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.12 (pii25-novasolutions)" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 3.12" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+Index: src/view/menu_director.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton\r\n\r\nclass MenuDirector(QWidget):\r\n    def __init__(self, usuario):\r\n        super().__init__()\r\n        self.usuario = usuario\r\n        self.setWindowTitle(\"Panel del Director\")\r\n        self.setGeometry(200, 150, 800, 500)\r\n        self.setStyleSheet(\"background-color:#1E1E1E; color:white;\")\r\n\r\n        layout = QVBoxLayout()\r\n        lbl = QLabel(f\"Bienvenido Director: {usuario.nombre_usuario}\")\r\n        layout.addWidget(lbl)\r\n\r\n        btn_usuarios = QPushButton(\"Gestionar usuarios\")\r\n        btn_usuarios.clicked.connect(self.abrir_gestion_usuarios)\r\n        layout.addWidget(btn_usuarios)\r\n\r\n        btn_reportes = QPushButton(\"Ver reportes de sensores\")\r\n        layout.addWidget(btn_reportes)\r\n\r\n        btn_salir = QPushButton(\"Cerrar sesión\")\r\n        btn_salir.clicked.connect(self.cerrar_sesion)\r\n        layout.addWidget(btn_salir)\r\n\r\n        self.setLayout(layout)\r\n\r\n    def abrir_gestion_usuarios(self):\r\n        \"\"\"Abre la ventana de gestión de usuarios sin cerrar el menú del director.\"\"\"\r\n        from src.view.gestion_usuarios import GestionUsuariosDirector\r\n        self.gestion = GestionUsuariosDirector(usuario=self.usuario)\r\n        self.gestion.show()\r\n\r\n    def cerrar_sesion(self):\r\n        from src.view.inicio import Inicio\r\n        self.inicio = Inicio()\r\n        self.inicio.show()\r\n        self.close()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/view/menu_director.py b/src/view/menu_director.py
+--- a/src/view/menu_director.py	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ b/src/view/menu_director.py	(date 1764873467788)
+@@ -1,37 +1,182 @@
+-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
++# src/view/menu_director.py (Sustituye a la implementación anterior del MenuDirector)
++
++from PySide6.QtWidgets import (
++    QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
++    QGroupBox, QGridLayout
++)
++from PySide6.QtCore import QTimer, Qt
++
++# Importar las clases necesarias del modelo y control
++# ASUME que estas rutas son correctas y accesibles desde este archivo
++from src.model.sistema import Sistema
++from src.model.sensor import Sensor
++from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador
++from src.control.controlador_sistema import Controlador_Sistema
++from src.control.controlador_sensores import Controlador_Sensores
++
++
++# from src.view.gestion_usuarios import GestionUsuariosDirector # Necesario para el botón de gestión
++# from src.view.inicio import Inicio # Necesario para cerrar sesión
+ 
+ class MenuDirector(QWidget):
+-    def __init__(self, usuario):
++    def __init__(self, usuario, sensor_data_file="simulation_data.json"):
+         super().__init__()
++
+         self.usuario = usuario
++        self.sensor_data_file = sensor_data_file
++
+         self.setWindowTitle("Panel del Director")
+-        self.setGeometry(200, 150, 800, 500)
++        # Ajustamos el tamaño para el contenido de monitoreo + gestión
++        self.setGeometry(200, 150, 800, 600)
+         self.setStyleSheet("background-color:#1E1E1E; color:white;")
+ 
++        # ----------------------------------------
++        # MODELO + CONTROLADORES (IDÉNTICO a Mantenimiento para la lectura de datos)
++        # ----------------------------------------
++
++        # Sensores: Distancia incluida
++        self.sensors = [
++            Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
++            Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
++            Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
++            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file)
++        ]
++
++        # Actuadores
++        self.actuators = [
++            Ventilador(id="fan1"),
++            Rociador(id="rociador1"),
++            LuzExterior(id="luzext1"),
++            LuzPasillo(id="luzpasillo1")
++        ]
++
++        self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
++        self.ctrl_sensores = Controlador_Sensores(self.sensors)
++        self.ctrl_sistema = Controlador_Sistema(self.sistema)
++
++        # LAYOUT PRINCIPAL
++
+         layout = QVBoxLayout()
+-        lbl = QLabel(f"Bienvenido Director: {usuario.nombre_usuario}")
+-        layout.addWidget(lbl)
++
++        titulo = QLabel(f"Bienvenido Director General: {usuario.nombre_usuario}")
++        titulo.setAlignment(Qt.AlignHCenter)
++        titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
++        layout.addWidget(titulo)
+ 
+-        btn_usuarios = QPushButton("Gestionar usuarios")
++        # 1. BOTONES DE GESTIÓN
++        gestion_group = QGroupBox("Opciones de Dirección")
++        gestion_layout = QHBoxLayout()
++        gestion_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
++
++        btn_usuarios = QPushButton("👥 Gestionar Usuarios")
+         btn_usuarios.clicked.connect(self.abrir_gestion_usuarios)
+-        layout.addWidget(btn_usuarios)
++        gestion_layout.addWidget(btn_usuarios)
++
++        btn_reportes = QPushButton("📈 Ver Reportes Históricos")
++        gestion_layout.addWidget(btn_reportes)
++
++        gestion_group.setLayout(gestion_layout)
++        layout.addWidget(gestion_group)
++
+ 
+-        btn_reportes = QPushButton("Ver reportes de sensores")
+-        layout.addWidget(btn_reportes)
++        # 2. SECCIÓN DE MONITOREO
+ 
++        status_group = QGroupBox("Estado del Sistema en Tiempo Real")
++        status_layout = QGridLayout()
++        status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
++
++        # Lecturas de Sensores
++        status_layout.addWidget(QLabel("### 📡 LECTURAS DE SENSORES"), 0, 0, 1, 2)
++
++        self.lbl_temp = QLabel("Temperatura: -- °C")
++        self.lbl_temp.setStyleSheet("font-weight: bold; padding: 5px;")
++        status_layout.addWidget(QLabel("🌡️ Temp"), 1, 0)
++        status_layout.addWidget(self.lbl_temp, 1, 1)
++
++        self.lbl_humo = QLabel("Nivel de Humo: --")
++        status_layout.addWidget(QLabel("💨 Humo"), 2, 0)
++        status_layout.addWidget(self.lbl_humo, 2, 1)
++
++        self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
++        status_layout.addWidget(QLabel("💡 Luz"), 3, 0)
++        status_layout.addWidget(self.lbl_luz, 3, 1)
++
++        self.lbl_distancia = QLabel("Distancia: -- cm")
++        status_layout.addWidget(QLabel("📏 Distancia"), 4, 0)
++        status_layout.addWidget(self.lbl_distancia, 4, 1)
++
++        # Estado de Actuadores
++        status_layout.addWidget(QLabel("### ⚙️ ESTADO DE ACTUADORES"), 5, 0, 1, 2)
++
++        self.actuator_labels = {}
++        for i, actuator in enumerate(self.actuators):
++            lbl_name = QLabel(f"{actuator.name}:")
++            lbl_state = QLabel("🔴 OFF")
++            self.actuator_labels[actuator.id] = lbl_state
++
++            row = i + 6
++            status_layout.addWidget(lbl_name, row, 0)
++            status_layout.addWidget(lbl_state, row, 1)
++
++        status_group.setLayout(status_layout)
++        layout.addWidget(status_group)
++
++        # BOTÓN SALIR
+         btn_salir = QPushButton("Cerrar sesión")
+         btn_salir.clicked.connect(self.cerrar_sesion)
+         layout.addWidget(btn_salir)
+ 
+         self.setLayout(layout)
+ 
++
++        # TIMER DE ACTUALIZACIÓN
++
++        self.timer = QTimer(self)
++        self.timer.setInterval(1000)  # 1 segundo
++        self.timer.timeout.connect(self.actualizar)
++        self.timer.start()
++
++
++    # MÉTODOS
++
++    def actualizar(self):
++
++        # El Director solo monitorea; el sistema sigue en modo automático
++        self.ctrl_sistema.update()
++
++        def safe_read(sensor_type):
++            try:
++                return self.sistema.get_sensor_reading(sensor_type)
++            except RuntimeError:
++                return None
++
++        temp = safe_read("temperature")
++        smoke = safe_read("smoke")
++        light = safe_read("light")
++        distance = safe_read("distance")
++
++        # 1. Actualización de etiquetas de sensores
++        self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
++        self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
++        self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
++        self.lbl_distancia.setText(
++            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
++
++        # 2. Actualizar el estado de los actuadores en la UI
++        for actuator in self.actuators:
++            label = self.actuator_labels.get(actuator.id)
++            if label:
++                state_text = "🟢 ON" if actuator.state else "🔴 OFF"
++                label.setText(state_text)
++
+     def abrir_gestion_usuarios(self):
+-        """Abre la ventana de gestión de usuarios sin cerrar el menú del director."""
++        # Se necesita importar la clase 'GestionUsuariosDirector'
+         from src.view.gestion_usuarios import GestionUsuariosDirector
+         self.gestion = GestionUsuariosDirector(usuario=self.usuario)
+         self.gestion.show()
+ 
+     def cerrar_sesion(self):
++        # Se necesita importar la clase 'Inicio'
+         from src.view.inicio import Inicio
+         self.inicio = Inicio()
+         self.inicio.show()
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Black\">\r\n    <option name=\"sdkName\" value=\"Python 3.12\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.12 (pii25-novasolutions)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ b/.idea/misc.xml	(date 1764873467780)
+@@ -3,5 +3,5 @@
+   <component name="Black">
+     <option name="sdkName" value="Python 3.12" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (pii25-novasolutions)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: src/view/inicio.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton\r\nfrom PySide6.QtCore import Qt\r\nfrom src.view.login import Login\r\nfrom src.view.ventana_principal import VentanaPrincipal\r\n\r\nclass Inicio(QWidget):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.setWindowTitle(\"Sistema de Sensores Escolares\")\r\n        self.setGeometry(200, 150, 700, 400)\r\n        self.setStyleSheet(\"background-color:#1E1E1E; color:white;\")\r\n\r\n        layout = QVBoxLayout()\r\n        titulo = QLabel(\"Bienvenido al sistema escolar de sensores\")\r\n        titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)\r\n        titulo.setStyleSheet(\"font-size:20px; font-weight:bold; margin:20px; color:white;\")\r\n        layout.addWidget(titulo)\r\n\r\n        btn_login = QPushButton(\"Iniciar sesión\")\r\n        btn_login.setStyleSheet(\"background-color:#4A90E2; color:white; font-size:18px; padding:20px; border-radius:15px;\")\r\n        btn_login.clicked.connect(self.ir_login)\r\n        layout.addWidget(btn_login)\r\n\r\n        btn_estudiante = QPushButton(\"Entrar como invitado\")\r\n        btn_estudiante.setStyleSheet(\"background-color:#F5A623; color:white; font-size:18px; padding:20px; border-radius:15px;\")\r\n        btn_estudiante.clicked.connect(self.ir_estudiante)\r\n        layout.addWidget(btn_estudiante)\r\n\r\n        self.setLayout(layout)\r\n\r\n    def ir_login(self):\r\n        self.login = Login()\r\n        self.login.show()\r\n        self.close()\r\n\r\n    def ir_estudiante(self):\r\n        self.main = VentanaPrincipal()\r\n        self.main.show()\r\n        self.close()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/view/inicio.py b/src/view/inicio.py
+--- a/src/view/inicio.py	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ b/src/view/inicio.py	(date 1764873467787)
+@@ -1,7 +1,7 @@
+ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+ from PySide6.QtCore import Qt
+ from src.view.login import Login
+-from src.view.ventana_principal import VentanaPrincipal
++
+ 
+ class Inicio(QWidget):
+     def __init__(self):
+@@ -34,6 +34,9 @@
+         self.close()
+ 
+     def ir_estudiante(self):
+-        self.main = VentanaPrincipal()
++        from src.view.menu_invitado import MenuInvitado
++        self.main = MenuInvitado()
+         self.main.show()
+         self.close()
++
++
+Index: src/view/menu_mantenimiento.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># src/view/menu_mantenimiento.py\r\n\r\n# src/view/menu_mantenimiento.py\r\n\r\nfrom PySide6.QtWidgets import (\r\n    QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,\r\n    QCheckBox, QDoubleSpinBox, QGroupBox, QGridLayout\r\n)\r\nfrom PySide6.QtCore import QTimer, Qt\r\n\r\n# Importar las clases necesarias\r\nfrom src.model.sistema import Sistema\r\nfrom src.model.sensor import Sensor\r\nfrom src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador\r\nfrom src.control.controlador_sistema import Controlador_Sistema\r\nfrom src.control.controlador_sensores import Controlador_Sensores\r\n\r\n\r\nclass MenuMantenimiento(QWidget):\r\n    def __init__(self, usuario, sensor_data_file=\"simulation_data.json\"):\r\n        super().__init__()\r\n\r\n        self.usuario = usuario\r\n        self.sensor_data_file = sensor_data_file\r\n\r\n        self.setWindowTitle(\"Panel Jefe de Mantenimiento\")\r\n        self.setGeometry(200, 150, 800, 600)\r\n        self.setStyleSheet(\"background-color:#1E1E1E; color:white;\")\r\n\r\n        # MODELO + CONTROLADORES\r\n        # Sensores: Distancia incluida\r\n        self.sensors = [\r\n            Sensor(id=\"temp1\", sensor_type=\"temperature\", data_file=self.sensor_data_file),\r\n            Sensor(id=\"smoke1\", sensor_type=\"smoke\", data_file=self.sensor_data_file),\r\n            Sensor(id=\"light1\", sensor_type=\"light\", data_file=self.sensor_data_file),\r\n            Sensor(id=\"dist1\", sensor_type=\"distance\", data_file=self.sensor_data_file)\r\n        ]\r\n\r\n        # Actuadores: Ventilador, Rociador, LuzExterior, LuzPasillo\r\n        self.actuators = [\r\n            Ventilador(id=\"fan1\"),\r\n            Rociador(id=\"rociador1\"),\r\n            LuzExterior(id=\"luzext1\"),\r\n            LuzPasillo(id=\"luzpasillo1\") # <-- NUEVO ACTUADOR\r\n        ]\r\n\r\n        self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)\r\n        self.ctrl_sensores = Controlador_Sensores(self.sensors)\r\n        self.ctrl_sistema = Controlador_Sistema(self.sistema)\r\n\r\n        # LAYOUT PRINCIPAL\r\n        layout = QVBoxLayout()\r\n\r\n        titulo = QLabel(f\"Bienvenido Jefe de Mantenimiento: {usuario.nombre_usuario}\")\r\n        titulo.setAlignment(Qt.AlignHCenter)\r\n        titulo.setStyleSheet(\"font-size:20px;\")\r\n        layout.addWidget(titulo)\r\n\r\n        # SENSORES y ACTUADORES\r\n        status_group = QGroupBox(\"Estado del Sistema\")\r\n        status_layout = QGridLayout()\r\n        status_group.setStyleSheet(\"QGroupBox { border: 1px solid #555; margin-top: 10px; }\")\r\n\r\n        # 1. Lecturas de Sensores\r\n        status_layout.addWidget(QLabel(\"SENSORES\"), 0, 0, 1, 2)\r\n\r\n        self.lbl_temp = QLabel(\"Temperatura: -- °C\")\r\n        self.lbl_temp.setStyleSheet(\"font-weight: bold; padding: 5px;\")\r\n        status_layout.addWidget(QLabel(\"\uD83C\uDF21\uFE0F Temp\"), 1, 0)\r\n        status_layout.addWidget(self.lbl_temp, 1, 1)\r\n\r\n        self.lbl_humo = QLabel(\"Nivel de Humo: --\")\r\n        status_layout.addWidget(QLabel(\"\uD83D\uDCA8 Humo\"), 2, 0)\r\n        status_layout.addWidget(self.lbl_humo, 2, 1)\r\n\r\n        self.lbl_luz = QLabel(\"Nivel de Luz: -- Lux\")\r\n        status_layout.addWidget(QLabel(\"\uD83D\uDCA1 Luz\"), 3, 0)\r\n        status_layout.addWidget(self.lbl_luz, 3, 1)\r\n\r\n        self.lbl_distancia = QLabel(\"Distancia: -- cm\")\r\n        status_layout.addWidget(QLabel(\"\uD83D\uDCCF Distancia\"), 4, 0)\r\n        status_layout.addWidget(self.lbl_distancia, 4, 1)\r\n\r\n        # 2. Estado de Actuadores\r\n        status_layout.addWidget(QLabel(\"ACTUADORES\"), 5, 0, 1, 2)\r\n\r\n        self.actuator_labels = {}\r\n        for i, actuator in enumerate(self.actuators):\r\n            lbl_name = QLabel(f\"{actuator.name}:\")\r\n            lbl_state = QLabel(\"\uD83D\uDD34 OFF\")\r\n            self.actuator_labels[actuator.id] = lbl_state\r\n\r\n            row = i + 6\r\n            status_layout.addWidget(lbl_name, row, 0)\r\n            status_layout.addWidget(lbl_state, row, 1)\r\n\r\n        status_group.setLayout(status_layout)\r\n        layout.addWidget(status_group)\r\n\r\n        # CONTROLES MANUALES (se mantienen igual)\r\n        controls = QGroupBox(\"Control Manual de Temperatura\")\r\n        controls_layout = QHBoxLayout()\r\n\r\n        # Botón modo auto/manual\r\n        self.btn_modo = QPushButton(\"Cambiar a MANUAL\")\r\n        self.btn_modo.clicked.connect(self.cambiar_modo)\r\n        controls_layout.addWidget(self.btn_modo)\r\n\r\n        # Activar control manual\r\n        self.cb_manual = QCheckBox(\"Control manual activado\")\r\n        self.cb_manual.stateChanged.connect(self.cambiar_manual)\r\n        controls_layout.addWidget(self.cb_manual)\r\n\r\n        # Target\r\n        self.spin_target = QDoubleSpinBox()\r\n        self.spin_target.setRange(5.0, 40.0)\r\n        self.spin_target.setValue(self.sistema.manual_target)\r\n        self.spin_target.setSingleStep(0.1)\r\n        self.spin_target.valueChanged.connect(self.actualizar_target)\r\n\r\n        controls_layout.addWidget(QLabel(\"Objetivo (°C):\"))\r\n        controls_layout.addWidget(self.spin_target)\r\n\r\n        controls.setLayout(controls_layout)\r\n        layout.addWidget(controls)\r\n\r\n        # BOTÓN SALIR\r\n        btn_salir = QPushButton(\"Cerrar sesión\")\r\n        btn_salir.clicked.connect(self.cerrar_sesion)\r\n        layout.addWidget(btn_salir)\r\n\r\n        self.setLayout(layout)\r\n\r\n        # TIMER DE ACTUALIZACIÓN\r\n        self.timer = QTimer(self)\r\n        self.timer.setInterval(1000)  # 1 segundo\r\n        self.timer.timeout.connect(self.actualizar)\r\n        self.timer.start()\r\n\r\n    def cambiar_modo(self):\r\n        \"\"\"Alterna entre modo automático y manual.\"\"\"\r\n        if self.sistema.mode == \"auto\":\r\n            self.sistema.set_mode(\"manual\")\r\n            self.btn_modo.setText(\"Cambiar a AUTO\")\r\n        else:\r\n            self.sistema.set_mode(\"auto\")\r\n            self.cb_manual.setChecked(False)\r\n            self.btn_modo.setText(\"Cambiar a MANUAL\")\r\n\r\n    def cambiar_manual(self, state):\r\n        enabled = bool(state)\r\n        self.sistema.manual_enabled = enabled\r\n\r\n        if enabled:\r\n            self.sistema.set_mode(\"manual\")\r\n            self.btn_modo.setText(\"Cambiar a AUTO\")\r\n\r\n    def actualizar_target(self, value):\r\n        self.sistema.manual_target = float(value)\r\n\r\n    def actualizar(self):\r\n\r\n        def safe_read(sensor_type):\r\n            try:\r\n                return self.sistema.get_sensor_reading(sensor_type)\r\n            except RuntimeError:\r\n                return None\r\n\r\n        temp = safe_read(\"temperature\")\r\n        smoke = safe_read(\"smoke\")\r\n        light = safe_read(\"light\")\r\n        distance = safe_read(\"distance\")\r\n\r\n        # Actualización de etiquetas\r\n        self.lbl_temp.setText(f\"Temperatura: {temp:.2f} °C\" if temp is not None else \"Temperatura: ⚠\uFE0F ERROR (JSON)\")\r\n        self.lbl_humo.setText(f\"Nivel de Humo: {smoke:.2f}\" if smoke is not None else \"Nivel de Humo: ⚠\uFE0F ERROR (JSON)\")\r\n        self.lbl_luz.setText(f\"Nivel de Luz: {light:.2f} Lux\" if light is not None else \"Nivel de Luz: ⚠\uFE0F ERROR (JSON)\")\r\n        self.lbl_distancia.setText(\r\n            f\"Distancia: {distance:.2f} cm\" if distance is not None else \"Distancia: ⚠\uFE0F ERROR (JSON)\")\r\n\r\n        # 2. Aplicar control\r\n        self.ctrl_sistema.update()\r\n\r\n        # 3. Actualizar el estado de los actuadores en la UI\r\n        for actuator in self.actuators:\r\n            label = self.actuator_labels.get(actuator.id)\r\n            if label:\r\n                state_text = \"\uD83D\uDFE2 ON\" if actuator.state else \"\uD83D\uDD34 OFF\"\r\n                label.setText(state_text)\r\n\r\n    def cerrar_sesion(self):\r\n        from src.view.inicio import Inicio\r\n\r\n        self.inicio = Inicio()\r\n        self.inicio.show()\r\n\r\n        self.close()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/view/menu_mantenimiento.py b/src/view/menu_mantenimiento.py
+--- a/src/view/menu_mantenimiento.py	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ b/src/view/menu_mantenimiento.py	(date 1764873467791)
+@@ -1,5 +1,3 @@
+-# src/view/menu_mantenimiento.py
+-
+ # src/view/menu_mantenimiento.py
+ 
+ from PySide6.QtWidgets import (
+@@ -8,16 +6,15 @@
+ )
+ from PySide6.QtCore import QTimer, Qt
+ 
+-# Importar las clases necesarias
+ from src.model.sistema import Sistema
+ from src.model.sensor import Sensor
+-from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador
++from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
+ from src.control.controlador_sistema import Controlador_Sistema
+ from src.control.controlador_sensores import Controlador_Sensores
+ 
+ 
+ class MenuMantenimiento(QWidget):
+-    def __init__(self, usuario, sensor_data_file="simulation_data.json"):
++    def __init__(self, usuario, sensor_data_file="data/json/sensores.json"):
+         super().__init__()
+ 
+         self.usuario = usuario
+@@ -27,28 +24,34 @@
+         self.setGeometry(200, 150, 800, 600)
+         self.setStyleSheet("background-color:#1E1E1E; color:white;")
+ 
+-        # MODELO + CONTROLADORES
+-        # Sensores: Distancia incluida
++        # ==========================
++        #   CREACIÓN DE SENSORES
++        # ==========================
+         self.sensors = [
+             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
+             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
+             Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
+-            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file)
++            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file),
++            Sensor(id="airQ1", sensor_type="airQuality", data_file=self.sensor_data_file)
+         ]
+ 
+-        # Actuadores: Ventilador, Rociador, LuzExterior, LuzPasillo
++        # ==========================
++        #   CREACIÓN DE ACTUADORES
++        # ==========================
+         self.actuators = [
+             Ventilador(id="fan1"),
+             Rociador(id="rociador1"),
+             LuzExterior(id="luzext1"),
+-            LuzPasillo(id="luzpasillo1") # <-- NUEVO ACTUADOR
++            LuzPasillo(id="luzpasillo1")
+         ]
+ 
+         self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
+         self.ctrl_sensores = Controlador_Sensores(self.sensors)
+         self.ctrl_sistema = Controlador_Sistema(self.sistema)
+ 
+-        # LAYOUT PRINCIPAL
++        # ==========================
++        #   LAYOUT PRINCIPAL
++        # ==========================
+         layout = QVBoxLayout()
+ 
+         titulo = QLabel(f"Bienvenido Jefe de Mantenimiento: {usuario.nombre_usuario}")
+@@ -56,62 +59,90 @@
+         titulo.setStyleSheet("font-size:20px;")
+         layout.addWidget(titulo)
+ 
+-        # SENSORES y ACTUADORES
++        # ==========================
++        #      GRUPO SENSORES
++        # ==========================
+         status_group = QGroupBox("Estado del Sistema")
++        status_group.setStyleSheet(
++            "QGroupBox { border: 1px solid #555; margin-top: 10px; padding-top: 10px; }"
++        )
+         status_layout = QGridLayout()
+-        status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
+ 
+-        # 1. Lecturas de Sensores
+-        status_layout.addWidget(QLabel("SENSORES"), 0, 0, 1, 2)
++        # ---- Creamos DOS columnas (la solución REAL) ----
++        sensores_left = QVBoxLayout()
++        sensores_right = QVBoxLayout()
+ 
++        # ====== SENSORES ======
+         self.lbl_temp = QLabel("Temperatura: -- °C")
+-        self.lbl_temp.setStyleSheet("font-weight: bold; padding: 5px;")
+-        status_layout.addWidget(QLabel("🌡️ Temp"), 1, 0)
+-        status_layout.addWidget(self.lbl_temp, 1, 1)
+-
+         self.lbl_humo = QLabel("Nivel de Humo: --")
+-        status_layout.addWidget(QLabel("💨 Humo"), 2, 0)
+-        status_layout.addWidget(self.lbl_humo, 2, 1)
+-
+         self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
+-        status_layout.addWidget(QLabel("💡 Luz"), 3, 0)
+-        status_layout.addWidget(self.lbl_luz, 3, 1)
+-
+         self.lbl_distancia = QLabel("Distancia: -- cm")
+-        status_layout.addWidget(QLabel("📏 Distancia"), 4, 0)
+-        status_layout.addWidget(self.lbl_distancia, 4, 1)
++        self.lbl_airq = QLabel("Calidad del Aire: --")
++
++        # Estilo uniforme de valores
++        for lbl in [self.lbl_temp, self.lbl_humo, self.lbl_luz, self.lbl_distancia, self.lbl_airq]:
++            lbl.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
++            lbl.setStyleSheet("padding: 4px;")
++
++        # Columna izquierda (títulos)
++        sensores_left.addWidget(QLabel("🌡️ Temp"))
++        sensores_left.addWidget(QLabel("💨 Humo"))
++        sensores_left.addWidget(QLabel("💡 Luz"))
++        sensores_left.addWidget(QLabel("📏 Distancia"))
++        sensores_left.addWidget(QLabel("🌬️ Calidad Aire"))
++
++        # Columna derecha (valores)
++        sensores_right.addWidget(self.lbl_temp)
++        sensores_right.addWidget(self.lbl_humo)
++        sensores_right.addWidget(self.lbl_luz)
++        sensores_right.addWidget(self.lbl_distancia)
++        sensores_right.addWidget(self.lbl_airq)
+ 
+-        # 2. Estado de Actuadores
+-        status_layout.addWidget(QLabel("ACTUADORES"), 5, 0, 1, 2)
++        # Insertar columnas al grid
++        status_layout.addLayout(sensores_left, 0, 0)
++        status_layout.addLayout(sensores_right, 0, 1)
++
++        # ==========================
++        #      GRUPO ACTUADORES
++        # ==========================
++        actuadores_left = QVBoxLayout()
++        actuadores_right = QVBoxLayout()
+ 
+         self.actuator_labels = {}
+-        for i, actuator in enumerate(self.actuators):
+-            lbl_name = QLabel(f"{actuator.name}:")
+-            lbl_state = QLabel("🔴 OFF")
+-            self.actuator_labels[actuator.id] = lbl_state
++
++        for actuator in self.actuators:
++            name = QLabel(f"{actuator.name}:")
++            name.setAlignment(Qt.AlignLeft)
++
++            estado = QLabel("🔴 OFF")
++            estado.setAlignment(Qt.AlignLeft)
++
++            actuadores_left.addWidget(name)
++            actuadores_right.addWidget(estado)
+ 
+-            row = i + 6
+-            status_layout.addWidget(lbl_name, row, 0)
+-            status_layout.addWidget(lbl_state, row, 1)
++            self.actuator_labels[actuator.id] = estado
++
++        # Añadimos actuadores debajo de sensores
++        status_layout.addLayout(actuadores_left, 1, 0)
++        status_layout.addLayout(actuadores_right, 1, 1)
+ 
+         status_group.setLayout(status_layout)
+         layout.addWidget(status_group)
+ 
+-        # CONTROLES MANUALES (se mantienen igual)
++        # ==========================
++        #   CONTROL MANUAL
++        # ==========================
+         controls = QGroupBox("Control Manual de Temperatura")
+         controls_layout = QHBoxLayout()
+ 
+-        # Botón modo auto/manual
+         self.btn_modo = QPushButton("Cambiar a MANUAL")
+         self.btn_modo.clicked.connect(self.cambiar_modo)
+         controls_layout.addWidget(self.btn_modo)
+ 
+-        # Activar control manual
+         self.cb_manual = QCheckBox("Control manual activado")
+         self.cb_manual.stateChanged.connect(self.cambiar_manual)
+         controls_layout.addWidget(self.cb_manual)
+ 
+-        # Target
+         self.spin_target = QDoubleSpinBox()
+         self.spin_target.setRange(5.0, 40.0)
+         self.spin_target.setValue(self.sistema.manual_target)
+@@ -124,21 +155,28 @@
+         controls.setLayout(controls_layout)
+         layout.addWidget(controls)
+ 
+-        # BOTÓN SALIR
++        # ==========================
++        #   BOTÓN SALIR
++        # ==========================
+         btn_salir = QPushButton("Cerrar sesión")
+         btn_salir.clicked.connect(self.cerrar_sesion)
+         layout.addWidget(btn_salir)
+ 
+         self.setLayout(layout)
+ 
+-        # TIMER DE ACTUALIZACIÓN
++        # ==========================
++        #   TIMER DE ACTUALIZACIÓN
++        # ==========================
+         self.timer = QTimer(self)
+-        self.timer.setInterval(1000)  # 1 segundo
++        self.timer.setInterval(1000)
+         self.timer.timeout.connect(self.actualizar)
+         self.timer.start()
+ 
++    # -----------------------------------
++    #   FUNCIONES DE CONTROL
++    # -----------------------------------
++
+     def cambiar_modo(self):
+-        """Alterna entre modo automático y manual."""
+         if self.sistema.mode == "auto":
+             self.sistema.set_mode("manual")
+             self.btn_modo.setText("Cambiar a AUTO")
+@@ -150,7 +188,6 @@
+     def cambiar_manual(self, state):
+         enabled = bool(state)
+         self.sistema.manual_enabled = enabled
+-
+         if enabled:
+             self.sistema.set_mode("manual")
+             self.btn_modo.setText("Cambiar a AUTO")
+@@ -160,38 +197,46 @@
+ 
+     def actualizar(self):
+ 
+-        def safe_read(sensor_type):
++        def safe_read(tipo):
+             try:
+-                return self.sistema.get_sensor_reading(sensor_type)
++                return self.sistema.get_sensor_reading(tipo)
+             except RuntimeError:
+                 return None
+ 
+         temp = safe_read("temperature")
+-        smoke = safe_read("smoke")
+-        light = safe_read("light")
+-        distance = safe_read("distance")
++        humo = safe_read("smoke")
++        luz = safe_read("light")
++        dist = safe_read("distance")
++        air = safe_read("airQuality")
++
++        self.lbl_temp.setText(
++            f"Temperatura: {temp:.2f} °C" if temp is not None else "⚠️ ERROR"
++        )
+ 
+-        # Actualización de etiquetas
+-        self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
+-        self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
+-        self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
++        self.lbl_humo.setText(
++            f"Nivel de Humo: {humo:.2f}" if humo is not None else "⚠️ ERROR"
++        )
++
++        self.lbl_luz.setText(
++            f"Nivel de Luz: {luz:.2f} Lux" if luz is not None else "⚠️ ERROR"
++        )
++
+         self.lbl_distancia.setText(
+-            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
++            f"Distancia: {dist:.2f} cm" if dist is not None else "⚠️ ERROR"
++        )
+ 
+-        # 2. Aplicar control
++        self.lbl_airq.setText(
++            f"Calidad del Aire: {air:.2f}" if air is not None else "⚠️ ERROR"
++        )
++
+         self.ctrl_sistema.update()
+ 
+-        # 3. Actualizar el estado de los actuadores en la UI
+         for actuator in self.actuators:
+-            label = self.actuator_labels.get(actuator.id)
+-            if label:
+-                state_text = "🟢 ON" if actuator.state else "🔴 OFF"
+-                label.setText(state_text)
++            lbl = self.actuator_labels[actuator.id]
++            lbl.setText("🟢 ON" if actuator.state else "🔴 OFF")
+ 
+     def cerrar_sesion(self):
+         from src.view.inicio import Inicio
+-
+         self.inicio = Inicio()
+         self.inicio.show()
+-
+-        self.close()
+\ No newline at end of file
++        self.close()
+Index: src/model/sensor.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># src/model/sensor.py\r\n\r\n# src/model/sensor.py\r\n\r\nfrom PySide6.QtCore import QObject, Signal, QTimer\r\nfrom pathlib import Path\r\nimport json\r\nimport logging\r\nfrom typing import Optional, Dict, Any, Union\r\n\r\n# Configuración básica del logger\r\nlogging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')\r\nlogger = logging.getLogger(\"SensorModel\")\r\n\r\n# Constante de módulo para los valores de simulación\r\nDEFAULT_SIM_DATA = {\r\n    \"temperature\": 22.0,  # Temperatura segura\r\n    \"smoke\": 0.0,         # Sin humo\r\n    \"light\": 500.0,       # Luz media\r\n    \"distance\": 100.0     # NUEVO: Distancia por defecto (cm)\r\n}\r\n\r\n\r\nclass Sensor(QObject):\r\n    # Señales para comunicar cambios y errores al Controlador\r\n    lectura_actualizada = Signal(float)\r\n    error_lectura = Signal(str)\r\n\r\n    def __init__(self, id: str, sensor_type: str, name: str = \"\", data_file: Optional[str] = None,\r\n                 interval_ms: int = 1000):\r\n        # 1. Llamada obligatoria al constructor de QObject\r\n        super().__init__()\r\n\r\n        if sensor_type not in DEFAULT_SIM_DATA:\r\n            raise ValueError(f\"Tipo de sensor '{sensor_type}' no soportado.\")\r\n\r\n        self.id = id\r\n        self.type = sensor_type\r\n        self.name = name or f\"{sensor_type}_sensor\"\r\n\r\n        # 2. Uso de pathlib.Path para manejo de archivos\r\n        self.data_path: Optional[Path] = Path(data_file) if data_file else None\r\n\r\n        # 3. Check y creación del archivo de simulación si no existe\r\n        if self.data_path and not self.data_path.exists():\r\n            logger.info(\r\n                f\"Archivo de simulación '{self.data_path.name}' no encontrado. Creando con valores por defecto...\")\r\n            Sensor.generate_simulation_json(self.data_path, DEFAULT_SIM_DATA)\r\n\r\n        # 4. Configuración de QTimer para la lectura periódica (asincronía ligera)\r\n        self._timer = QTimer(self)\r\n        self._timer.timeout.connect(self.read)\r\n        self.interval_ms = interval_ms\r\n\r\n        # Iniciar la lectura al crear la instancia\r\n        self.start_reading()\r\n\r\n    def start_reading(self):\r\n        if self.data_path:\r\n            self._timer.start(self.interval_ms)\r\n            logger.info(f\"Sensor '{self.name}' iniciado. Lectura cada {self.interval_ms}ms.\")\r\n        else:\r\n            logger.warning(f\"Sensor '{self.name}' no tiene archivo de datos configurado. Lectura inactiva.\")\r\n\r\n    def stop_reading(self):\r\n        if self._timer.isActive():\r\n            self._timer.stop()\r\n            logger.info(f\"Sensor '{self.name}' detenido.\")\r\n\r\n    def read(self) -> Optional[float]:\r\n        if not self.data_path or not self.data_path.exists():\r\n            error_msg = f\"Archivo de datos de simulación no encontrado: {self.data_path}\"\r\n            logger.error(error_msg)\r\n            self.error_lectura.emit(error_msg)\r\n            return None\r\n\r\n        try:\r\n            with self.data_path.open(\"r\", encoding=\"utf-8\") as f:\r\n                data: Dict[str, Any] = json.load(f)\r\n\r\n            # Intentar leer el valor correspondiente\r\n            if self.type in data and isinstance(data[self.type], (int, float)):\r\n                value = float(data[self.type])\r\n\r\n                # 5. Emitir señal al Controlador para notificar el nuevo valor\r\n                self.lectura_actualizada.emit(value)\r\n                return value\r\n            else:\r\n                raise KeyError(f\"El JSON no contiene el campo '{self.type}' o el valor no es numérico.\")\r\n\r\n        except (IOError, json.JSONDecodeError, KeyError, Exception) as e:\r\n            # 6. Capturar errores, loguear y emitir señal de error\r\n            error_msg = f\"Error leyendo sensor {self.type} desde JSON: {e}\"\r\n            logger.error(error_msg)\r\n            self.error_lectura.emit(error_msg)\r\n            return None\r\n\r\n    @staticmethod\r\n    def generate_simulation_json(path: Path, data: Dict[str, Union[float, int]]):\r\n        # Crea los directorios padres si no existen\r\n        path.parent.mkdir(parents=True, exist_ok=True)\r\n        data_to_dump = {k: float(v) for k, v in data.items()}\r\n        with path.open(\"w\", encoding=\"utf-8\") as f:\r\n            json.dump(data_to_dump, f, indent=4)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/model/sensor.py b/src/model/sensor.py
+--- a/src/model/sensor.py	(revision 3e19776391f6c1785a1f3f13ddba7cce2af97889)
++++ b/src/model/sensor.py	(date 1764873467784)
+@@ -17,7 +17,8 @@
+     "temperature": 22.0,  # Temperatura segura
+     "smoke": 0.0,         # Sin humo
+     "light": 500.0,       # Luz media
+-    "distance": 100.0     # NUEVO: Distancia por defecto (cm)
++    "distance": 100.0,    # NUEVO: Distancia por defecto (cm)
++    "airQuality": 15.0    # Calidad de aire
+ }
+ 
+ 
+Index: src/view/menu_invitado.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/view/menu_invitado.py b/src/view/menu_invitado.py
+new file mode 100644
+--- /dev/null	(date 1764873467789)
++++ b/src/view/menu_invitado.py	(date 1764873467789)
+@@ -0,0 +1,77 @@
++# src/view/menu_invitado.py
++
++from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
++from PySide6.QtCore import Qt, QTimer
++
++from src.model.sensor import Sensor
++from src.model.sistema import Sistema
++from src.control.controlador_sensores import Controlador_Sensores
++
++
++class MenuInvitado(QWidget):
++    def __init__(self):
++        super().__init__()
++
++        # --- Ventana ---
++        self.setWindowTitle("Modo Invitado – Solo Lectura")
++        self.setGeometry(200, 150, 500, 300)
++        self.setStyleSheet("background-color:#1E1E1E; color:white; font-size:18px;")
++
++        layout = QVBoxLayout()
++
++        titulo = QLabel("Lectura de Sensores")
++        titulo.setAlignment(Qt.AlignCenter)
++        titulo.setStyleSheet("font-size:22px; font-weight:bold; margin-bottom:20px;")
++        layout.addWidget(titulo)
++
++        self.lbl_temp = QLabel("Temperatura: -- °C")
++        self.lbl_temp.setAlignment(Qt.AlignCenter)
++        layout.addWidget(self.lbl_temp)
++
++        self.lbl_air = QLabel("Calidad del aire: --")
++        self.lbl_air.setAlignment(Qt.AlignCenter)
++        layout.addWidget(self.lbl_air)
++
++        btn = QPushButton("Cerrar sesión")
++        btn.clicked.connect(self.cerrar_sesion)
++        btn.setStyleSheet("font-size:16px; margin-top:25px;")
++        layout.addWidget(btn)
++
++        self.setLayout(layout)
++
++        # --- Sensores (MISMO que mantenimiento) ---
++        data_file = "data/json/sensores.json"
++
++        self.sensors = [
++            Sensor(id="temperature1", sensor_type="temperature", data_file=data_file),
++            Sensor(id="airQ1", sensor_type="airQuality", data_file=data_file),
++        ]
++
++        # --- Sistema y controlador ---
++        self.sistema = Sistema(sensors=self.sensors)
++        self.ctrl = Controlador_Sensores(self.sistema.sensors)
++
++        # --- Timer de actualización ---
++        self.timer = QTimer()
++        self.timer.timeout.connect(self.actualizar)
++        self.timer.start(1000)
++
++    def actualizar(self):
++        lecturas = self.ctrl.read_all()
++
++        temp = lecturas.get("temperature1")
++        air = lecturas.get("airQ1")
++
++        self.lbl_temp.setText(
++            f"Temperatura: {temp:.1f} °C" if temp is not None else "Temperatura: -- °C"
++        )
++
++        self.lbl_air.setText(
++            f"Calidad del aire: {air:.1f}" if air is not None else "Calidad del aire: -- "
++        )
++
++    def cerrar_sesion(self):
++        from src.view.inicio import Inicio
++        self.inicio = Inicio()
++        self.inicio.show()
++        self.close()
+Index: data/json/sensores.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/data/json/sensores.json b/data/json/sensores.json
+new file mode 100644
+--- /dev/null	(date 1764873467783)
++++ b/data/json/sensores.json	(date 1764873467783)
+@@ -0,0 +1,7 @@
++{
++    "temperature": 22.0,
++    "smoke": 0.0,
++    "light": 500.0,
++    "distance": 100.0,
++    "airQuality": 15.0
++}
+\ No newline at end of file

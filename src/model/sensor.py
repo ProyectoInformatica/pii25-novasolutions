@@ -13,8 +13,10 @@ logger = logging.getLogger("SensorModel")
 # Constante de módulo para los valores de simulación
 DEFAULT_SIM_DATA = {
     "temperature": 22.0,  # Temperatura segura
-    "smoke": 0.0,  # Sin humo
-    "light": 500.0  # Luz media
+    "smoke": 0.0,         # Sin humo
+    "light": 500.0,       # Luz media
+    "distance": 100.0,    # NUEVO: Distancia por defecto (cm)
+    "airQuality": 15.0    # Calidad de aire
 }
 
 
@@ -25,7 +27,7 @@ class Sensor(QObject):
 
     def __init__(self, id: str, sensor_type: str, name: str = "", data_file: Optional[str] = None,
                  interval_ms: int = 1000):
-        # 1. Llamada obligatoria al constructor de QObject
+        # Llamada obligatoria al constructor de QObject
         super().__init__()
 
         if sensor_type not in DEFAULT_SIM_DATA:
@@ -35,16 +37,16 @@ class Sensor(QObject):
         self.type = sensor_type
         self.name = name or f"{sensor_type}_sensor"
 
-        # 2. Uso de pathlib.Path para manejo de archivos
+        # Uso de pathlib.Path para manejo de archivos
         self.data_path: Optional[Path] = Path(data_file) if data_file else None
 
-        # 3. Check y creación del archivo de simulación si no existe
+        # Check y creación del archivo de simulación si no existe
         if self.data_path and not self.data_path.exists():
             logger.info(
                 f"Archivo de simulación '{self.data_path.name}' no encontrado. Creando con valores por defecto...")
             Sensor.generate_simulation_json(self.data_path, DEFAULT_SIM_DATA)
 
-        # 4. Configuración de QTimer para la lectura periódica (asincronía ligera)
+        # Configuración de QTimer para la lectura periódica (asincronía ligera)
         self._timer = QTimer(self)
         self._timer.timeout.connect(self.read)
         self.interval_ms = interval_ms
@@ -53,7 +55,6 @@ class Sensor(QObject):
         self.start_reading()
 
     def start_reading(self):
-        """Inicia la lectura periódica del sensor usando QTimer."""
         if self.data_path:
             self._timer.start(self.interval_ms)
             logger.info(f"Sensor '{self.name}' iniciado. Lectura cada {self.interval_ms}ms.")
@@ -61,15 +62,11 @@ class Sensor(QObject):
             logger.warning(f"Sensor '{self.name}' no tiene archivo de datos configurado. Lectura inactiva.")
 
     def stop_reading(self):
-        """Detiene la lectura periódica del sensor."""
         if self._timer.isActive():
             self._timer.stop()
             logger.info(f"Sensor '{self.name}' detenido.")
 
     def read(self) -> Optional[float]:
-        """
-        Devuelve la lectura actual y emite la señal de actualización de datos.
-        """
         if not self.data_path or not self.data_path.exists():
             error_msg = f"Archivo de datos de simulación no encontrado: {self.data_path}"
             logger.error(error_msg)
@@ -91,7 +88,7 @@ class Sensor(QObject):
                 raise KeyError(f"El JSON no contiene el campo '{self.type}' o el valor no es numérico.")
 
         except (IOError, json.JSONDecodeError, KeyError, Exception) as e:
-            # 6. Capturar errores, loguear y emitir señal de error
+            # Capturar errores, loguear y emitir señal de error
             error_msg = f"Error leyendo sensor {self.type} desde JSON: {e}"
             logger.error(error_msg)
             self.error_lectura.emit(error_msg)
@@ -99,7 +96,6 @@ class Sensor(QObject):
 
     @staticmethod
     def generate_simulation_json(path: Path, data: Dict[str, Union[float, int]]):
-        """Crea/reescribe un JSON con datos de simulación para pruebas."""
         # Crea los directorios padres si no existen
         path.parent.mkdir(parents=True, exist_ok=True)
         data_to_dump = {k: float(v) for k, v in data.items()}

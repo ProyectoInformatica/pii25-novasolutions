@@ -33,7 +33,7 @@ class Actuador:
         return f"<Actuador id={self.id}, name={self.name}, state={'ON' if self.state else 'OFF'}>"
 
 class Ventilador(Actuador):
-    def __init__(self, id: str = "heat1"):
+    def __init__(self, id: str = "fan1"): # Cambiado a fan1 por claridad
         super().__init__(id, name="Ventilador")
 
 
@@ -43,5 +43,9 @@ class Rociador(Actuador):
 
 
 class LuzExterior(Actuador):
-    def __init__(self, id: str = "light1"):
+    def __init__(self, id: str = "lightext1"): # Cambiado a lightext1
         super().__init__(id, name="Luz Exterior")
+
+class LuzPasillo(Actuador):
+    def __init__(self, id: str = "lightpasillo1"):
+        super().__init__(id, name="Luz de Pasillo")
