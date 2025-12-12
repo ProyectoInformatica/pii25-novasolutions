@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 # src/control/controlador_sistema.py
 
->>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
 from typing import Optional
 
 from src.model.sistema import Sistema

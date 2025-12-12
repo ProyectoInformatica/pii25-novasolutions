@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 # src/model/sensor.py
 
->>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
 from PySide6.QtCore import QObject, Signal, QTimer
 from pathlib import Path
 import json

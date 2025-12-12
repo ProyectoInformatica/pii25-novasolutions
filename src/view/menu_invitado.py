@@ -28,7 +28,6 @@ class MenuInvitado(QWidget):
         # 1. DEFINICIÓN Y CONFIGURACIÓN DE SENSORES
         # ======================================
 
-<<<<<<< HEAD
         # Sensores del Municipio (Exterior/General)
         self.municipio_sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=data_file),
@@ -37,24 +36,22 @@ class MenuInvitado(QWidget):
 
         # Sensores de la Escuela (Interior/Específico)
         self.escuela_sensors: List[Sensor] = [
-            # Usamos el sensor de Luz, que ya estaba definido en el sistema.
             Sensor(id="light1", sensor_type="light", data_file=data_file),
         ]
 
         self.all_sensors = self.municipio_sensors + self.escuela_sensors
 
-        # 🔔 CONEXIÓN DE SEÑALES ESPECÍFICAS (AirQuality a texto)
+        # 🔔 Conexión de señales (airQuality → texto)
         for s in self.all_sensors:
             if s.type == "airQuality":
                 s.air_quality_text_actualizada.connect(self.update_air_quality_text)
 
-        # --- Sistema y controlador ---
-        # El controlador y sistema trabajan con todos los sensores.
+        # Sistema y controlador
         self.sistema = Sistema(sensors=self.all_sensors)
         self.ctrl = Controlador_Sensores(self.sistema.sensors)
 
         # ======================================
-        # 2. LAYOUT PRINCIPAL Y CONTROLES
+        # 2. LAYOUT PRINCIPAL
         # ======================================
         main_layout = QVBoxLayout()
 
@@ -63,7 +60,7 @@ class MenuInvitado(QWidget):
         titulo.setStyleSheet("font-size:22px; font-weight:bold; margin-bottom:10px;")
         main_layout.addWidget(titulo)
 
-        # Contenedor de botones para alternar vistas
+        # Botones de selección de panel
         button_container = QHBoxLayout()
 
         self.btn_municipio = QPushButton("Sensores del Municipio")
@@ -78,7 +75,7 @@ class MenuInvitado(QWidget):
         button_container.addWidget(self.btn_escuela)
         main_layout.addLayout(button_container)
 
-        # Contenedores de paneles (Panels)
+        # Paneles
         self.panel_municipio = self.create_municipio_panel()
         self.panel_escuela = self.create_escuela_panel()
 
@@ -88,7 +85,7 @@ class MenuInvitado(QWidget):
 
         main_layout.addLayout(self.panel_container)
 
-        # Botón Cerrar Sesión
+        # Botón cerrar sesión
         main_layout.addStretch()
         btn = QPushButton("Cerrar sesión")
         btn.clicked.connect(self.cerrar_sesion)
@@ -103,42 +100,12 @@ class MenuInvitado(QWidget):
         # ======================================
         # 3. TIMER DE ACTUALIZACIÓN
         # ======================================
-=======
-        self.lbl_temp = QLabel("Temperatura: -- °C")
-        self.lbl_temp.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.lbl_temp)
-
-        self.lbl_air = QLabel("Calidad del aire: --")
-        self.lbl_air.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.lbl_air)
-
-        btn = QPushButton("Cerrar sesión")
-        btn.clicked.connect(self.cerrar_sesion)
-        btn.setStyleSheet("font-size:16px; margin-top:25px;")
-        layout.addWidget(btn)
-
-        self.setLayout(layout)
-
-        # Sensores (MISMO que mantenimiento)
-        data_file = "simulation_data.json"
-
-        self.sensors = [
-            Sensor(id="temperature1", sensor_type="temperature", data_file=data_file),
-            Sensor(id="airQ1", sensor_type="airQuality", data_file=data_file),
-        ]
-
-        # Sistema y controlador
-        self.sistema = Sistema(sensors=self.sensors)
-        self.ctrl = Controlador_Sensores(self.sistema.sensors)
-
-        # Timer de actualización
->>>>>>> b7de1960d890cd3fd98422adc8b36de8e6cb1371
         self.timer = QTimer()
         self.timer.timeout.connect(self.actualizar)
         self.timer.start(1000)
 
     # -----------------------------------
-    #   CREACIÓN DE PANELES
+    #   PANELES
     # -----------------------------------
 
     def create_municipio_panel(self) -> QWidget:
@@ -161,22 +128,22 @@ class MenuInvitado(QWidget):
         layout = QVBoxLayout(panel)
 
         self.lbl_luz = QLabel("💡 Nivel de Luz: -- Lux")
-
         self.lbl_luz.setAlignment(Qt.AlignCenter)
 
         layout.addWidget(self.lbl_luz)
-
         return panel
 
-    #   FUNCIONES DE CONTROL
+    # -----------------------------------
+    #   CONTROL
+    # -----------------------------------
 
     def show_panel(self, panel_name: str):
-        """Muestra el panel solicitado y oculta el otro."""
         if panel_name == "municipio":
             self.panel_municipio.show()
             self.panel_escuela.hide()
             self.btn_municipio.setEnabled(False)
             self.btn_escuela.setEnabled(True)
+
         elif panel_name == "escuela":
             self.panel_municipio.hide()
             self.panel_escuela.show()
@@ -184,9 +151,7 @@ class MenuInvitado(QWidget):
             self.btn_escuela.setEnabled(False)
 
     def get_reading(self, sensor_type: str):
-        """Intenta obtener la lectura de un sensor específico."""
         try:
-            # Iteramos sobre los sensores del sistema para encontrar el tipo
             for s in self.all_sensors:
                 if s.type == sensor_type:
                     return s.read()
@@ -195,25 +160,17 @@ class MenuInvitado(QWidget):
             return None
 
     def update_air_quality_text(self, text_value: str):
-        """Método llamado por la señal air_quality_text_actualizada (desde sensor.py)."""
         self.lbl_air.setText(f"🌬️ Calidad del aire: {text_value}")
 
     def actualizar(self):
-        """Actualiza todas las etiquetas de la vista cada segundo."""
-
-        # Forzar la lectura de todos los sensores (el controlador lo hace)
         self.ctrl.read_all()
 
-        # Sensores Municipales (Exterior)
         temp = self.get_reading("temperature")
         self.lbl_temp.setText(
             f"🌡️ Temperatura: {temp:.1f} °C" if temp is not None else "🌡️ Temperatura: -- °C"
         )
-        # La Calidad del Aire se actualiza mediante su señal (update_air_quality_text)
 
-        # Sensores de la Escuela (Interior)
         luz = self.get_reading("light")
-
         self.lbl_luz.setText(
             f"💡 Nivel de Luz: {luz:.1f} Lux" if luz is not None else "💡 Nivel de Luz: -- Lux"
         )
