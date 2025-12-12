@@ -21,14 +21,14 @@ class Login(QWidget):
         # Campo usuario
         self.usuario = QLineEdit()
         self.usuario.setPlaceholderText("Usuario")
-        self.usuario.setText("director") # Para facilitar pruebas
+        self.usuario.setText("")
         layout.addWidget(self.usuario)
 
         # Campo contraseña
         self.clave = QLineEdit()
         self.clave.setPlaceholderText("Contraseña")
         self.clave.setEchoMode(QLineEdit.EchoMode.Password)
-        self.clave.setText("1234") # Para facilitar pruebas
+        self.clave.setText("")
         layout.addWidget(self.clave)
 
         # Botones
