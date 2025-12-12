@@ -13,10 +13,10 @@ logger = logging.getLogger("SensorModel")
 # Constante de módulo para los valores de simulación
 DEFAULT_SIM_DATA = {
     "temperature": 22.0,  # Temperatura segura
-    "smoke": 0.0,         # Sin humo
-    "light": 500.0,       # Luz media
-    "distance": 100.0,    # NUEVO: Distancia por defecto (cm)
-    "airQuality": 15.0    # Calidad de aire
+    "smoke": 0.0,  # Sin humo
+    "light": 500.0,  # Luz media
+    "distance": 100.0,  # Distancia por defecto (cm)
+    "airQuality": 15.0  # Calidad de aire
 }
 
 
@@ -24,6 +24,9 @@ class Sensor(QObject):
     # Señales para comunicar cambios y errores al Controlador
     lectura_actualizada = Signal(float)
     error_lectura = Signal(str)
+
+    # NUEVA SEÑAL para valores de calidad de aire en texto
+    air_quality_text_actualizada = Signal(str)
 
     def __init__(self, id: str, sensor_type: str, name: str = "", data_file: Optional[str] = None,
                  interval_ms: int = 1000):
@@ -66,6 +69,21 @@ class Sensor(QObject):
             self._timer.stop()
             logger.info(f"Sensor '{self.name}' detenido.")
 
+    @staticmethod
+    def map_air_quality_to_text(value: float) -> str:
+        """Traduce el valor numérico de AirQuality a un descriptor de texto."""
+        # Ajusta estos umbrales según el estándar de calidad de aire que uses (ej: AQI, PM2.5, CO2)
+        if value <= 10.0:
+            return "Muy Buena"
+        elif value <= 25.0:
+            return "Buena"
+        elif value <= 50.0:
+            return "Aceptable"
+        elif value <= 100.0:
+            return "Mala"
+        else:
+            return "Muy Mala (Peligrosa)"
+
     def read(self) -> Optional[float]:
         if not self.data_path or not self.data_path.exists():
             error_msg = f"Archivo de datos de simulación no encontrado: {self.data_path}"
@@ -82,7 +100,15 @@ class Sensor(QObject):
                 value = float(data[self.type])
 
                 # 5. Emitir señal al Controlador para notificar el nuevo valor
-                self.lectura_actualizada.emit(value)
+                if self.type == "airQuality":
+                    # Si es Air Quality, mapear a texto y emitir la nueva señal de texto
+                    text_value = Sensor.map_air_quality_to_text(value)
+                    self.air_quality_text_actualizada.emit(text_value)
+                    # logger.info(f"Sensor AirQuality actualizado: {text_value}") # Mantenemos logger a INFO
+                else:
+                    # Para otros sensores, emitir el valor numérico
+                    self.lectura_actualizada.emit(value)
+
                 return value
             else:
                 raise KeyError(f"El JSON no contiene el campo '{self.type}' o el valor no es numérico.")
