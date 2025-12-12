@@ -1,5 +1,4 @@
 # src/control/controlador_sistema.py
-# src/control/controlador_sistema.py
 
 from typing import Optional
 

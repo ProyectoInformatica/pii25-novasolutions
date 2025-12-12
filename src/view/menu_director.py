@@ -1,5 +1,3 @@
-# src/view/menu_director.py (Sustituye a la implementación anterior del MenuDirector)
-
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
     QGroupBox, QGridLayout
@@ -13,7 +11,6 @@ from src.model.sensor import Sensor
 from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador
 from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
-
 
 # from src.view.gestion_usuarios import GestionUsuariosDirector # Necesario para el botón de gestión
 # from src.view.inicio import Inicio # Necesario para cerrar sesión
@@ -30,11 +27,7 @@ class MenuDirector(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
-        # ----------------------------------------
-        # MODELO + CONTROLADORES (IDÉNTICO a Mantenimiento para la lectura de datos)
-        # ----------------------------------------
-
-        # Sensores: Distancia incluida
+        # Sensores
         self.sensors = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
@@ -55,7 +48,6 @@ class MenuDirector(QWidget):
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
         # LAYOUT PRINCIPAL
-
         layout = QVBoxLayout()
 
         titulo = QLabel(f"Bienvenido Director General: {usuario.nombre_usuario}")
@@ -63,7 +55,7 @@ class MenuDirector(QWidget):
         titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
         layout.addWidget(titulo)
 
-        # 1. BOTONES DE GESTIÓN
+        # BOTONES DE GESTIÓN
         gestion_group = QGroupBox("Opciones de Dirección")
         gestion_layout = QHBoxLayout()
         gestion_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
@@ -79,8 +71,7 @@ class MenuDirector(QWidget):
         layout.addWidget(gestion_group)
 
 
-        # 2. SECCIÓN DE MONITOREO
-
+        # SECCIÓN DE MONITOREO
         status_group = QGroupBox("Estado del Sistema en Tiempo Real")
         status_layout = QGridLayout()
         status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
@@ -130,18 +121,16 @@ class MenuDirector(QWidget):
 
 
         # TIMER DE ACTUALIZACIÓN
-
         self.timer = QTimer(self)
         self.timer.setInterval(1000)  # 1 segundo
         self.timer.timeout.connect(self.actualizar)
         self.timer.start()
 
 
-    # MÉTODOS
-
+    # METODOS
     def actualizar(self):
 
-        # El Director solo monitorea; el sistema sigue en modo automático
+        # El Director solo monitorea; el sistema sigue en modo automatico
         self.ctrl_sistema.update()
 
         def safe_read(sensor_type):
@@ -155,14 +144,14 @@ class MenuDirector(QWidget):
         light = safe_read("light")
         distance = safe_read("distance")
 
-        # 1. Actualización de etiquetas de sensores
+        # Actualizacion de etiquetas de sensores
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
         self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
         self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
         self.lbl_distancia.setText(
             f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
 
-        # 2. Actualizar el estado de los actuadores en la UI
+        # Actualizar el estado de los actuadores en la UI
         for actuator in self.actuators:
             label = self.actuator_labels.get(actuator.id)
             if label:
