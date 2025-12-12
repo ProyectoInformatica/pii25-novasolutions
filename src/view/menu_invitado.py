@@ -12,7 +12,7 @@ class MenuInvitado(QWidget):
     def __init__(self):
         super().__init__()
 
-        # --- Ventana ---
+        # Ventana
         self.setWindowTitle("Modo Invitado – Solo Lectura")
         self.setGeometry(200, 150, 500, 300)
         self.setStyleSheet("background-color:#1E1E1E; color:white; font-size:18px;")
@@ -39,19 +39,19 @@ class MenuInvitado(QWidget):
 
         self.setLayout(layout)
 
-        # --- Sensores (MISMO que mantenimiento) ---
-        data_file = "data/json/sensores.json"
+        # Sensores (MISMO que mantenimiento)
+        data_file = "simulation_data.json"
 
         self.sensors = [
             Sensor(id="temperature1", sensor_type="temperature", data_file=data_file),
             Sensor(id="airQ1", sensor_type="airQuality", data_file=data_file),
         ]
 
-        # --- Sistema y controlador ---
+        # Sistema y controlador
         self.sistema = Sistema(sensors=self.sensors)
         self.ctrl = Controlador_Sensores(self.sistema.sensors)
 
-        # --- Timer de actualización ---
+        # Timer de actualización
         self.timer = QTimer()
         self.timer.timeout.connect(self.actualizar)
         self.timer.start(1000)

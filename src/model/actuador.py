@@ -1,7 +1,5 @@
 # src/model/actuador.py
 
-# src/model/actuador.py
-
 from typing import Optional
 
 class Actuador:
