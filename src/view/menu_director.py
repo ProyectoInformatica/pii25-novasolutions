@@ -25,10 +25,6 @@ class MenuDirector(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
-        # ----------------------------------------
-        # MODELO + CONTROLADORES
-        # ----------------------------------------
-
         self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
