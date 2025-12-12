@@ -12,6 +12,7 @@ from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
 from src.model.usuario import Usuario
 from src.view.gestion_usuarios import GestionUsuariosDirector
+from src.view.reporte_view import ReporteHistorialView
 
 
 class MenuDirector(QWidget):
@@ -44,6 +45,9 @@ class MenuDirector(QWidget):
         self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
+        from src.model.reporte import Reporteador
+        self.reporteador = Reporteador()
+        self.update_count = 0
 
         # 🔔 Conexión de señal específica para AirQuality
         for s in self.sensors:
@@ -69,7 +73,7 @@ class MenuDirector(QWidget):
         gestion_layout.addWidget(btn_usuarios)
 
         btn_reportes = QPushButton("📈 Ver Reportes Históricos")
-        btn_reportes.setEnabled(False)  # No implementado
+        btn_reportes.clicked.connect(self.abrir_reportes)
         gestion_layout.addWidget(btn_reportes)
 
         gestion_group.setLayout(gestion_layout)
@@ -83,7 +87,6 @@ class MenuDirector(QWidget):
         status_layout.addWidget(QLabel("### 📡 LECTURAS DE SENSORES"), 0, 0, 1, 2)
 
         self.lbl_temp = QLabel("Temperatura: -- °C")
-        self.lbl_temp.setStyleSheet("font-weight: bold; padding: 5px;")
         status_layout.addWidget(QLabel("🌡️ Temp"), 1, 0)
         status_layout.addWidget(self.lbl_temp, 1, 1)
 
@@ -100,7 +103,6 @@ class MenuDirector(QWidget):
         status_layout.addWidget(self.lbl_distancia, 4, 1)
 
         self.lbl_airq = QLabel("Calidad del Aire: Esperando lectura...")
-        self.lbl_airq.setStyleSheet("font-weight: bold; padding: 5px; color: #7FDBFF;")
         status_layout.addWidget(QLabel("🌬️ Calidad Aire"), 5, 0)
         status_layout.addWidget(self.lbl_airq, 5, 1)
 
@@ -162,9 +164,20 @@ class MenuDirector(QWidget):
             if label:
                 label.setText("🟢 ON" if actuator.state else "🔴 OFF")
 
+        self.update_count += 1
+        if self.update_count % 10 == 0:  # Cada 10 ciclos (10 segundos)
+            # El reporteador leerá directamente de simulation_data.json
+            self.reporteador.registrar_lectura_actual()
+
     def abrir_gestion_usuarios(self):
         self.gestion = GestionUsuariosDirector(usuario=self.usuario)
         self.gestion.show()
+
+    def abrir_reportes(self):
+        """Abre la ventana para visualizar los reportes históricos de sensores."""
+        # Se necesita importar la clase 'ReporteHistorialView'
+        self.reporte_view = ReporteHistorialView()
+        self.reporte_view.show()
 
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
