@@ -9,7 +9,7 @@ class ControladorUsuarios:
         self.usuarios = self.cargar_usuarios()
 
     def cargar_usuarios(self):
-        """Carga los usuarios desde un archivo JSON o crea uno por defecto."""
+        # Carga los usuarios desde un archivo JSON o crea uno por defecto.
         if not os.path.exists(self.ruta_json):
             # Si no existe, crear usuarios de prueba y guardarlos
             usuarios_iniciales = [
@@ -30,7 +30,7 @@ class ControladorUsuarios:
             return [Usuario(**u) for u in datos]
 
     def guardar_usuarios(self):
-        """Guarda la lista actual de usuarios en el archivo JSON."""
+        # Guarda la lista actual de usuarios en el archivo JSON.
         datos = [
             {
                 "nombre_usuario": u.nombre_usuario,
@@ -43,14 +43,14 @@ class ControladorUsuarios:
             json.dump(datos, f, indent=4, ensure_ascii=False)
 
     def autenticar(self, nombre_usuario, contrasena):
-        """Verifica si las credenciales son correctas."""
+        # Verifica si las credenciales son correctas.
         for usuario in self.usuarios:
             if usuario.verificar_credenciales(nombre_usuario, contrasena):
                 return usuario
         return None
 
     def registrar_usuario(self, nombre_usuario, contrasena, rol):
-        """Registra un nuevo usuario y lo guarda en el archivo JSON."""
+        # Registra un nuevo usuario y lo guarda en el archivo JSON.
         # Verificar si ya existe el usuario
         user_name = nombre_usuario.lower().strip()
         if any(u.nombre_usuario == user_name for u in self.usuarios):
@@ -64,7 +64,7 @@ class ControladorUsuarios:
         return True
 
     def eliminar_usuario(self, nombre_usuario):
-        """Elimina un usuario por nombre y guarda el JSON."""
+        # Elimina un usuario por nombre y guarda el JSON.
         nombre_usuario_clean = nombre_usuario.lower().strip()
         for usuario in self.usuarios:
             if usuario.nombre_usuario == nombre_usuario_clean:

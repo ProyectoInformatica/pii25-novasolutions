@@ -1,5 +1,3 @@
-# src/control/controlador_sistema.py
-
 from typing import Optional
 
 from src.model.sistema import Sistema
@@ -16,21 +14,20 @@ class Controlador_Sistema:
         self.sistema = sistema
         self.deadband = deadband
         # Umbrales para control (ajustar según sea necesario)
-        self.UMBRAL_TEMP_MAX = 25.0  # <--- Temperatura MÁXIMA deseada (Auto)
+        self.UMBRAL_TEMP_MAX = 25.0  # Temperatura MÁXIMA deseada (Auto)
         self.UMBRAL_HUMO = 0.6
         self.UMBRAL_LUZ = 400.0
         self.UMBRAL_DISTANCIA = 50.0  # cm. Distancia para detectar presencia
 
     def update(self):
-        # 1. Leer temperatura
+        # Leer temperatura
         temp = None
         try:
             temp = self.sistema.get_temperature()
         except RuntimeError as e:
-            # logger.error(f"Error leyendo temperatura: {e}")
             return  # No continuar si no hay temperatura
 
-        # 2. Controlar la temperatura (Manual o Auto)
+        # Controlar la temperatura (Manual o Auto)
         if self.sistema.mode == "manual" and self.sistema.manual_enabled:
             # Lógica de control manual: Si la temperatura es > Target, encender Ventilador. Si es < Target, apagarlo.
             if temp is not None:
@@ -39,7 +36,7 @@ class Controlador_Sistema:
         elif self.sistema.mode == "auto":
             self._control_temperatura_auto(temp)
 
-        # 3. Controlar Humo, Luz Ambiente y Luz de Pasillo (Estos siempre son automáticos)
+        # Controlar Humo, Luz Ambiente y Luz de Pasillo
         self._control_humo()
         self._control_luz_exterior()
         self._control_luz_pasillo()
@@ -48,7 +45,7 @@ class Controlador_Sistema:
         target = self.sistema.manual_target
         should_be_on = None
 
-        # Si la temperatura sube por encima del target + banda muerta, encender ventilador (para enfriar)
+        # Si la temperatura sube por encima del target + banda muerta, encender ventilador
         if current_temp > (target + self.deadband):
             should_be_on = True
 
@@ -66,7 +63,7 @@ class Controlador_Sistema:
         target = self.UMBRAL_TEMP_MAX
         should_be_on = None
 
-        # Si la temperatura es demasiado ALTA (supera el umbral), encender el ventilador
+        # Si la temperatura es demasiado ALTA, encender el ventilador
         if current_temp > target:
             should_be_on = True
 
