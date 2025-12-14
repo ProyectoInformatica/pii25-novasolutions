@@ -14,7 +14,7 @@ from src.model.usuario import Usuario
 
 
 class MenuMantenimiento(QWidget):
-    def __init__(self, usuario: Usuario, sensor_data_file="simulation_data.json"):
+    def __init__(self, usuario: Usuario, sensor_data_file="escuela_data.json"):
         super().__init__()
 
         self.usuario = usuario
@@ -24,9 +24,7 @@ class MenuMantenimiento(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
-        # ==========================
-        #   CREACIÓN DE SENSORES
-        # ==========================
+
         self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
@@ -63,9 +61,6 @@ class MenuMantenimiento(QWidget):
         titulo.setStyleSheet("font-size:20px;")
         layout.addWidget(titulo)
 
-        # ==========================
-        #   GRUPO ESTADOS
-        # ==========================
         status_group = QGroupBox("Estado del Sistema")
         status_group.setStyleSheet(
             "QGroupBox { border: 1px solid #555; margin-top: 10px; padding-top: 10px; }"
@@ -100,7 +95,7 @@ class MenuMantenimiento(QWidget):
         status_layout.addLayout(sensores_left, 0, 0)
         status_layout.addLayout(sensores_right, 0, 1)
 
-        # ====== ACTUADORES ======
+        # ACTUADORES
         actuadores_left = QVBoxLayout()
         actuadores_right = QVBoxLayout()
 
@@ -121,9 +116,7 @@ class MenuMantenimiento(QWidget):
         status_group.setLayout(status_layout)
         layout.addWidget(status_group)
 
-        # ==========================
-        #   CONTROL MANUAL
-        # ==========================
+        #CONTROL MANUAL
         controls = QGroupBox("Control de Temperatura")
         controls_layout = QHBoxLayout()
 
@@ -152,9 +145,7 @@ class MenuMantenimiento(QWidget):
 
         self._update_mode_ui(self.sistema.mode)
 
-        # ==========================
-        #   BOTÓN SALIR
-        # ==========================
+
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
         layout.addWidget(btn_salir)
@@ -167,9 +158,6 @@ class MenuMantenimiento(QWidget):
         self.timer.timeout.connect(self.actualizar)
         self.timer.start()
 
-    # -----------------------------------
-    #   FUNCIONES DE CONTROL Y UI
-    # -----------------------------------
     def _update_mode_ui(self, mode: str):
         is_manual = mode == "manual"
         self.btn_modo.setText("Cambiar a AUTO" if is_manual else "Cambiar a MANUAL")

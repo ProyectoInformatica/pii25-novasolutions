@@ -30,9 +30,6 @@ class MenuInvitado(QWidget):
         self.setGeometry(200, 150, 600, 550)  # Aumentamos el tamaño
         self.setStyleSheet("background-color:#1E1E1E; color:white; font-size:18px;")
 
-        # DEFINICIÓN Y CONFIGURACIÓN DE SENSORES
-        # ... (Resto de la inicialización de sensores igual) ...
-
         # Sensores del Municipio (temp y airQ con ID distinto)
         self.municipio_sensors: List[Sensor] = [
             Sensor(id="municipio_temp", sensor_type="temperature", data_file=MUNICIPIO_DATA_FILE, name="Temp. Ext."),
@@ -178,7 +175,6 @@ class MenuInvitado(QWidget):
         return None
 
     def update_air_quality_text(self, text_value: str, sensor_id: str):
-        """Método llamado por la señal air_quality_text_actualizada, ahora diferencia el sensor por su ID."""
         if sensor_id == "municipio_airQ":
             # Sensor Municipal
             self.lbl_air_ext.setText(f"🌬️ Calidad del aire (Ext.): {text_value}")
@@ -187,7 +183,6 @@ class MenuInvitado(QWidget):
             self.lbl_air_int.setText(f"🌬️ Calidad del aire (Int.): {text_value}")
 
     def actualizar(self):
-        """Actualiza todas las etiquetas de la vista cada segundo."""
 
         self.ctrl.read_all()  # Forzar la lectura de todos los sensores
 

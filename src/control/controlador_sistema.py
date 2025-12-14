@@ -29,7 +29,6 @@ class Controlador_Sistema:
 
         # Controlar la temperatura (Manual o Auto)
         if self.sistema.mode == "manual" and self.sistema.manual_enabled:
-            # Lógica de control manual: Si la temperatura es > Target, encender Ventilador. Si es < Target, apagarlo.
             if temp is not None:
                 self._control_temperatura_manual(temp)
 

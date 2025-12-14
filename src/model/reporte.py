@@ -8,9 +8,7 @@ HISTORY_FILE = "sensor_history.json"
 
 
 class Reporteador:
-    """Clase encargada de generar reportes a partir de los datos históricos."""
-
-    def __init__(self, data_file="simulation_data.json"):
+    def __init__(self, data_file="escuela_data.json"):
         self.current_data_file = data_file
         self.history_file = HISTORY_FILE
 
@@ -23,7 +21,6 @@ class Reporteador:
         self.inicializar_historial_desde_simulacion()
 
     def _leer_estado_actual(self):
-        """Función auxiliar para leer el contenido del simulation_data.json."""
         try:
             if not self.current_full_path.exists():
                 print(f"Advertencia: Archivo de datos actual ({self.current_data_file}) no encontrado.")
@@ -43,10 +40,6 @@ class Reporteador:
             return None
 
     def inicializar_historial_desde_simulacion(self):
-        """
-        Crea el archivo de historial si no existe. 
-        Si lo crea, usa la lectura actual de simulation_data.json como primera entrada.
-        """
         if self.history_full_path.exists():
             # Si el historial ya existe, no hacemos nada.
             return
@@ -79,16 +72,10 @@ class Reporteador:
             print(f"ERROR: No se pudo crear/escribir el archivo de historial: {e}")
 
     def get_historial_sensores(self):
-        """
-        Lee el historial de lecturas del archivo sensor_history.json.
-        (El parámetro from_history_file=True/False ha sido eliminado para simplificar).
-        """
         ruta_archivo = self.history_full_path
 
         try:
             if not ruta_archivo.exists():
-                # Ya que se llama a inicializar_historial_desde_simulacion en __init__, 
-                # esto solo debería ocurrir si hay un fallo de permiso grave.
                 print(
                     f"Advertencia: Archivo de historial {self.history_file} no encontrado después de la inicialización.")
                 return []
@@ -110,10 +97,6 @@ class Reporteador:
             return []
 
     def registrar_lectura_actual(self):
-        """
-        Lee el último estado (de simulation_data.json), añade la marca de tiempo 
-        y lo registra al final del archivo de historial.
-        """
         lectura_actual = self._leer_estado_actual()
 
         if not lectura_actual:

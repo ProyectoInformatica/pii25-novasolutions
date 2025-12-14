@@ -57,7 +57,6 @@ class Sistema(QObject):
             # print(f"[Sistema] Control manual (Ventilador) establecido a: {enabled}")
 
     def get_sensor_reading(self, sensor_type: str) -> Optional[float]:
-        """Busca el primer sensor de un tipo dado y devuelve su última lectura (forzando la lectura del JSON)."""
 
         for s in self.sensors:
             if s.type == sensor_type:
@@ -67,7 +66,6 @@ class Sistema(QObject):
         raise RuntimeError(f"Sensor de tipo '{sensor_type}' no encontrado en el sistema.")
 
     def get_temperature(self) -> Optional[float]:
-        """Método directo para el controlador."""
         # Note: Esta versión llama a get_sensor_reading, que a su vez llama a .read() del sensor.
         return self.get_sensor_reading("temperature")
 
