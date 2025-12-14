@@ -1,5 +1,3 @@
-# src/view/inicio.py
-
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QSizePolicy
 )
@@ -12,18 +10,16 @@ RESOURCES_DIR = Path("resources")
 LOGO_MADRID_PATH = str(RESOURCES_DIR / "cdm.png")
 LOGO_NOVASOLUTIONS_PATH = str(RESOURCES_DIR / "novasolutions.jpg")
 
+# La bandera de Madrid tiene una proporción de 11:7
 MADRID_ASPECT_RATIO = 11 / 7
 
 # Factores de escala
 CDM_SCALE_FACTOR = 0.10
 NOVASOLUTIONS_SCALE_FACTOR = 0.22
-MIN_LOGO_SIZE = 60  # Tamaño mínimo
+MIN_LOGO_SIZE = 60  # Tamaño mínimo de seguridad
 
 
 class LogoLabel(QLabel):
-    """
-    QLabel especializado que carga un logo y gestiona su redimensionamiento.
-    """
 
     def __init__(self, path: str, name: str, default_size: int, scale_by_width=False):
         super().__init__()
@@ -35,7 +31,6 @@ class LogoLabel(QLabel):
         self._load_logo_initial(default_size)
 
     def _load_logo_initial(self, size: int):
-        """Carga el logo y lo prepara para el escalado."""
         try:
             self.original_pixmap = QPixmap(self.path)
             if self.original_pixmap.isNull():
@@ -56,13 +51,13 @@ class LogoLabel(QLabel):
         if hasattr(self, 'original_pixmap') and not self.original_pixmap.isNull():
 
             if self.scale_by_width or new_height == -1:
-                # Lógica para NovaSolutions
+                # Lógica para NovaSolutions (rectangular): escalar por ancho
                 scaled_pixmap = self.original_pixmap.scaledToWidth(
                     new_width, Qt.SmoothTransformation
                 )
                 self.setFixedSize(scaled_pixmap.size())
             else:
-                # Lógica para CDM
+                # Lógica
                 scaled_pixmap = self.original_pixmap.scaled(
                     new_width, new_height, Qt.KeepAspectRatio, Qt.SmoothTransformation
                 )
@@ -99,19 +94,19 @@ class Inicio(QWidget):
         layout.addLayout(logo_container)
 
         # TITULO PRINCIPAL
-        self.titulo = QLabel("Bienvenido al sistema escolar de sensores")
-        self.titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.titulo.setStyleSheet("font-size:20px; font-weight:bold; margin:20px; color:white;")
-        layout.addWidget(self.titulo)
+        titulo = QLabel("Bienvenido al sistema escolar de sensores")
+        titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        titulo.setStyleSheet("font-size:20px; font-weight:bold; margin:20px; color:white;")
+        layout.addWidget(titulo)
 
-        # 3. BOTONES
-        btn_login = QPushButton("Iniciar sesión (Director/Mantenimiento)")
+        # BOTONES
+        btn_login = QPushButton("Iniciar sesión")
         btn_login.setStyleSheet(
             "background-color:#4A90E2; color:white; font-size:18px; padding:20px; border-radius:15px;")
         btn_login.clicked.connect(self.ir_login)
         layout.addWidget(btn_login)
 
-        btn_estudiante = QPushButton("Entrar como invitado (Solo Lectura)")
+        btn_estudiante = QPushButton("Entrar como invitado")
         btn_estudiante.setStyleSheet(
             "background-color:#F5A623; color:white; font-size:18px; padding:20px; border-radius:15px;")
         btn_estudiante.clicked.connect(self.ir_estudiante)
@@ -120,28 +115,24 @@ class Inicio(QWidget):
         self.setLayout(layout)
 
     def resizeEvent(self, event: QResizeEvent):
+        # Sobreescribe el evento para escalar los logos con el tamaño de la ventana.
         super().resizeEvent(event)
 
         new_width = self.width()
-
-        # CÁLCULO DE TAMAÑOS
 
         # Bandera de Madrid
         base_width_madrid = int(new_width * CDM_SCALE_FACTOR)
         base_width_madrid = max(base_width_madrid, MIN_LOGO_SIZE)
 
-        # Calcular la altura necesaria para mantener la proporción
+        # Calcular la altura necesaria para mantener la proporcion
         height_madrid = int(base_width_madrid / MADRID_ASPECT_RATIO)
 
-        # Logo de NovaSolutions
+        # 2. Logo de NovaSolutions
         base_width_nova = int(new_width * NOVASOLUTIONS_SCALE_FACTOR)
         base_width_nova = max(base_width_nova, MIN_LOGO_SIZE + 30)
 
         # Redimensionar y actualizar los logos
-        # Comunidad de Madrid
         self.lbl_madrid.scale_logo(base_width_madrid, height_madrid)
-
-        # NovaSolutions
         self.lbl_novasolutions.scale_logo(base_width_nova)
 
     def ir_login(self):

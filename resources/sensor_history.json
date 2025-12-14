@@ -1,0 +1,10 @@
+[
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-14 16:42:18"
+    }
+]

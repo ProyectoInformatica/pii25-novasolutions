@@ -81,7 +81,7 @@ class GestionUsuariosDirector(QWidget):
             self.lista_usuarios.addItem(f"{usuario.nombre_usuario} ({usuario.rol})")
 
     def eliminar_usuario(self):
-        """Elimina un usuario seleccionado de la lista."""
+        # Elimina un usuario seleccionado de la lista.
         item = self.lista_usuarios.currentItem()
 
         if not item:

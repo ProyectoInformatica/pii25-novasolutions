@@ -4,28 +4,35 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QTimer, Qt
 from typing import List
+from pathlib import Path
 
 from src.model.sistema import Sistema
-from src.model.sensor import Sensor
+from src.model.sensor import Sensor, initialize_simulation_files
 from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
 from src.model.usuario import Usuario
+from src.model.reporte import Reporteador
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
 
+# UBICACIÓN DEL ARCHIVO DE DATOS DE LA ESCUELA
+RESOURCES_DIR = Path("resources")
+ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
+
 
 class MenuDirector(QWidget):
-    def __init__(self, usuario: Usuario, sensor_data_file="simulation_data.json"):
+    def __init__(self, usuario: Usuario):
         super().__init__()
 
         self.usuario = usuario
-        self.sensor_data_file = sensor_data_file
+        self.sensor_data_file = ESCUELA_DATA_FILE
 
         self.setWindowTitle("Panel del Director")
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
+        # Sensores de la Escuela
         self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
@@ -45,14 +52,17 @@ class MenuDirector(QWidget):
         self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
-        from src.model.reporte import Reporteador
+
+        # Inicialización de Reporteador
         self.reporteador = Reporteador()
+
+        # Contador de ciclos de actualización
         self.update_count = 0
 
-        # 🔔 Conexión de señal específica para AirQuality
+        # Conexión de señal específica para AirQuality
         for s in self.sensors:
             if s.type == "airQuality":
-                s.air_quality_text_actualizada.connect(self.update_air_quality_text)
+                s.air_quality_text_actualizada.connect(lambda text, id=s.id: self.update_air_quality_text(text))
                 break
 
         # LAYOUT PRINCIPAL
@@ -141,32 +151,26 @@ class MenuDirector(QWidget):
     def actualizar(self):
         self.ctrl_sistema.update()
 
-        def safe_read(sensor_type):
-            try:
-                if sensor_type == "airQuality":
-                    return None
-                return self.sistema.get_sensor_reading(sensor_type)
-            except RuntimeError:
-                return None
+        temp = self.sistema.get_sensor_reading("temperature")
+        smoke = self.sistema.get_sensor_reading("smoke")
+        light = self.sistema.get_sensor_reading("light")
+        distance = self.sistema.get_sensor_reading("distance")
 
-        temp = safe_read("temperature")
-        smoke = safe_read("smoke")
-        light = safe_read("light")
-        distance = safe_read("distance")
-
+        # Actualización de la GUI
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
         self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
         self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
-        self.lbl_distancia.setText(f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
+        self.lbl_distancia.setText(
+            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
 
         for actuator in self.actuators:
             label = self.actuator_labels.get(actuator.id)
             if label:
                 label.setText("🟢 ON" if actuator.state else "🔴 OFF")
 
+        # REPORTES CADA HORA
         self.update_count += 1
-        if self.update_count % 10 == 0:  # Cada 10 ciclos (10 segundos)
-            # El reporteador leerá directamente de simulation_data.json
+        if self.update_count % 3600 == 0:
             self.reporteador.registrar_lectura_actual()
 
     def abrir_gestion_usuarios(self):
@@ -179,8 +183,17 @@ class MenuDirector(QWidget):
         self.reporte_view = ReporteHistorialView()
         self.reporte_view.show()
 
+    def cleanup(self):
+        """Detiene el timer de la ventana y los timers internos de todos los sensores."""
+        self.timer.stop()
+        for sensor in self.sensors:
+            sensor.stop_reading()
+
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
+
+        self.cleanup()
+
         self.inicio = Inicio()
         self.inicio.show()
         self.close()

@@ -1,5 +1,3 @@
-# src/model/sensor.py
-
 from PySide6.QtCore import QObject, Signal, QTimer
 from pathlib import Path
 import json
@@ -19,14 +17,19 @@ DEFAULT_SIM_DATA = {
     "airQuality": 15.0  # Calidad de aire
 }
 
+# UBICACIONES DE ARCHIVOS JSON
+RESOURCES_DIR = Path("resources")
+MUNICIPIO_DATA_FILE = str(RESOURCES_DIR / "municipio_data.json")
+ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
+
 
 class Sensor(QObject):
     # Señales para comunicar cambios y errores al Controlador
     lectura_actualizada = Signal(float)
     error_lectura = Signal(str)
 
-    # NUEVA SEÑAL para valores de calidad de aire en texto
-    air_quality_text_actualizada = Signal(str)
+    # NUEVA SEÑAL: Emite el texto y el ID del sensor que lo generó
+    air_quality_text_actualizada = Signal(str, str)
 
     def __init__(self, id: str, sensor_type: str, name: str = "", data_file: Optional[str] = None,
                  interval_ms: int = 1000):
@@ -40,39 +43,30 @@ class Sensor(QObject):
         self.type = sensor_type
         self.name = name or f"{sensor_type}_sensor"
 
-        # Uso de pathlib.Path para manejo de archivos
         self.data_path: Optional[Path] = Path(data_file) if data_file else None
+        self.data_file = data_file
 
-        # Check y creación del archivo de simulación si no existe
-        if self.data_path and not self.data_path.exists():
-            logger.info(
-                f"Archivo de simulación '{self.data_path.name}' no encontrado. Creando con valores por defecto...")
-            Sensor.generate_simulation_json(self.data_path, DEFAULT_SIM_DATA)
-
-        # Configuración de QTimer para la lectura periódica (asincronía ligera)
         self._timer = QTimer(self)
         self._timer.timeout.connect(self.read)
         self.interval_ms = interval_ms
+        self.last_reading: Optional[float] = None
 
-        # Iniciar la lectura al crear la instancia
         self.start_reading()
 
     def start_reading(self):
         if self.data_path:
             self._timer.start(self.interval_ms)
-            logger.info(f"Sensor '{self.name}' iniciado. Lectura cada {self.interval_ms}ms.")
+            logger.debug(f"Sensor '{self.name}' iniciado. Lectura cada {self.interval_ms}ms.")
         else:
             logger.warning(f"Sensor '{self.name}' no tiene archivo de datos configurado. Lectura inactiva.")
 
     def stop_reading(self):
         if self._timer.isActive():
             self._timer.stop()
-            logger.info(f"Sensor '{self.name}' detenido.")
+            logger.debug(f"Sensor '{self.name}' detenido.")
 
     @staticmethod
     def map_air_quality_to_text(value: float) -> str:
-        """Traduce el valor numérico de AirQuality a un descriptor de texto."""
-        # Ajusta estos umbrales según el estándar de calidad de aire que uses (ej: AQI, PM2.5, CO2)
         if value <= 10.0:
             return "Muy Buena"
         elif value <= 25.0:
@@ -86,27 +80,21 @@ class Sensor(QObject):
 
     def read(self) -> Optional[float]:
         if not self.data_path or not self.data_path.exists():
-            error_msg = f"Archivo de datos de simulación no encontrado: {self.data_path}"
-            logger.error(error_msg)
-            self.error_lectura.emit(error_msg)
-            return None
+            return self.last_reading
 
         try:
             with self.data_path.open("r", encoding="utf-8") as f:
                 data: Dict[str, Any] = json.load(f)
 
-            # Intentar leer el valor correspondiente
             if self.type in data and isinstance(data[self.type], (int, float)):
                 value = float(data[self.type])
+                self.last_reading = value
 
-                # 5. Emitir señal al Controlador para notificar el nuevo valor
                 if self.type == "airQuality":
-                    # Si es Air Quality, mapear a texto y emitir la nueva señal de texto
                     text_value = Sensor.map_air_quality_to_text(value)
-                    self.air_quality_text_actualizada.emit(text_value)
-                    # logger.info(f"Sensor AirQuality actualizado: {text_value}") # Mantenemos logger a INFO
+                    # Emitir el texto y el ID del sensor
+                    self.air_quality_text_actualizada.emit(text_value, self.id)
                 else:
-                    # Para otros sensores, emitir el valor numérico
                     self.lectura_actualizada.emit(value)
 
                 return value
@@ -114,7 +102,6 @@ class Sensor(QObject):
                 raise KeyError(f"El JSON no contiene el campo '{self.type}' o el valor no es numérico.")
 
         except (IOError, json.JSONDecodeError, KeyError, Exception) as e:
-            # Capturar errores, loguear y emitir señal de error
             error_msg = f"Error leyendo sensor {self.type} desde JSON: {e}"
             logger.error(error_msg)
             self.error_lectura.emit(error_msg)
@@ -122,8 +109,35 @@ class Sensor(QObject):
 
     @staticmethod
     def generate_simulation_json(path: Path, data: Dict[str, Union[float, int]]):
-        # Crea los directorios padres si no existen
+        # Metodo estático para crear el archivo JSON
         path.parent.mkdir(parents=True, exist_ok=True)
-        data_to_dump = {k: float(v) for k, v in data.items()}
+        data_to_dump = {k: float(v) for k, v in data.items() if k in DEFAULT_SIM_DATA}
         with path.open("w", encoding="utf-8") as f:
             json.dump(data_to_dump, f, indent=4)
+        logger.info(f"Archivo de simulación creado: {path.name}")
+
+
+def initialize_simulation_files():
+
+    # Datos Municipales (Solo Temp y AirQ)
+    municipio_data = {
+        "temperature": DEFAULT_SIM_DATA["temperature"] + 3.0,
+        "airQuality": DEFAULT_SIM_DATA["airQuality"]
+    }
+    # Datos de la Escuela (Todos los sensores internos)
+    escuela_data = {
+        "temperature": DEFAULT_SIM_DATA["temperature"],
+        "smoke": DEFAULT_SIM_DATA["smoke"],
+        "light": DEFAULT_SIM_DATA["light"],
+        "distance": DEFAULT_SIM_DATA["distance"],
+        "airQuality": DEFAULT_SIM_DATA["airQuality"]
+    }
+
+    municipio_path = Path(MUNICIPIO_DATA_FILE)
+    escuela_path = Path(ESCUELA_DATA_FILE)
+
+    if not municipio_path.exists():
+        Sensor.generate_simulation_json(municipio_path, municipio_data)
+
+    if not escuela_path.exists():
+        Sensor.generate_simulation_json(escuela_path, escuela_data)
