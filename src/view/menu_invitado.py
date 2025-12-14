@@ -16,14 +16,11 @@ MUNICIPIO_DATA_FILE = str(RESOURCES_DIR / "municipio_data.json")
 ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
 
 
-
-
 class MenuInvitado(QWidget):
     def __init__(self):
         super().__init__()
 
-        # 1. Asegurar la existencia de los archivos JSON antes de crear los sensores
-        initialize_simulation_files()
+        # Ya no es necesario llamar a initialize_simulation_files() aquí si se hace en run.py
 
         # --- Ventana ---
         self.setWindowTitle("Modo Invitado – Solo Lectura")
@@ -212,8 +209,18 @@ class MenuInvitado(QWidget):
             f"📏 Distancia (Presencia): {distancia:.1f} cm" if distancia is not None else "📏 Distancia (Presencia): -- cm"
         )
 
+    def cleanup(self):
+        # Detiene el timer de la ventana y los timers internos de todos los sensores.
+        self.timer.stop()
+        for sensor in self.all_sensors:
+            sensor.stop_reading()
+
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
+
+        # 🛑 PASO CRÍTICO: Limpiar antes de cerrar
+        self.cleanup()
+
         self.inicio = Inicio()
         self.inicio.show()
         self.close()

@@ -24,8 +24,7 @@ class MenuDirector(QWidget):
     def __init__(self, usuario: Usuario):
         super().__init__()
 
-        # Asegurar que los archivos existan antes de usarlos
-        initialize_simulation_files()
+        # Ya no es necesario llamar a initialize_simulation_files() aquí si se hace en run.py
 
         self.usuario = usuario
         self.sensor_data_file = ESCUELA_DATA_FILE
@@ -181,8 +180,18 @@ class MenuDirector(QWidget):
         self.reporte_view = ReporteHistorialView()
         self.reporte_view.show()
 
+    def cleanup(self):
+        """Detiene el timer de la ventana y los timers internos de todos los sensores."""
+        self.timer.stop()
+        for sensor in self.sensors:
+            sensor.stop_reading()
+
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
+
+        # Limpiar antes de cerrar
+        self.cleanup()
+
         self.inicio = Inicio()
         self.inicio.show()
         self.close()

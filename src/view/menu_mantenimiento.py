@@ -1,9 +1,12 @@
+# src/view/menu_mantenimiento.py
+
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
     QCheckBox, QDoubleSpinBox, QGroupBox, QGridLayout
 )
 from PySide6.QtCore import QTimer, Qt
 from typing import List, Dict
+from pathlib import Path
 
 from src.model.sistema import Sistema
 from src.model.sensor import Sensor
@@ -12,18 +15,21 @@ from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
 from src.model.usuario import Usuario
 
+# DEFINICIÓN DE RUTAS
+RESOURCES_DIR = Path("resources")
+ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
+
 
 class MenuMantenimiento(QWidget):
-    def __init__(self, usuario: Usuario, sensor_data_file="escuela_data.json"):
+    def __init__(self, usuario: Usuario):
         super().__init__()
 
         self.usuario = usuario
-        self.sensor_data_file = sensor_data_file
+        self.sensor_data_file = ESCUELA_DATA_FILE
 
         self.setWindowTitle("Panel Jefe de Mantenimiento")
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
-
 
         self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
@@ -116,7 +122,7 @@ class MenuMantenimiento(QWidget):
         status_group.setLayout(status_layout)
         layout.addWidget(status_group)
 
-        #CONTROL MANUAL
+        # CONTROL MANUAL
         controls = QGroupBox("Control de Temperatura")
         controls_layout = QHBoxLayout()
 
@@ -144,7 +150,6 @@ class MenuMantenimiento(QWidget):
         layout.addWidget(controls)
 
         self._update_mode_ui(self.sistema.mode)
-
 
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
@@ -194,6 +199,7 @@ class MenuMantenimiento(QWidget):
             try:
                 if tipo == "airQuality":
                     return None
+                # Se lee directamente de la simulación.
                 return self.sistema.get_sensor_reading(tipo)
             except RuntimeError:
                 return None
@@ -203,25 +209,38 @@ class MenuMantenimiento(QWidget):
         luz = safe_read("light")
         dist = safe_read("distance")
 
+        # El mensaje de error ahora es más genérico, ya que la ruta debería estar corregida
+        error_msg = "⚠️ No disponible"
+
         self.lbl_temp.setText(
-            f"Temperatura: {temp:.2f} °C" if temp is not None else "⚠️ ERROR"
+            f"Temperatura: {temp:.2f} °C" if temp is not None else error_msg
         )
         self.lbl_humo.setText(
-            f"Nivel de Humo: {humo:.2f}" if humo is not None else "⚠️ ERROR"
+            f"Nivel de Humo: {humo:.2f}" if humo is not None else error_msg
         )
         self.lbl_luz.setText(
-            f"Nivel de Luz: {luz:.2f} Lux" if luz is not None else "⚠️ ERROR"
+            f"Nivel de Luz: {luz:.2f} Lux" if luz is not None else error_msg
         )
         self.lbl_distancia.setText(
-            f"Distancia: {dist:.2f} cm" if dist is not None else "⚠️ ERROR"
+            f"Distancia: {dist:.2f} cm" if dist is not None else error_msg
         )
 
         for actuator in self.actuators:
             lbl = self.actuator_labels[actuator.id]
             lbl.setText("🟢 ON" if actuator.state else "🔴 OFF")
 
+    def cleanup(self):
+        # Detiene el timer de la ventana y los timers internos de todos los sensores.
+        self.timer.stop()
+        for sensor in self.sensors:
+            sensor.stop_reading()
+
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
+
+        # Limpiar antes de cerrar
+        self.cleanup()
+
         self.inicio = Inicio()
         self.inicio.show()
         self.close()
