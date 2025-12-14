@@ -1,0 +1,1346 @@
+[
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:25:24"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:25:34"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:25:44"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:25:54"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:04"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:14"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:24"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:27"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:34"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:37"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:44"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:47"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:54"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:26:57"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:04"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:07"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:14"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:17"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:24"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:34"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:38"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:27:45"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 18:40:04"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:00:31"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:00:41"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:00:51"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:00:58"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:01"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:08"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:11"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:18"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:21"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:31"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:38"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:41"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:48"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:51"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:01:58"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:01"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:08"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:11"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:18"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:21"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:31"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:38"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:41"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:48"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:51"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:02:58"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:01"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:08"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:11"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:18"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:21"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:31"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:38"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:42"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:48"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:52"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:03:58"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:02"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:08"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:12"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:18"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:22"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:32"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:38"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:42"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:48"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:52"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:04:58"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:02"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:08"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:12"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:18"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:22"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:32"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:38"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:42"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:48"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:52"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:05:58"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:02"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:08"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:12"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:18"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:22"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:28"
+    },
+    {
+        "temperature": 22.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:32"
+    },
+    {
+        "temperature": 15.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:38"
+    },
+    {
+        "temperature": 15.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:42"
+    },
+    {
+        "temperature": 15.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:48"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:52"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:06:58"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:02"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:08"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:12"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:18"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:22"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:28"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:32"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:38"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:42"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:48"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:52"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:07:58"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:02"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:08"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:12"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:18"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:22"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:28"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:32"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:38"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:42"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:48"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:52"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:08:58"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:02"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:08"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:12"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:18"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:22"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:28"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:32"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:38"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:42"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:48"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:52"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:09:58"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:02"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:08"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:12"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:18"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:22"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:28"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:32"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:38"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:42"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:48"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:52"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:10:58"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:02"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:08"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:12"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:18"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:22"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:28"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:32"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:38"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:42"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:48"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:52"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:11:58"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:02"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:08"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:12"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:18"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:22"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:28"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:32"
+    },
+    {
+        "temperature": 30.0,
+        "smoke": 0.0,
+        "light": 500.0,
+        "distance": 100.0,
+        "airQuality": 15.0,
+        "timestamp": "2025-12-12 19:12:38"
+    }
+]
