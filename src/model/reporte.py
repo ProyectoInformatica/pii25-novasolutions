@@ -1,29 +1,37 @@
+# CÓDIGO A COPIAR Y REEMPLAZAR EN src/model/reporte.py
+
 import json
 from datetime import datetime
-import os
 from pathlib import Path
 
-# Definimos el nombre del archivo de historial
-HISTORY_FILE = "sensor_history.json"
+# Definimos los nombres de los archivos
+HISTORY_FILE_NAME = "sensor_history.json"
+DEFAULT_DATA_FILE_NAME = "escuela_data.json"
 
 
 class Reporteador:
-    def __init__(self, data_file="escuela_data.json"):
-        self.current_data_file = data_file
-        self.history_file = HISTORY_FILE
-
-        # CÁLCULO ROBUSTO DE LA RUTA (Subir a la raíz del proyecto)
+    def __init__(self, data_file: str = DEFAULT_DATA_FILE_NAME):
+        """
+        Inicializa el Reporteador, configurando las rutas de los archivos
+        de datos actuales y de historial, asegurando que ambos estén en la
+        carpeta 'resources/' respecto a la raíz del proyecto.
+        """
+        # La base del proyecto asumiendo que Reporteador está en src/model/
+        # base_dir sube tres niveles: model/ -> src/ -> pii25-novasolutions/
         base_dir = Path(__file__).resolve().parent.parent.parent
-        self.history_full_path = base_dir / self.history_file
-        self.current_full_path = base_dir / self.current_data_file
+        resources_dir = base_dir / "resources"
 
-        # 🌟 NUEVA LÓGICA DE INICIALIZACIÓN 🌟
+        # 🟢 CRÍTICO: Definimos la ruta de historial dentro de resources/
+        self.history_full_path = resources_dir / HISTORY_FILE_NAME
+        self.current_full_path = resources_dir / data_file
+
         self.inicializar_historial_desde_simulacion()
 
-    def _leer_estado_actual(self):
+    def _leer_estado_actual(self) -> dict | None:
+        """Lee el estado actual de los sensores desde el archivo de simulación."""
         try:
             if not self.current_full_path.exists():
-                print(f"Advertencia: Archivo de datos actual ({self.current_data_file}) no encontrado.")
+                print(f"Advertencia: Archivo de datos actual ({self.current_full_path.name}) no encontrado.")
                 return None
 
             with open(self.current_full_path, 'r', encoding='utf-8') as f:
@@ -33,54 +41,47 @@ class Reporteador:
                 return lectura_actual
             else:
                 print(
-                    f"Advertencia: El contenido de {self.current_data_file} no es un único objeto JSON (diccionario).")
+                    f"Advertencia: El contenido de {self.current_full_path.name} no es un único objeto JSON (diccionario).")
                 return None
         except Exception as e:
-            print(f"ERROR al leer el estado actual para inicializar: {e}")
+            print(f"ERROR al leer el estado actual para registro: {e}")
             return None
 
     def inicializar_historial_desde_simulacion(self):
         if self.history_full_path.exists():
-            # Si el historial ya existe, no hacemos nada.
             return
 
-        print(f"INFO: El archivo de historial ({self.history_file}) no existe. Creando y poblando.")
+        print(f"INFO: El archivo de historial ({self.history_full_path.name}) no existe. Creando y poblando.")
 
         lectura_base = self._leer_estado_actual()
 
+        historial_inicial = []
         if lectura_base:
-            # 1. Añadir marca de tiempo a la lectura base
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             lectura_base['timestamp'] = timestamp
-
-            # 2. Crear el historial con esta única entrada
             historial_inicial = [lectura_base]
-        else:
-            # Si no se pudo leer el archivo de simulación, creamos un historial vacío
-            historial_inicial = []
 
-        # 3. Guardar el historial inicial en el nuevo archivo
+        self.history_full_path.parent.mkdir(parents=True, exist_ok=True)
+
         try:
             with open(self.history_full_path, 'w', encoding='utf-8') as f:
                 json.dump(historial_inicial, f, indent=4)
 
             if lectura_base:
-                print(f"INFO: {self.history_file} creado exitosamente con 1 entrada de {self.current_data_file}.")
+                print(f"INFO: {self.history_full_path.name} creado exitosamente con 1 entrada.")
             else:
-                print(f"INFO: {self.history_file} creado como lista vacía (no se pudo leer el estado actual).")
+                print(f"INFO: {self.history_full_path.name} creado como lista vacía.")
         except Exception as e:
             print(f"ERROR: No se pudo crear/escribir el archivo de historial: {e}")
 
-    def get_historial_sensores(self):
-        ruta_archivo = self.history_full_path
-
+    def get_historial_sensores(self) -> list:
         try:
-            if not ruta_archivo.exists():
-                print(
-                    f"Advertencia: Archivo de historial {self.history_file} no encontrado después de la inicialización.")
-                return []
+            if not self.history_full_path.exists():
+                self.inicializar_historial_desde_simulacion()
+                if not self.history_full_path.exists():
+                    return []
 
-            with open(ruta_archivo, 'r', encoding='utf-8') as f:
+            with open(self.history_full_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
 
             if not isinstance(data, list):
@@ -90,7 +91,7 @@ class Reporteador:
             return data
 
         except json.JSONDecodeError:
-            print(f"ERROR: No se pudo decodificar el JSON de historial. Revisa el formato.")
+            print(f"ERROR: No se pudo decodificar el JSON de historial.")
             return []
         except Exception as e:
             print(f"ERROR inesperado al leer el historial: {e}")
@@ -100,22 +101,16 @@ class Reporteador:
         lectura_actual = self._leer_estado_actual()
 
         if not lectura_actual:
-            # El error ya se mostró en _leer_estado_actual
             return
 
-        # 1. Añadir la marca de tiempo
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         lectura_actual['timestamp'] = timestamp
 
-        # 2. Cargar el historial existente
-        historial = self.get_historial_sensores()  # Ahora usa el método principal
-
-        # 3. Añadir la nueva lectura y guardar todo de nuevo
+        historial = self.get_historial_sensores()
         historial.append(lectura_actual)
 
         try:
             with open(self.history_full_path, 'w', encoding='utf-8') as f:
                 json.dump(historial, f, indent=4)
-            # print(f"INFO: Lectura registrada en {self.history_file}") # Se puede comentar para no llenar la consola
         except Exception as e:
             print(f"ERROR al escribir en el archivo de historial: {e}")

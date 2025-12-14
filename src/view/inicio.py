@@ -100,13 +100,13 @@ class Inicio(QWidget):
         layout.addWidget(titulo)
 
         # BOTONES
-        btn_login = QPushButton("Iniciar sesión (Director/Mantenimiento)")
+        btn_login = QPushButton("Iniciar sesión")
         btn_login.setStyleSheet(
             "background-color:#4A90E2; color:white; font-size:18px; padding:20px; border-radius:15px;")
         btn_login.clicked.connect(self.ir_login)
         layout.addWidget(btn_login)
 
-        btn_estudiante = QPushButton("Entrar como invitado (Solo Lectura)")
+        btn_estudiante = QPushButton("Entrar como invitado")
         btn_estudiante.setStyleSheet(
             "background-color:#F5A623; color:white; font-size:18px; padding:20px; border-radius:15px;")
         btn_estudiante.clicked.connect(self.ir_estudiante)
