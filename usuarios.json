@@ -1,20 +1,20 @@
 [
     {
         "nombre_usuario": "director",
-        "salt": "b62a9b318e3bc449300fcbe0cc2b3727",
-        "contrasena": "084d5b899ccecbb93a95b6cdaa73788e868d0c1c0d651bd89005c09fb958d78a",
+        "salt": "1cd48aab47a13b5a4d8fe842646206a6",
+        "contrasena": "465362d84f1d1980769febc402a92df328b8dff5bd01bbe55dc0c960a99d7ab9",
         "rol": "director"
     },
     {
         "nombre_usuario": "mantenimiento",
-        "salt": "46b0b25d80d452ab3124315cad117e04",
-        "contrasena": "09f1a1a6d669f9448edeacc088203672ca470b9a9dddbe6e79efa1c89441d24c",
+        "salt": "95f9cc4edbb431cee2bb3cf44be2b2dc",
+        "contrasena": "9e33db75e86f14ee13d7bbe04f45755736f9cfbaeee8f84c3cab6babef101397",
         "rol": "mantenimiento"
     },
     {
         "nombre_usuario": "juan",
-        "salt": "b90ab7474de06e2c1652e2dfb125fc48",
-        "contrasena": "cada88f3eedfe6cad0044d452a5b686c79bccee333f4016d0f083f2d44e4036f",
+        "salt": "c3e8b0d767d8945e9ff7bf1dd63ac3bd",
+        "contrasena": "fcd0153454ae2e2a34655ea19584e5ec282bd88996727f1db1c0d6371e707c78",
         "rol": "mantenimiento"
     }
 ]

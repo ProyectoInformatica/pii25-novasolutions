@@ -1,4 +1,3 @@
-# src/view/login.py
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
 )
@@ -12,7 +11,7 @@ class Login(QWidget):
         self.setGeometry(200, 150, 400, 300)
         self.setStyleSheet("background-color:#1E1E1E; color:white;")
 
-        self.ctrl_usuarios = ControladorUsuarios()  # Usa JSON automáticamente
+        self.ctrl_usuarios = ControladorUsuarios()
 
         layout = QVBoxLayout()
         lbl = QLabel("Ingrese sus credenciales")
@@ -22,12 +21,14 @@ class Login(QWidget):
         # Campo usuario
         self.usuario = QLineEdit()
         self.usuario.setPlaceholderText("Usuario")
+        self.usuario.setText("")
         layout.addWidget(self.usuario)
 
         # Campo contraseña
         self.clave = QLineEdit()
         self.clave.setPlaceholderText("Contraseña")
         self.clave.setEchoMode(QLineEdit.EchoMode.Password)
+        self.clave.setText("")
         layout.addWidget(self.clave)
 
         # Botones
@@ -59,8 +60,9 @@ class Login(QWidget):
             from src.view.menu_mantenimiento import MenuMantenimiento
             self.vista = MenuMantenimiento(usuario)
         else:
-            from src.view.ventana_principal import VentanaPrincipal
-            self.vista = VentanaPrincipal(usuario)
+            # En este sistema, solo director/mantenimiento/invitado (desde Inicio)
+            QMessageBox.warning(self, "Acceso Denegado", "Rol de usuario no reconocido.")
+            return
 
         self.vista.show()
         self.close()
