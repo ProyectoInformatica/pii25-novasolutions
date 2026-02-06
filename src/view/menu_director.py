@@ -30,7 +30,7 @@ class MenuDirector(QWidget):
 
         self.setWindowTitle("Panel del Director")
         self.setGeometry(200, 150, 800, 600)
-        self.setStyleSheet("background-color:#1E1E1E; color:white;")
+        self.setStyleSheet("background-color:#0e143b; color:white;")
 
         # Sensores de la Escuela
         self.sensors: List[Sensor] = [
@@ -73,50 +73,83 @@ class MenuDirector(QWidget):
         titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
         layout.addWidget(titulo)
 
-        # BOTONES DE GESTIÓN
-        gestion_group = QGroupBox("Opciones de Dirección")
-        gestion_layout = QHBoxLayout()
-        gestion_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
+        body_layout = QHBoxLayout()
+        body_layout.setSpacing(12)
 
-        btn_usuarios = QPushButton("👥 Gestionar Usuarios")
+        gestion_group = QGroupBox("Opciones de Dirección")
+        gestion_group.setStyleSheet("""
+        QGroupBox {
+            border: 1px solid #555;
+            margin-top: 18px;
+            padding-top: 6px;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            padding: 0 6px;
+            margin-left: 0px;
+        }
+        """)
+
+        # Botones en VERTICAL para estilo panel/menú
+        gestion_layout = QVBoxLayout()
+        gestion_layout.setAlignment(Qt.AlignTop)
+
+        btn_usuarios = QPushButton("Gestionar Usuarios")
         btn_usuarios.clicked.connect(self.abrir_gestion_usuarios)
+        btn_usuarios.setStyleSheet("background-color:#3489e2; color:white;")
         gestion_layout.addWidget(btn_usuarios)
 
-        btn_reportes = QPushButton("📈 Ver Reportes Históricos")
+        btn_reportes = QPushButton("Ver Reportes Históricos")
         btn_reportes.clicked.connect(self.abrir_reportes)
+        btn_reportes.setStyleSheet("background-color:#3489e2; color:white;")
         gestion_layout.addWidget(btn_reportes)
 
+        gestion_layout.addStretch()
         gestion_group.setLayout(gestion_layout)
-        layout.addWidget(gestion_group)
 
-        # SECCIÓN DE MONITOREO
+        # Opcional: fija un ancho tipo panel lateral
+        gestion_group.setFixedWidth(260)
+
         status_group = QGroupBox("Estado del Sistema en Tiempo Real")
+        status_group.setStyleSheet("""
+        QGroupBox {
+            border: 1px solid #555;
+            margin-top: 18px;
+            padding-top: 6px;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            padding: 0 6px;
+            margin-left: 0px;
+        }
+        """)
         status_layout = QGridLayout()
-        status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
 
-        status_layout.addWidget(QLabel("### 📡 LECTURAS DE SENSORES"), 0, 0, 1, 2)
+        status_layout.addWidget(QLabel("LECTURAS DE SENSORES"), 0, 0, 1, 2)
 
         self.lbl_temp = QLabel("Temperatura: -- °C")
-        status_layout.addWidget(QLabel("🌡️ Temp"), 1, 0)
+        status_layout.addWidget(QLabel("Temp"), 1, 0)
         status_layout.addWidget(self.lbl_temp, 1, 1)
 
         self.lbl_humo = QLabel("Nivel de Humo: --")
-        status_layout.addWidget(QLabel("💨 Humo"), 2, 0)
+        status_layout.addWidget(QLabel("Humo"), 2, 0)
         status_layout.addWidget(self.lbl_humo, 2, 1)
 
         self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
-        status_layout.addWidget(QLabel("💡 Luz"), 3, 0)
+        status_layout.addWidget(QLabel("Luz"), 3, 0)
         status_layout.addWidget(self.lbl_luz, 3, 1)
 
         self.lbl_distancia = QLabel("Distancia: -- cm")
-        status_layout.addWidget(QLabel("📏 Distancia"), 4, 0)
+        status_layout.addWidget(QLabel("Distancia"), 4, 0)
         status_layout.addWidget(self.lbl_distancia, 4, 1)
 
         self.lbl_airq = QLabel("Calidad del Aire: Esperando lectura...")
-        status_layout.addWidget(QLabel("🌬️ Calidad Aire"), 5, 0)
+        status_layout.addWidget(QLabel("Calidad Aire"), 5, 0)
         status_layout.addWidget(self.lbl_airq, 5, 1)
 
-        status_layout.addWidget(QLabel("### ⚙️ ESTADO DE ACTUADORES"), 6, 0, 1, 2)
+        status_layout.addWidget(QLabel("ESTADO DE ACTUADORES"), 6, 0, 1, 2)
 
         self.actuator_labels = {}
         for i, actuator in enumerate(self.actuators):
@@ -128,11 +161,18 @@ class MenuDirector(QWidget):
             status_layout.addWidget(lbl_state, row, 1)
 
         status_group.setLayout(status_layout)
-        layout.addWidget(status_group)
 
-        # BOTÓN SALIR
+        # Añadir ambos paneles al body_layout
+        body_layout.addWidget(gestion_group, 0)  # 0: no estirar
+        body_layout.addWidget(status_group, 1)  # 1: que se estire (ocupe el resto)
+
+        # Meter el body_layout dentro del layout principal
+        layout.addLayout(body_layout)
+
+        # BOTÓN SALIR (a lo ancho)
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
+        btn_salir.setStyleSheet("""QPushButton{background-color:#AA3333;color:white;padding:10px;border-radius:10px;font-size:14px;}QPushButton:hover{ background-color:#972d2d; }QPushButton:pressed{ background-color:#822727; }""")
         layout.addWidget(btn_salir)
 
         self.setLayout(layout)
@@ -178,13 +218,11 @@ class MenuDirector(QWidget):
         self.gestion.show()
 
     def abrir_reportes(self):
-        """Abre la ventana para visualizar los reportes históricos de sensores."""
         # Se necesita importar la clase 'ReporteHistorialView'
         self.reporte_view = ReporteHistorialView()
         self.reporte_view.show()
 
     def cleanup(self):
-        """Detiene el timer de la ventana y los timers internos de todos los sensores."""
         self.timer.stop()
         for sensor in self.sensors:
             sensor.stop_reading()
