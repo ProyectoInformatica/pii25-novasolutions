@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1">
-      <change afterPath="$PROJECT_DIR$/uml/actividad.puml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uml/casosDeUso.puml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uml/clases.puml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uml/secuencia.puml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/menu_invitado.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_invitado.py" afterDir="false" />
-    </list>
+    <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,6 +51,7 @@
     "Python.main.executor": "Run",
     "Python.run.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "developer",
     "ignore.virus.scanning.warn.message": "true",
