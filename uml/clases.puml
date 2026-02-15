@@ -1,0 +1,151 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+package "model" {
+
+  class Usuario {
+    -nombre_usuario: str
+    -salt: bytes
+    -contrasenaHasheada: bytes
+    -rol: str
+    +verificar_credenciales(usuario, clave): bool
+    +es_director(): bool
+    +es_mantenimiento(): bool
+    +es_estudiante(): bool
+  }
+
+  class Sensor <<QObject>> {
+    +id: str
+    +type: str
+    +name: str
+    +data_file: str
+    +interval_ms: int
+    +last_reading: float
+    +read(): float
+    +start_reading()
+    +stop_reading()
+    --
+    +map_air_quality_to_text(value: float): str
+    --
+    +lectura_actualizada(value: float)
+    +air_quality_text_actualizada(text: str, id: str)
+    +error_lectura(msg: str)
+  }
+
+  class Actuador {
+    +id: str
+    +name: str
+    -_state: bool
+    +state: bool
+    +on()
+    +off()
+    +set_state(on: bool)
+  }
+
+  class Ventilador
+  class Rociador
+  class LuzExterior
+  class LuzPasillo
+
+  Actuador <|-- Ventilador
+  Actuador <|-- Rociador
+  Actuador <|-- LuzExterior
+  Actuador <|-- LuzPasillo
+
+  class Sistema <<QObject>> {
+    +sensors: List<Sensor>
+    +actuators: List<Actuador>
+    -_mode: str
+    -_manual_target: float
+    -_manual_enabled: bool
+    +mode: str
+    +manual_target: float
+    +manual_enabled: bool
+    +get_sensor_reading(sensor_type: str): float
+    +get_temperature(): float
+    +get_actuator_state(actuator_class: type): bool
+    --
+    +mode_changed(mode: str)
+    +manual_target_changed(value: float)
+    +manual_enabled_changed(enabled: bool)
+  }
+
+  class Reporteador {
+    -history_full_path: Path
+    -current_full_path: Path
+    +get_historial_sensores(): list
+    +registrar_lectura_actual()
+  }
+
+  class BaseDatos
+}
+
+package "control" {
+
+  class ControladorUsuarios {
+    -ruta_json: str
+    +usuarios: List<Usuario>
+    +cargar_usuarios(): List<Usuario>
+    +autenticar(nombre_usuario, contrasena): Usuario
+    +registrar_usuario(nombre, clave, rol): bool
+    +eliminar_usuario(nombre): bool
+    +guardar_usuarios()
+  }
+
+  class Controlador_Sensores {
+    +sensors: List<Sensor>
+    +read_all(): Dict<str, float>
+    +write_data(sensor_type: str, new_value: float, target_file: str)
+  }
+
+  class Controlador_Sistema {
+    +sistema: Sistema
+    +deadband: float
+    +update()
+    -_control_temperatura_auto(temp: float)
+    -_control_temperatura_manual(temp: float)
+    -_control_humo()
+    -_control_luz_exterior()
+    -_control_luz_pasillo()
+    -_set_actuators_by_type(type, on: bool)
+  }
+}
+
+package "view" {
+
+  class VentanaPrincipal
+  class Inicio
+  class Login
+  class MenuInvitado
+  class MenuMantenimiento
+  class MenuDirector
+  class GestionUsuariosDirector
+  class ReporteHistorialView
+  class LogoLabel
+}
+
+Sistema o-- "many" Sensor
+Sistema o-- "many" Actuador
+
+Controlador_Sistema --> Sistema
+Controlador_Sensores --> Sensor
+ControladorUsuarios --> Usuario
+
+MenuInvitado --> Controlador_Sensores
+MenuInvitado --> Sistema
+
+MenuMantenimiento --> Controlador_Sistema
+MenuMantenimiento --> Sistema
+
+MenuDirector --> Controlador_Sistema
+MenuDirector --> Sistema
+MenuDirector --> Reporteador
+
+Login --> ControladorUsuarios
+GestionUsuariosDirector --> ControladorUsuarios
+ReporteHistorialView --> Reporteador
+
+VentanaPrincipal --> Inicio
+
+@enduml

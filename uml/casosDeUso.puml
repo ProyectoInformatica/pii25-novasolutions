@@ -1,0 +1,47 @@
+@startuml
+left to right direction
+
+actor Invitado as guest
+actor Mantenimiento as maint
+actor Director as dir
+
+package "Sistema de Monitorización (Escuela + Municipio)" {
+
+  usecase "Ver sensores externos\n(Municipio: Temp, AirQ)" as UC_EXT
+  usecase "Ver sensores internos\n(Escuela: Temp, AirQ, Luz, Humo, Distancia)" as UC_INT
+
+  usecase "Iniciar sesión" as UC_LOGIN
+  usecase "Autenticar credenciales" as UC_AUTH
+
+  usecase "Ver estado de actuadores\n(Ventilador, Rociador, Luz ext., Luz pasillo)" as UC_ACT
+
+  usecase "Cambiar modo Auto/Manual" as UC_MODE
+  usecase "Ajustar temperatura objetivo (manual)" as UC_TARGET
+
+  usecase "Ver reportes históricos" as UC_REPORTS
+  usecase "Gestionar usuarios de mantenimiento\n(alta/baja)" as UC_USERS
+
+  usecase "Cerrar sesión" as UC_LOGOUT
+}
+
+guest --> UC_EXT
+guest --> UC_INT
+
+maint --> UC_LOGIN
+maint --> UC_INT
+maint --> UC_ACT
+maint --> UC_MODE
+maint --> UC_TARGET
+maint --> UC_LOGOUT
+
+dir --> UC_LOGIN
+dir --> UC_INT
+dir --> UC_ACT
+dir --> UC_REPORTS
+dir --> UC_USERS
+dir --> UC_LOGOUT
+
+UC_LOGIN .> UC_AUTH : <<include>>
+UC_MODE .> UC_TARGET : <<extend>>
+
+@enduml

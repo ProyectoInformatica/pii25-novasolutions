@@ -1,0 +1,81 @@
+@startuml
+skinparam shadowing false
+
+start
+:Mostrar pantalla Inicio (Inicio);
+
+if (Usuario elige "Entrar como invitado"?) then (Sí)
+  :Abrir MenuInvitado;
+  repeat
+    if (Tab = Municipio?) then (Sí)
+      :Leer JSON municipio_data.json;
+      :Mostrar Temp.Ext + AirQ.Ext (texto);
+    else (No)
+      :Leer JSON escuela_data.json;
+      :Mostrar Temp.Int + AirQ.Int (texto)\n+ Luz + Humo + Distancia;
+    endif
+  repeat while (No pulsa "Cerrar sesión"?) is (Sí)
+  :Stop timers + stop_reading() sensores;
+  :Volver a Inicio;
+  stop
+else (No, elige "Iniciar sesión")
+  :Abrir Login;
+  :Introducir usuario/contraseña;
+  :ControladorUsuarios.autenticar();
+
+  if (Credenciales válidas?) then (Sí)
+    if (Rol = Director?) then (Sí)
+      :Abrir MenuDirector;
+      repeat
+        :Controlador_Sistema.update();
+        :Leer sensores escuela_data.json;
+        :Aplicar lógica automática actuadores;
+        :Actualizar GUI (sensores + actuadores);
+
+        if (Cada 3600 ciclos?) then (Sí)
+          :Reporteador.registrar_lectura_actual();
+        endif
+
+        if (Pulsa "Gestionar Usuarios"?) then (Sí)
+          :Abrir GestionUsuariosDirector;
+          :Registrar/Eliminar mantenimiento;
+        endif
+
+        if (Pulsa "Ver Reportes Históricos"?) then (Sí)
+          :Abrir ReporteHistorialView;
+          :Cargar tabla con historial;
+        endif
+      repeat while (No pulsa "Cerrar sesión"?) is (Sí)
+      :Stop timers + stop_reading() sensores;
+      :Volver a Inicio;
+      stop
+
+    else (Rol = Mantenimiento)
+      :Abrir MenuMantenimiento;
+      repeat
+        :Controlador_Sistema.update();
+        :Leer sensores escuela_data.json;
+        :Aplicar lógica Auto/Manual (si procede);
+        :Actualizar GUI (sensores + actuadores);
+
+        if (Pulsa cambiar modo?) then (Sí)
+          :Sistema.mode = auto/manual;
+          :Sistema.manual_enabled = true/false;
+        endif
+
+        if (Ajusta target?) then (Sí)
+          :Sistema.manual_target = valor;
+        endif
+      repeat while (No pulsa "Cerrar sesión"?) is (Sí)
+      :Stop timers + stop_reading() sensores;
+      :Volver a Inicio;
+      stop
+    endif
+
+  else (No)
+    :Mostrar error "Usuario o contraseña incorrectos";
+    :Quedarse en Login;
+    stop
+  endif
+endif
+@enduml

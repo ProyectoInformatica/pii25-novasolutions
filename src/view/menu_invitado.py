@@ -236,9 +236,9 @@ class MenuInvitado(QWidget):
 
     def update_air_quality_text(self, text_value: str, sensor_id: str):
         if sensor_id == "municipio_airQ":
-            self.lbl_air_ext.setText(f"🌬️ Calidad del aire (Ext.): {text_value}")
+            self.lbl_air_ext.setText(f" Calidad del aire (Ext.): {text_value}")
         elif sensor_id == "escuela_airQ":
-            self.lbl_air_int.setText(f"🌬️ Calidad del aire (Int.): {text_value}")
+            self.lbl_air_int.setText(f" Calidad del aire (Int.): {text_value}")
 
     def actualizar(self):
         self.ctrl.read_all()
