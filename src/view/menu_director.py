@@ -16,7 +16,6 @@ from src.model.reporte import Reporteador
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
 
-# UBICACIÓN DEL ARCHIVO DE DATOS DE LA ESCUELA
 RESOURCES_DIR = Path("resources")
 ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
 
@@ -32,7 +31,6 @@ class MenuDirector(QWidget):
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#0e143b; color:white;")
 
-        # Sensores de la Escuela
         self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
@@ -41,7 +39,6 @@ class MenuDirector(QWidget):
             Sensor(id="airQ1", sensor_type="airQuality", data_file=self.sensor_data_file)
         ]
 
-        # Actuadores
         self.actuators = [
             Ventilador(id="fan1"),
             Rociador(id="rociador1"),
@@ -53,19 +50,15 @@ class MenuDirector(QWidget):
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
-        # Inicialización de Reporteador
         self.reporteador = Reporteador()
-
-        # Contador de ciclos de actualización
         self.update_count = 0
 
-        # Conexión de señal específica para AirQuality
+
         for s in self.sensors:
             if s.type == "airQuality":
-                s.air_quality_text_actualizada.connect(lambda text, id=s.id: self.update_air_quality_text(text))
+                s.air_quality_text_actualizada.connect(self.update_air_quality_text)
                 break
 
-        # LAYOUT PRINCIPAL
         layout = QVBoxLayout()
 
         titulo = QLabel(f"Bienvenido Director General: {usuario.nombre_usuario}")
@@ -91,7 +84,6 @@ class MenuDirector(QWidget):
         }
         """)
 
-        # Botones en VERTICAL para estilo panel/menú
         gestion_layout = QVBoxLayout()
         gestion_layout.setAlignment(Qt.AlignTop)
 
@@ -107,8 +99,6 @@ class MenuDirector(QWidget):
 
         gestion_layout.addStretch()
         gestion_group.setLayout(gestion_layout)
-
-        # Opcional: fija un ancho tipo panel lateral
         gestion_group.setFixedWidth(260)
 
         status_group = QGroupBox("Estado del Sistema en Tiempo Real")
@@ -162,14 +152,10 @@ class MenuDirector(QWidget):
 
         status_group.setLayout(status_layout)
 
-        # Añadir ambos paneles al body_layout
-        body_layout.addWidget(gestion_group, 0)  # 0: no estirar
-        body_layout.addWidget(status_group, 1)  # 1: que se estire (ocupe el resto)
-
-        # Meter el body_layout dentro del layout principal
+        body_layout.addWidget(gestion_group, 0)
+        body_layout.addWidget(status_group, 1)
         layout.addLayout(body_layout)
 
-        # BOTÓN SALIR (a lo ancho)
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
         btn_salir.setStyleSheet("""QPushButton{background-color:#AA3333;color:white;padding:10px;border-radius:10px;font-size:14px;}QPushButton:hover{ background-color:#972d2d; }QPushButton:pressed{ background-color:#822727; }""")
@@ -177,15 +163,12 @@ class MenuDirector(QWidget):
 
         self.setLayout(layout)
 
-        # TIMER DE ACTUALIZACIÓN
         self.timer = QTimer(self)
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.actualizar)
         self.timer.start()
 
-    # MÉTODOS
-
-    def update_air_quality_text(self, text_value: str):
+    def update_air_quality_text(self, text_value: str, sensor_id: str):
         self.lbl_airq.setText(f"Calidad del Aire: {text_value}")
 
     def actualizar(self):
@@ -196,7 +179,6 @@ class MenuDirector(QWidget):
         light = self.sistema.get_sensor_reading("light")
         distance = self.sistema.get_sensor_reading("distance")
 
-        # Actualización de la GUI
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
         self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
         self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
@@ -208,7 +190,6 @@ class MenuDirector(QWidget):
             if label:
                 label.setText("🟢 ON" if actuator.state else "🔴 OFF")
 
-        # REPORTES CADA HORA
         self.update_count += 1
         if self.update_count % 3600 == 0:
             self.reporteador.registrar_lectura_actual()
@@ -218,7 +199,6 @@ class MenuDirector(QWidget):
         self.gestion.show()
 
     def abrir_reportes(self):
-        # Se necesita importar la clase 'ReporteHistorialView'
         self.reporte_view = ReporteHistorialView()
         self.reporte_view.show()
 
@@ -229,9 +209,7 @@ class MenuDirector(QWidget):
 
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
-
         self.cleanup()
-
         self.inicio = Inicio()
         self.inicio.show()
         self.close()

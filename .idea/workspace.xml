@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1" />
+    <list default="true" id="867caf74-ebc0-433a-bff0-f31238e3becb" name="Changes" comment="Registro de usuarios V1">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/reporte.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/reporte.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,12 +38,12 @@
     &quot;assignee&quot;: &quot;Sebasmsz&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ProyectoInformatica/pii25-novasolutions.git",
-    "accountId": "290ce86f-c954-45ca-adf8-4dad7b17b02a"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ProyectoInformatica/pii25-novasolutions.git&quot;,
+    &quot;accountId&quot;: &quot;e852d795-8172-4815-96d4-88206df35ac5&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
@@ -56,7 +63,7 @@
     "git-widget-placeholder": "developer",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/sebas/PycharmProjects/pii25-novasolutions-developer",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">

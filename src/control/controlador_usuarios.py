@@ -2,6 +2,8 @@ import json
 import os
 from src.model.usuario import Usuario
 
+USUARIO_PROTEGIDO = "director"
+
 
 class ControladorUsuarios:
     def __init__(self):
@@ -29,7 +31,6 @@ class ControladorUsuarios:
 
     def usuariosToJson(self, usuarios):
         usuarios_array = []
-
         for user in usuarios:
             usuario_dict = {
                 "nombre_usuario": user.nombre_usuario,
@@ -38,7 +39,6 @@ class ControladorUsuarios:
                 "rol": user.rol
             }
             usuarios_array.append(usuario_dict)
-
         return usuarios_array
 
     def asegurarHex(self, dato):
@@ -84,9 +84,16 @@ class ControladorUsuarios:
         return True
 
     def eliminar_usuario(self, nombre_usuario):
+        nombre_normalizado = nombre_usuario.lower().strip()
+
+        if nombre_normalizado == USUARIO_PROTEGIDO:
+            print(f"ERROR: No se puede eliminar al usuario protegido '{USUARIO_PROTEGIDO}'.")
+            return False
+
         for usuario in self.usuarios:
-            if usuario.nombre_usuario == nombre_usuario:
+            if usuario.nombre_usuario == nombre_normalizado:
                 self.usuarios.remove(usuario)
                 self.guardar_usuarios()
                 return True
+
         return False
