@@ -3,13 +3,10 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
-from pathlib import Path
 
 from src.control.controlador_usuarios import ControladorUsuarios
 
-# Ruta del icono
-RESOURCES_DIR = Path("resources")
-ICON_USER_PATH = str(RESOURCES_DIR / "img.png")  # <-- cambia el nombre si es distinto
+ICON_USER_PATH = "resources/img.png"
 
 
 class Login(QWidget):
@@ -25,7 +22,6 @@ class Login(QWidget):
         layout.setSpacing(12)
         layout.setContentsMargins(30, 20, 30, 20)
 
-        # ===== ICONO ARRIBA =====
         icon_lbl = QLabel()
         icon_lbl.setAlignment(Qt.AlignCenter)
 
@@ -33,23 +29,17 @@ class Login(QWidget):
         if not pix.isNull():
             pix = pix.scaled(90, 90, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             icon_lbl.setPixmap(pix)
-        else:
-            # Si no encuentra el archivo, no rompe la app
-            icon_lbl.setText("👤")
-            icon_lbl.setStyleSheet("font-size: 36px;")
 
         layout.addWidget(icon_lbl)
 
-        # ===== TEXTO =====
-        lbl = QLabel("Ingrese sus credenciales")
+        lbl = QLabel("Ingrese su correo y contraseña")
         lbl.setAlignment(Qt.AlignCenter)
         lbl.setStyleSheet("font-size:16px; font-weight:700;")
         layout.addWidget(lbl)
 
-        # Campo usuario
-        self.usuario = QLineEdit()
-        self.usuario.setPlaceholderText("Usuario")
-        self.usuario.setStyleSheet("""
+        self.correo = QLineEdit()
+        self.correo.setPlaceholderText("Correo electrónico")
+        self.correo.setStyleSheet("""
             QLineEdit{
                 padding:10px;
                 border-radius:10px;
@@ -58,9 +48,8 @@ class Login(QWidget):
                 color:white;
             }
         """)
-        layout.addWidget(self.usuario)
+        layout.addWidget(self.correo)
 
-        # Campo contraseña
         self.clave = QLineEdit()
         self.clave.setPlaceholderText("Contraseña")
         self.clave.setEchoMode(QLineEdit.EchoMode.Password)
@@ -75,7 +64,6 @@ class Login(QWidget):
         """)
         layout.addWidget(self.clave)
 
-        # Botón Entrar
         btn_entrar = QPushButton("Entrar")
         btn_entrar.clicked.connect(self.intentar_login)
         btn_entrar.setStyleSheet("""
@@ -91,7 +79,6 @@ class Login(QWidget):
         """)
         layout.addWidget(btn_entrar)
 
-        # Botón Volver
         btn_volver = QPushButton("Volver")
         btn_volver.clicked.connect(self.volver_inicio)
         btn_volver.setStyleSheet("""
@@ -110,12 +97,12 @@ class Login(QWidget):
         self.setLayout(layout)
 
     def intentar_login(self):
-        usuario_texto = self.usuario.text().strip()
+        correo_texto = self.correo.text().strip()
         clave_texto = self.clave.text().strip()
-        usuario = self.ctrl_usuarios.autenticar(usuario_texto, clave_texto)
+        usuario = self.ctrl_usuarios.autenticar(correo_texto, clave_texto)
 
         if not usuario:
-            QMessageBox.warning(self, "Error", "Usuario o contraseña incorrectos.")
+            QMessageBox.warning(self, "Error", "Correo o contraseña incorrectos.")
             return
 
         if usuario.es_director():

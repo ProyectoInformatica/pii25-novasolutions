@@ -6,7 +6,6 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QTimer, Qt
 from typing import List, Dict
-from pathlib import Path
 
 from src.model.sistema import Sistema
 from src.model.sensor import Sensor
@@ -15,9 +14,7 @@ from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
 from src.model.usuario import Usuario
 
-# DEFINICIÓN DE RUTAS
-RESOURCES_DIR = Path("resources")
-ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
+ESCUELA_DATA_FILE = "resources/escuela_data.json"
 
 
 PANEL_STYLE = """
@@ -86,7 +83,6 @@ class MenuMantenimiento(QWidget):
         self.setGeometry(200, 150, 900, 600)
         self.setStyleSheet("background-color:#0e143b; color:white;")
 
-        # Sensores
         self.sensors: List[Sensor] = [
             Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
             Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
@@ -95,7 +91,6 @@ class MenuMantenimiento(QWidget):
             Sensor(id="airQ1", sensor_type="airQuality", data_file=self.sensor_data_file)
         ]
 
-        # Actuadores
         self.actuators = [
             Ventilador(id="fan1"),
             Rociador(id="rociador1"),
@@ -107,7 +102,6 @@ class MenuMantenimiento(QWidget):
         self.ctrl_sensores = Controlador_Sensores(self.sensors)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
-        # Señal para calidad del aire (texto)
         for s in self.sensors:
             if s.type == "airQuality":
                 s.air_quality_text_actualizada.connect(self.update_air_quality_text)
@@ -115,7 +109,7 @@ class MenuMantenimiento(QWidget):
 
         layout = QVBoxLayout()
 
-        titulo = QLabel(f"Bienvenido Jefe de Mantenimiento: {usuario.nombre_usuario}")
+        titulo = QLabel(f"Bienvenido Jefe de Mantenimiento: {usuario.nombre} {usuario.apellido}")
         titulo.setAlignment(Qt.AlignHCenter)
         titulo.setStyleSheet("font-size:20px; margin-bottom: 10px; font-weight:700;")
         layout.addWidget(titulo)
@@ -130,7 +124,6 @@ class MenuMantenimiento(QWidget):
         opciones_layout = QVBoxLayout()
         opciones_layout.setAlignment(Qt.AlignTop)
 
-        # Modo manual/auto
         self.btn_modo = QPushButton("Cambiar a MANUAL")
         self.btn_modo.setStyleSheet(BTN_PRIMARY)
         self.btn_modo.clicked.connect(self.cambiar_modo)
@@ -162,7 +155,6 @@ class MenuMantenimiento(QWidget):
         """)
         opciones_layout.addWidget(self.spin_target)
 
-        # Tip / ayuda pequeña
         hint = QLabel("En MANUAL puedes forzar el ventilador con el objetivo.")
         hint.setWordWrap(True)
         hint.setStyleSheet("color: rgba(255,255,255,0.75); padding-top: 8px;")
@@ -177,19 +169,16 @@ class MenuMantenimiento(QWidget):
         status_layout.setHorizontalSpacing(16)
         status_layout.setVerticalSpacing(10)
 
-        # Cabecera sensores
         lbl_header_sens = QLabel("LECTURAS DE SENSORES")
         lbl_header_sens.setStyleSheet("font-weight:700; padding:6px 0;")
         status_layout.addWidget(lbl_header_sens, 0, 0, 1, 2)
 
-        # Sensores
         self.lbl_temp = QLabel("Temperatura: -- °C")
         self.lbl_humo = QLabel("Nivel de Humo: --")
         self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
         self.lbl_distancia = QLabel("Distancia: -- cm")
         self.lbl_airq = QLabel("Calidad del Aire: Esperando lectura...")
 
-        # Columna de nombres
         status_layout.addWidget(QLabel("Temp"), 1, 0)
         status_layout.addWidget(self.lbl_temp, 1, 1)
 
@@ -208,17 +197,15 @@ class MenuMantenimiento(QWidget):
         for lbl in [self.lbl_temp, self.lbl_humo, self.lbl_luz, self.lbl_distancia, self.lbl_airq]:
             lbl.setStyleSheet("padding: 4px; color: rgba(255,255,255,0.92);")
 
-        # Cabecera actuadores
         lbl_header_act = QLabel("ESTADO DE ACTUADORES")
         lbl_header_act.setStyleSheet("font-weight:700; padding:10px 0 6px 0;")
         status_layout.addWidget(lbl_header_act, 6, 0, 1, 2)
 
-        # Actuadores
         self.actuator_labels: Dict[str, QLabel] = {}
         row = 7
         for actuator in self.actuators:
             lbl_name = QLabel(f"{actuator.name}:")
-            lbl_state = QLabel("🔴 OFF")
+            lbl_state = QLabel("OFF")
             lbl_name.setStyleSheet("padding:4px;")
             lbl_state.setStyleSheet("padding:4px; font-weight:600;")
             self.actuator_labels[actuator.id] = lbl_state
@@ -229,14 +216,11 @@ class MenuMantenimiento(QWidget):
 
         status_group.setLayout(status_layout)
 
-        # Añadir ambos paneles al body_layout
         body_layout.addWidget(opciones_group, 0)
         body_layout.addWidget(status_group, 1)
 
-        # Meter el body_layout dentro del layout principal
         layout.addLayout(body_layout)
 
-        # BOTÓN SALIR (a lo ancho)
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
         btn_salir.setStyleSheet(BTN_DANGER)
@@ -244,10 +228,8 @@ class MenuMantenimiento(QWidget):
 
         self.setLayout(layout)
 
-        # UI inicial según modo
         self._update_mode_ui(self.sistema.mode)
 
-        # Timer
         self.timer = QTimer(self)
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.actualizar)
@@ -300,7 +282,7 @@ class MenuMantenimiento(QWidget):
         luz = safe_read("light")
         dist = safe_read("distance")
 
-        error_msg = "⚠️ No disponible"
+        error_msg = "No disponible"
 
         self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else error_msg)
         self.lbl_humo.setText(f"Nivel de Humo: {humo:.2f}" if humo is not None else error_msg)
@@ -309,7 +291,7 @@ class MenuMantenimiento(QWidget):
 
         for actuator in self.actuators:
             lbl = self.actuator_labels[actuator.id]
-            lbl.setText("🟢 ON" if actuator.state else "🔴 OFF")
+            lbl.setText("ON" if actuator.state else "OFF")
 
     def cleanup(self):
         self.timer.stop()
