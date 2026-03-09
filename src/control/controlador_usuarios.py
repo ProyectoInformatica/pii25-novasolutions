@@ -1,3 +1,5 @@
+# src/control/controlador_usuarios.py
+
 import json
 import os
 from src.model.usuario import Usuario
@@ -14,79 +16,97 @@ class ControladorUsuarios:
             usuarios_json_array = self.usuariosToJson(usuarios_objects)
 
             with open(self.ruta_json, "w", encoding="utf-8") as openFile:
-                json.dump(usuarios_json_array, openFile, indent=4)
+                json.dump(usuarios_json_array, openFile, indent=4, ensure_ascii=False)
+
+            return usuarios_objects
 
         with open(self.ruta_json, "r", encoding="utf-8") as openFile:
             datos = json.load(openFile)
-            return [Usuario.from_json_data(**u) for u in datos]
+
+            usuarios = []
+            for u in datos:
+                usuario = Usuario.from_json_data(**u)
+                usuarios.append(usuario)
+            return usuarios
 
     def crearUsuariosIniciales(self):
         usuariosIniciales = [
-            Usuario("director", "1234", "director"),
-            Usuario("mantenimiento", "abcd", "mantenimiento"),
+            Usuario(
+                email="director@escuela.com",
+                contrasena="1234",
+                rol="director",
+                nombre="Director",
+                apellido="General"
+            ),
+            Usuario(
+                email="mantenimiento@escuela.com",
+                contrasena="abcd",
+                rol="mantenimiento",
+                nombre="Jefe",
+                apellido="Mantenimiento"
+            ),
         ]
         return usuariosIniciales
 
     def usuariosToJson(self, usuarios):
         usuarios_array = []
-
         for user in usuarios:
             usuario_dict = {
-                "nombre_usuario": user.nombre_usuario,
-                "salt": self.asegurarHex(user.salt),
-                "contrasena": self.asegurarHex(user.contrasenaHasheada),
+                "email": user.email,
+                "nombre": user.nombre,
+                "apellido": user.apellido,
+                "salt": "",
+                "contrasena": user.contrasena,
                 "rol": user.rol
             }
             usuarios_array.append(usuario_dict)
 
         return usuarios_array
 
-    def asegurarHex(self, dato):
-        if isinstance(dato, str):
-            return dato
-        else:
-            return dato.hex()
-
-    def asegurarBytes(self, dato):
-        if isinstance(dato, bytes):
-            return dato
-        else:
-            return bytes.fromhex(dato)
-
     def guardar_usuarios(self):
-        datos = [
-            {
-                "nombre_usuario": u.nombre_usuario,
-                "salt": self.asegurarHex(u.salt),
-                "contrasena": self.asegurarHex(u.contrasenaHasheada),
-                "rol": u.rol
-            }
-            for u in self.usuarios
-        ]
+        datos = self.usuariosToJson(self.usuarios)
         with open(self.ruta_json, "w", encoding="utf-8") as openFile:
             json.dump(datos, openFile, indent=4, ensure_ascii=False)
 
-    def autenticar(self, nombre_usuario, contrasena):
+    def autenticar(self, email, contrasena):
         for usuario in self.usuarios:
-            if usuario.verificar_credenciales(nombre_usuario, contrasena):
+            if usuario.verificar_credenciales(email, contrasena):
                 return usuario
         return None
 
-    def registrar_usuario(self, nombre_usuario, contrasena, rol):
-        if any(u.nombre_usuario == nombre_usuario.lower().strip() for u in self.usuarios):
-            print("El usuario ya existe.")
+    def registrar_usuario(self, email, nombre, apellido, contrasena, rol):
+        email_limpio = email.lower().strip()
+        if any(u.email == email_limpio for u in self.usuarios):
+            print("El correo ya está registrado.")
             return False
 
-        nuevo_usuario = Usuario(nombre_usuario, contrasena, rol)
+        nuevo_usuario = Usuario(
+            email=email_limpio,
+            contrasena=contrasena,
+            rol=rol,
+            nombre=nombre,
+            apellido=apellido
+        )
         self.usuarios.append(nuevo_usuario)
         self.guardar_usuarios()
-        print(f"Usuario '{nombre_usuario}' registrado correctamente.")
+        print(f"Usuario '{email_limpio}' registrado correctamente.")
         return True
 
-    def eliminar_usuario(self, nombre_usuario):
+    def eliminar_usuario(self, email):
+        email_limpio = email.lower().strip()
         for usuario in self.usuarios:
-            if usuario.nombre_usuario == nombre_usuario:
+            if usuario.email == email_limpio:
+                if usuario.es_director():
+                    print("No se puede eliminar al usuario director.")
+                    return False
                 self.usuarios.remove(usuario)
                 self.guardar_usuarios()
                 return True
         return False
+
+    def obtener_usuario_por_email(self, email):
+        email_limpio = email.lower().strip()
+        for usuario in self.usuarios:
+            if usuario.email == email_limpio:
+                return usuario
+        return None
