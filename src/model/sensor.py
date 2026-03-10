@@ -72,8 +72,6 @@ class Sensor(QObject):
             return "Muy Mala (Peligrosa)"
 
     def read(self) -> Optional[float]:
-        # BUG 2 CORREGIDO: Si el archivo no existe, emitir error_lectura
-        # en lugar de fallar silenciosamente.
         if not self.data_path or not self.data_path.exists():
             error_msg = f"Archivo de datos no encontrado para sensor '{self.name}': {self.data_path}"
             logger.warning(error_msg)
