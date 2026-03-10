@@ -4,10 +4,9 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QTimer, Qt
 from typing import List
-from pathlib import Path
 
 from src.model.sistema import Sistema
-from src.model.sensor import Sensor, initialize_simulation_files
+from src.model.sensor import Sensor
 from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 from src.control.controlador_sistema import Controlador_Sistema
 from src.control.controlador_sensores import Controlador_Sensores
@@ -16,8 +15,8 @@ from src.model.reporte import Reporteador
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
 
-RESOURCES_DIR = Path("resources")
-ESCUELA_DATA_FILE = str(RESOURCES_DIR / "escuela_data.json")
+
+ESCUELA_DATA_FILE = "resources/escuela_data.json"
 
 
 class MenuDirector(QWidget):
@@ -51,8 +50,8 @@ class MenuDirector(QWidget):
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
         self.reporteador = Reporteador()
-        self.update_count = 0
 
+        self.update_count = 0
 
         for s in self.sensors:
             if s.type == "airQuality":
@@ -61,7 +60,7 @@ class MenuDirector(QWidget):
 
         layout = QVBoxLayout()
 
-        titulo = QLabel(f"Bienvenido Director General: {usuario.nombre_usuario}")
+        titulo = QLabel(f"Bienvenido Director General: {usuario.nombre} {usuario.apellido}")
         titulo.setAlignment(Qt.AlignHCenter)
         titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
         layout.addWidget(titulo)
@@ -99,6 +98,7 @@ class MenuDirector(QWidget):
 
         gestion_layout.addStretch()
         gestion_group.setLayout(gestion_layout)
+
         gestion_group.setFixedWidth(260)
 
         status_group = QGroupBox("Estado del Sistema en Tiempo Real")
@@ -144,7 +144,7 @@ class MenuDirector(QWidget):
         self.actuator_labels = {}
         for i, actuator in enumerate(self.actuators):
             lbl_name = QLabel(f"{actuator.name}:")
-            lbl_state = QLabel("🔴 OFF")
+            lbl_state = QLabel("OFF")
             self.actuator_labels[actuator.id] = lbl_state
             row = i + 7
             status_layout.addWidget(lbl_name, row, 0)
@@ -154,6 +154,7 @@ class MenuDirector(QWidget):
 
         body_layout.addWidget(gestion_group, 0)
         body_layout.addWidget(status_group, 1)
+
         layout.addLayout(body_layout)
 
         btn_salir = QPushButton("Cerrar sesión")
@@ -168,7 +169,7 @@ class MenuDirector(QWidget):
         self.timer.timeout.connect(self.actualizar)
         self.timer.start()
 
-    def update_air_quality_text(self, text_value: str, sensor_id: str):
+    def update_air_quality_text(self, text_value: str):
         self.lbl_airq.setText(f"Calidad del Aire: {text_value}")
 
     def actualizar(self):
@@ -179,16 +180,17 @@ class MenuDirector(QWidget):
         light = self.sistema.get_sensor_reading("light")
         distance = self.sistema.get_sensor_reading("distance")
 
-        self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
-        self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
-        self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
+        self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ERROR (JSON)")
+        self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ERROR (JSON)")
+        self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ERROR (JSON)")
         self.lbl_distancia.setText(
-            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
+            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ERROR (JSON)")
 
         for actuator in self.actuators:
             label = self.actuator_labels.get(actuator.id)
             if label:
-                label.setText("🟢 ON" if actuator.state else "🔴 OFF")
+                label.setText("ON" if actuator.state else "OFF")
+
 
         self.update_count += 1
         if self.update_count % 3600 == 0:
@@ -209,7 +211,9 @@ class MenuDirector(QWidget):
 
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
+
         self.cleanup()
+
         self.inicio = Inicio()
         self.inicio.show()
         self.close()
