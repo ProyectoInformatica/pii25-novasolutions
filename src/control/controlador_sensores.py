@@ -34,7 +34,7 @@ class Controlador_Sensores:
             if target_file.endswith("escuela_data.json"):
                  pass # Permitimos continuar ya que el sensor_type es suficiente como clave.
             else:
-                print(f"⚠️ Error: No se encontró el sensor '{sensor_type}' asociado al archivo '{target_file}'.")
+                print(f"Error: No se encontró el sensor '{sensor_type}' asociado al archivo '{target_file}'.")
                 return
 
         # Leer todos los datos existentes del archivo objetivo

@@ -1,12 +1,16 @@
 # src/model/usuario.py
 
 class Usuario:
-    def __init__(self, email, contrasena, rol, nombre="", apellido=""):
+    def __init__(self, email, contrasena, rol, nombre="", apellido="", id_db=None):
+        self.id_db = id_db
         self.email = email.lower().strip()
         self.nombre = nombre.strip()
         self.apellido = apellido.strip()
         self.contrasena = contrasena.strip()
-        self.rol = rol.lower().strip()
+        # Mapeo: '1' es director, '0' es mantenimiento (según el estándar de tu SQL)
+        if rol == '1': self.rol = "director"
+        elif rol == '0': self.rol = "mantenimiento"
+        else: self.rol = rol.lower().strip()
 
     @classmethod
     def from_json_data(cls, email, nombre, apellido, salt, contrasena, rol):
