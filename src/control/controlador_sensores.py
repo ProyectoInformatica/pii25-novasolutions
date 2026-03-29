@@ -1,61 +1,60 @@
-from typing import List, Dict, Optional
-import json
+from typing import List, Optional
+import logging
 from src.model.sensor import Sensor
-from pathlib import Path
+from src.basedatos import BaseDatos
+
+logger = logging.getLogger("ControladorSensores")
 
 
 class Controlador_Sensores:
-    def __init__(self, sensors: List[Sensor]):
-        self.sensors = sensors
+    def __init__(self, db: BaseDatos):
+        self.db = db
+        self.sensors: List[Sensor] = []
+        # Cargamos los sensores existentes al iniciar
+        self.cargar_sensores_desde_bd()
 
-    def read_all(self) -> Dict[str, Optional[float]]:
-        readings = {}
-        for s in self.sensors:
-            # Llama a read() que internamente emite la señal
-            try:
-                # Guardamos el valor float retornado (None si falla)
-                readings[s.id] = s.read()
-            except Exception:
-                readings[s.id] = None
-        return readings
+    def cargar_sensores_desde_bd(self):
+        """
+        Consulta la tabla 'sensor' y crea los objetos en memoria.
+        """
+        self.sensors.clear()
+        datos = self.db.obtener_sensores()  # Método que definimos en BaseDatos
 
-    def write_data(self, sensor_type: str, new_value: float, target_file: str):
+        for d in datos:
+            nuevo_sensor = Sensor(
+                id_bd=d['id'],
+                tipo=d['tipo_sensor'],
+                ubicacion=d['ubicacion'],
+                escuela=d['escuela']
+            )
+            self.sensors.append(nuevo_sensor)
 
-        # Encontrar el sensor para obtener el ID de clave
-        # Esto es solo para asegurar que el sensor existe en el sistema.
-        target_sensor: Optional[Sensor] = None
-        for s in self.sensors:
-            if s.type == sensor_type and str(s.data_path) == target_file:
-                target_sensor = s
-                break
+        logger.info(f"Cargados {len(self.sensors)} sensores desde la base de datos.")
 
-        if not target_sensor:
-            # En modo Mantenimiento, la escritura es siempre al archivo de la Escuela
-            if target_file.endswith("escuela_data.json"):
-                 pass # Permitimos continuar ya que el sensor_type es suficiente como clave.
-            else:
-                print(f"Error: No se encontró el sensor '{sensor_type}' asociado al archivo '{target_file}'.")
-                return
+    def crear_nuevo_sensor(self, tipo: str, ubicacion: str, escuela: str) -> bool:
+        """
+        Crea un sensor en la BDD y, si tiene éxito, lo añade a la lista local.
+        """
+        nuevo_id = self.db.crear_sensor(tipo, ubicacion, escuela)
 
-        # Leer todos los datos existentes del archivo objetivo
-        try:
-            target_path = Path(target_file)
-            with target_path.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-        except FileNotFoundError:
-            print(f"Error: Archivo de datos no encontrado: {target_file}")
-            return
-        except json.JSONDecodeError:
-            print(f"Error: Formato JSON inválido en {target_file}")
-            return
+        if nuevo_id:
+            nuevo_obj = Sensor(nuevo_id, tipo, ubicacion, escuela)
+            self.sensors.append(nuevo_obj)
+            logger.info(f"Sensor '{tipo}' en '{ubicacion}' creado con ID: {nuevo_id}")
+            return True
 
-        # Actualizar el valor específico y escribir de vuelta
-        try:
-            # Usamos el tipo de sensor como la clave en el JSON
-            data[sensor_type] = float(new_value)
+        logger.error("No se pudo crear el sensor en la base de datos.")
+        return False
 
-            with target_path.open("w", encoding="utf-8") as f:
-                json.dump(data, f, indent=4)
+    def actualizar_lecturas_en_tiempo_real(self):
+        """
+        Recorre los sensores actuales y busca su última medida en la tabla 'registros'.
+        Este método debería ser llamado por un QTimer global.
+        """
+        for sensor in self.sensors:
+            ultima_medida = self.db.obtener_ultima_medida(sensor.id)
+            if ultima_medida is not None:
+                sensor.actualizar_valor(ultima_medida)
 
-        except Exception as e:
-            print(f"Error al escribir en el archivo {target_file}: {e}")
+    def get_all_sensors(self) -> List[Sensor]:
+        return self.sensors

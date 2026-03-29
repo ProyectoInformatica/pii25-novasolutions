@@ -54,6 +54,8 @@ class Sistema(QObject):
             if s.type == sensor_type:
                 return s.last_reading
 
+        return None
+
         raise RuntimeError(f"Sensor de tipo '{sensor_type}' no encontrado en el sistema.")
 
     def get_temperature(self) -> Optional[float]:

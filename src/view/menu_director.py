@@ -1,22 +1,15 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
-    QGroupBox, QGridLayout
+    QGroupBox, QGridLayout, QScrollArea
 )
 from PySide6.QtCore import QTimer, Qt
-from typing import List
+from typing import List, Dict
 
 from src.model.sistema import Sistema
-from src.model.sensor import Sensor
-from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
-from src.control.controlador_sistema import Controlador_Sistema
-from src.control.controlador_sensores import Controlador_Sensores
 from src.model.usuario import Usuario
-from src.model.reporte import Reporteador
+from src.model.basedatos import BaseDatos  # Importamos tu clase de conexión
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
-
-
-ESCUELA_DATA_FILE = "resources/escuela_data.json"
 
 
 class MenuDirector(QWidget):
@@ -24,177 +17,166 @@ class MenuDirector(QWidget):
         super().__init__()
 
         self.usuario = usuario
-        self.sensor_data_file = ESCUELA_DATA_FILE
+        self.db = BaseDatos()
 
-        self.setWindowTitle("Panel del Director")
+        # Diccionario para guardar las etiquetas de los sensores dinámicos
+        # Key: id_sensor (de la BDD), Value: QLabel (donde se muestra el valor)
+        self.sensor_widgets: Dict[int, QLabel] = {}
+
+        self.setWindowTitle("Panel del Director - Nova Solutions")
         self.setGeometry(200, 150, 800, 600)
         self.setStyleSheet("background-color:#0e143b; color:white;")
 
-        self.sensors: List[Sensor] = [
-            Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
-            Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
-            Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
-            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file),
-            Sensor(id="airQ1", sensor_type="airQuality", data_file=self.sensor_data_file)
-        ]
+        self.init_ui()
 
-        self.actuators = [
-            Ventilador(id="fan1"),
-            Rociador(id="rociador1"),
-            LuzExterior(id="luzext1"),
-            LuzPasillo(id="luzpasillo1")
-        ]
+        # Timer para actualizar lecturas desde la BDD cada 2 segundos
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.actualizar_datos_desde_db)
+        self.timer.start(2000)
 
-        self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
-        self.ctrl_sensores = Controlador_Sensores(self.sensors)
-        self.ctrl_sistema = Controlador_Sistema(self.sistema)
-
-        self.reporteador = Reporteador()
-
-        self.update_count = 0
-
-        for s in self.sensors:
-            if s.type == "airQuality":
-                s.air_quality_text_actualizada.connect(self.update_air_quality_text)
-                break
-
+    def init_ui(self):
         layout = QVBoxLayout()
 
-        titulo = QLabel(f"Bienvenido Director General: {usuario.nombre} {usuario.apellido}")
+        # Título
+        titulo = QLabel(f"Bienvenido Director General: {self.usuario.nombre} {self.usuario.apellido}")
         titulo.setAlignment(Qt.AlignHCenter)
-        titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
+        titulo.setStyleSheet("font-size:20px; margin-bottom: 10px; font-weight: bold;")
         layout.addWidget(titulo)
 
         body_layout = QHBoxLayout()
         body_layout.setSpacing(12)
 
+        # --- PANEL IZQUIERDO: OPCIONES ---
         gestion_group = QGroupBox("Opciones de Dirección")
-        gestion_group.setStyleSheet("""
-        QGroupBox {
-            border: 1px solid #555;
-            margin-top: 18px;
-            padding-top: 6px;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            subcontrol-position: top left;
-            padding: 0 6px;
-            margin-left: 0px;
-        }
-        """)
-
+        gestion_group.setStyleSheet(self.get_groupbox_style())
         gestion_layout = QVBoxLayout()
-        gestion_layout.setAlignment(Qt.AlignTop)
 
         btn_usuarios = QPushButton("Gestionar Usuarios")
         btn_usuarios.clicked.connect(self.abrir_gestion_usuarios)
-        btn_usuarios.setStyleSheet("background-color:#3489e2; color:white;")
-        gestion_layout.addWidget(btn_usuarios)
+        btn_usuarios.setStyleSheet("background-color:#3489e2; color:white; padding: 8px;")
 
         btn_reportes = QPushButton("Ver Reportes Históricos")
         btn_reportes.clicked.connect(self.abrir_reportes)
-        btn_reportes.setStyleSheet("background-color:#3489e2; color:white;")
-        gestion_layout.addWidget(btn_reportes)
+        btn_reportes.setStyleSheet("background-color:#3489e2; color:white; padding: 8px;")
 
+        gestion_layout.addWidget(btn_usuarios)
+        gestion_layout.addWidget(btn_reportes)
         gestion_layout.addStretch()
         gestion_group.setLayout(gestion_layout)
+        gestion_group.setFixedWidth(240)
 
-        gestion_group.setFixedWidth(260)
+        # --- PANEL DERECHO: SENSORES DINÁMICOS ---
+        self.status_group = QGroupBox("Monitoreo de Sensores (BDD)")
+        self.status_group.setStyleSheet(self.get_groupbox_style())
 
-        status_group = QGroupBox("Estado del Sistema en Tiempo Real")
-        status_group.setStyleSheet("""
-        QGroupBox {
-            border: 1px solid #555;
-            margin-top: 18px;
-            padding-top: 6px;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            subcontrol-position: top left;
-            padding: 0 6px;
-            margin-left: 0px;
-        }
-        """)
-        status_layout = QGridLayout()
+        # Usamos un ScrollArea por si hay muchos sensores creados en la BDD
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet("border: none; background: transparent;")
 
-        status_layout.addWidget(QLabel("LECTURAS DE SENSORES"), 0, 0, 1, 2)
+        self.container_sensores = QWidget()
+        self.layout_sensores = QVBoxLayout(self.container_sensores)
+        self.layout_sensores.setAlignment(Qt.AlignTop)
 
-        self.lbl_temp = QLabel("Temperatura: -- °C")
-        status_layout.addWidget(QLabel("Temp"), 1, 0)
-        status_layout.addWidget(self.lbl_temp, 1, 1)
+        scroll.setWidget(self.container_sensores)
 
-        self.lbl_humo = QLabel("Nivel de Humo: --")
-        status_layout.addWidget(QLabel("Humo"), 2, 0)
-        status_layout.addWidget(self.lbl_humo, 2, 1)
-
-        self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
-        status_layout.addWidget(QLabel("Luz"), 3, 0)
-        status_layout.addWidget(self.lbl_luz, 3, 1)
-
-        self.lbl_distancia = QLabel("Distancia: -- cm")
-        status_layout.addWidget(QLabel("Distancia"), 4, 0)
-        status_layout.addWidget(self.lbl_distancia, 4, 1)
-
-        self.lbl_airq = QLabel("Calidad del Aire: Esperando lectura...")
-        status_layout.addWidget(QLabel("Calidad Aire"), 5, 0)
-        status_layout.addWidget(self.lbl_airq, 5, 1)
-
-        status_layout.addWidget(QLabel("ESTADO DE ACTUADORES"), 6, 0, 1, 2)
-
-        self.actuator_labels = {}
-        for i, actuator in enumerate(self.actuators):
-            lbl_name = QLabel(f"{actuator.name}:")
-            lbl_state = QLabel("OFF")
-            self.actuator_labels[actuator.id] = lbl_state
-            row = i + 7
-            status_layout.addWidget(lbl_name, row, 0)
-            status_layout.addWidget(lbl_state, row, 1)
-
-        status_group.setLayout(status_layout)
+        # Layout principal del grupo de estatus
+        status_main_layout = QVBoxLayout()
+        status_main_layout.addWidget(scroll)
+        self.status_group.setLayout(status_main_layout)
 
         body_layout.addWidget(gestion_group, 0)
-        body_layout.addWidget(status_group, 1)
+        body_layout.addWidget(self.status_group, 1)
 
         layout.addLayout(body_layout)
 
+        # Botón Salir
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
-        btn_salir.setStyleSheet("""QPushButton{background-color:#AA3333;color:white;padding:10px;border-radius:10px;font-size:14px;}QPushButton:hover{ background-color:#972d2d; }QPushButton:pressed{ background-color:#822727; }""")
+        btn_salir.setStyleSheet("background-color:#AA3333; color:white; padding:10px; border-radius:10px;")
         layout.addWidget(btn_salir)
 
         self.setLayout(layout)
 
-        self.timer = QTimer(self)
-        self.timer.setInterval(1000)
-        self.timer.timeout.connect(self.actualizar)
-        self.timer.start()
+        # Carga inicial de sensores
+        self.cargar_sensores_desde_db()
 
-    def update_air_quality_text(self, text_value: str):
-        self.lbl_airq.setText(f"Calidad del Aire: {text_value}")
+    def cargar_sensores_desde_db(self):
+        """Consulta la BDD y crea un widget por cada sensor existente."""
+        # Limpiar widgets previos si existen
+        for i in reversed(range(self.layout_sensores.count())):
+            self.layout_sensores.itemAt(i).widget().setParent(None)
+        self.sensor_widgets.clear()
 
-    def actualizar(self):
-        self.ctrl_sistema.update()
+        conn = self.db.conectar()
+        if not conn: return
 
-        temp = self.sistema.get_sensor_reading("temperature")
-        smoke = self.sistema.get_sensor_reading("smoke")
-        light = self.sistema.get_sensor_reading("light")
-        distance = self.sistema.get_sensor_reading("distance")
+        try:
+            cursor = conn.cursor(dictionary=True)
+            # Solo traemos los sensores (nombre, tipo, ubicacion)
+            cursor.execute("SELECT id, tipo_sensor, ubicacion, escuela FROM sensor")
+            sensores = cursor.fetchall()
 
-        self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ERROR (JSON)")
-        self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ERROR (JSON)")
-        self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ERROR (JSON)")
-        self.lbl_distancia.setText(
-            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ERROR (JSON)")
+            for s in sensores:
+                # Creamos una fila para el sensor
+                fila = QWidget()
+                fila_layout = QHBoxLayout(fila)
 
-        for actuator in self.actuators:
-            label = self.actuator_labels.get(actuator.id)
-            if label:
-                label.setText("ON" if actuator.state else "OFF")
+                nombre_lbl = QLabel(f"<b>{s['tipo_sensor']}</b> ({s['ubicacion']}):")
+                valor_lbl = QLabel("Cargando...")
+                valor_lbl.setStyleSheet("color: #00ff00; font-family: monospace; font-size: 14px;")
 
+                fila_layout.addWidget(nombre_lbl)
+                fila_layout.addStretch()
+                fila_layout.addWidget(valor_lbl)
 
-        self.update_count += 1
-        if self.update_count % 3600 == 0:
-            self.reporteador.registrar_lectura_actual()
+                self.layout_sensores.addWidget(fila)
+                # Guardamos la referencia para actualizar el valor_lbl luego
+                self.sensor_widgets[s['id']] = valor_lbl
+
+        except Exception as e:
+            print(f"Error al cargar sensores: {e}")
+        finally:
+            conn.close()
+
+    def actualizar_datos_desde_db(self):
+        """Busca la última medida en la tabla 'registros' para cada sensor cargado."""
+        conn = self.db.conectar()
+        if not conn: return
+
+        try:
+            cursor = conn.cursor(dictionary=True)
+            for id_sensor, label_widget in self.sensor_widgets.items():
+                # Buscamos el último registro de este sensor
+                query = "SELECT medida FROM registros WHERE id_sensor = %s ORDER BY hora DESC LIMIT 1"
+                cursor.execute(query, (id_sensor,))
+                resultado = cursor.fetchone()
+
+                if resultado:
+                    medida = resultado['medida']
+                    label_widget.setText(f"{medida:.2f}")
+                else:
+                    label_widget.setText("Sin datos")
+
+        except Exception as e:
+            print(f"Error actualizando lecturas: {e}")
+        finally:
+            conn.close()
+
+    def get_groupbox_style(self):
+        return """
+        QGroupBox {
+            border: 1px solid #555;
+            margin-top: 18px;
+            padding-top: 10px;
+            font-weight: bold;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            padding: 0 6px;
+        }
+        """
 
     def abrir_gestion_usuarios(self):
         self.gestion = GestionUsuariosDirector(usuario=self.usuario)
@@ -204,16 +186,9 @@ class MenuDirector(QWidget):
         self.reporte_view = ReporteHistorialView()
         self.reporte_view.show()
 
-    def cleanup(self):
-        self.timer.stop()
-        for sensor in self.sensors:
-            sensor.stop_reading()
-
     def cerrar_sesion(self):
         from src.view.inicio import Inicio
-
-        self.cleanup()
-
+        self.timer.stop()
         self.inicio = Inicio()
         self.inicio.show()
         self.close()
