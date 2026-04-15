@@ -6,19 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="918074fc-6c49-4386-aa3e-b4c1e4cead0b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/escuela_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/municipio_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sensor_history.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/control/controlador_sensores.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sensores.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/basedatos.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/basedatos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/sensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sensor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/menu_director.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_director.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/menu_invitado.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_invitado.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/reporte_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/reporte_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuarios.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

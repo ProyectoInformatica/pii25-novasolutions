@@ -68,3 +68,32 @@ class BaseDatos:
             return True
         finally:
             conexion.close()
+
+    def obtener_actuadores_con_sensor(self):
+        conexion = self.conectar()
+        if not conexion: return []
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            # Trae el actuador y el tipo de sensor al que está pegado
+            query = """
+                SELECT a.*, s.tipo_sensor 
+                FROM actuador a
+                JOIN sensor s ON a.id_sensor_vinculado = s.id
+            """
+            cursor.execute(query)
+            return cursor.fetchall()
+        finally:
+            conexion.close()
+
+    def crear_actuador(self, nombre, tipo, id_sensor):
+        conexion = self.conectar()
+        if not conexion: return None
+        try:
+            cursor = conexion.cursor()
+            query = "INSERT INTO actuador (nombre, tipo, id_sensor_vinculado) VALUES (%s, %s, %s)"
+            cursor.execute(query, (nombre, tipo, id_sensor))
+            conexion.commit()
+            return cursor.lastrowid
+        finally:
+            conexion.close()
+

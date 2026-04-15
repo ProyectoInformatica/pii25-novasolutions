@@ -1,7 +1,7 @@
 from typing import List, Optional
 import logging
 from src.model.sensor import Sensor
-from src.basedatos import BaseDatos
+from src.model.basedatos import BaseDatos
 
 logger = logging.getLogger("ControladorSensores")
 

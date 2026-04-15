@@ -13,7 +13,7 @@ class Controlador_Sistema:
     def __init__(self, sistema: Sistema, deadband: float = 0.3):
         self.sistema = sistema
         self.deadband = deadband
-        self.UMBRAL_TEMP_MAX = 25.0
+        self.UMBRAL_TEMP_MAX = 35.0
         self.UMBRAL_HUMO = 0.6
         self.UMBRAL_LUZ = 400.0
         self.UMBRAL_DISTANCIA = 50.0
@@ -69,9 +69,19 @@ class Controlador_Sistema:
         for a in self.sistema.actuators:
             if isinstance(a, actuator_class):
                 try:
-                    a.set_state(on)
+                    a.set_state(on)  # Cambio lógico
+
+                    # AGREGAR ESTO: Actualización en BDD
+                    conexion = self.sistema.db.conectar()
+                    if conexion:
+                        cursor = conexion.cursor()
+                        # Se usa a.id que debe ser el ID numérico de la tabla
+                        cursor.execute("UPDATE actuador SET estado_actual = %s WHERE id = %s",
+                                       (1 if on else 0, a.id))
+                        conexion.commit()
+                        conexion.close()
                 except Exception as e:
-                    logger.error(f"[Controlador] Error al cambiar actuador {a}: {e}")
+                    logger.error(f"Error: {e}")
 
     def _control_humo(self):
         smoke_level = self.sistema.get_sensor_reading("smoke")

@@ -1,13 +1,12 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
-    QGroupBox, QGridLayout, QScrollArea
+    QGroupBox, QScrollArea, QFrame
 )
 from PySide6.QtCore import QTimer, Qt
-from typing import List, Dict
+from typing import Dict
 
-from src.model.sistema import Sistema
 from src.model.usuario import Usuario
-from src.model.basedatos import BaseDatos  # Importamos tu clase de conexión
+from src.model.basedatos import BaseDatos
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
 
@@ -19,19 +18,19 @@ class MenuDirector(QWidget):
         self.usuario = usuario
         self.db = BaseDatos()
 
-        # Diccionario para guardar las etiquetas de los sensores dinámicos
-        # Key: id_sensor (de la BDD), Value: QLabel (donde se muestra el valor)
+        # Diccionarios para actualización dinámica
         self.sensor_widgets: Dict[int, QLabel] = {}
+        self.actuador_widgets: Dict[int, QLabel] = {}
 
         self.setWindowTitle("Panel del Director - Nova Solutions")
-        self.setGeometry(200, 150, 800, 600)
+        self.setGeometry(200, 150, 900, 700)
         self.setStyleSheet("background-color:#0e143b; color:white;")
 
         self.init_ui()
 
-        # Timer para actualizar lecturas desde la BDD cada 2 segundos
+        # Timer para actualizar lecturas y estados cada 2 segundos
         self.timer = QTimer(self)
-        self.timer.timeout.connect(self.actualizar_datos_desde_db)
+        self.timer.timeout.connect(self.actualizar_todo_desde_db)
         self.timer.start(2000)
 
     def init_ui(self):
@@ -65,22 +64,20 @@ class MenuDirector(QWidget):
         gestion_group.setLayout(gestion_layout)
         gestion_group.setFixedWidth(240)
 
-        # --- PANEL DERECHO: SENSORES DINÁMICOS ---
-        self.status_group = QGroupBox("Monitoreo de Sensores (BDD)")
+        # --- PANEL DERECHO: MONITOREO ---
+        self.status_group = QGroupBox("Monitoreo de Infraestructura (BDD)")
         self.status_group.setStyleSheet(self.get_groupbox_style())
 
-        # Usamos un ScrollArea por si hay muchos sensores creados en la BDD
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("border: none; background: transparent;")
 
-        self.container_sensores = QWidget()
-        self.layout_sensores = QVBoxLayout(self.container_sensores)
-        self.layout_sensores.setAlignment(Qt.AlignTop)
+        self.container_monitor = QWidget()
+        self.layout_monitor = QVBoxLayout(self.container_monitor)
+        self.layout_monitor.setAlignment(Qt.AlignTop)
 
-        scroll.setWidget(self.container_sensores)
+        scroll.setWidget(self.container_monitor)
 
-        # Layout principal del grupo de estatus
         status_main_layout = QVBoxLayout()
         status_main_layout.addWidget(scroll)
         self.status_group.setLayout(status_main_layout)
@@ -98,84 +95,79 @@ class MenuDirector(QWidget):
 
         self.setLayout(layout)
 
-        # Carga inicial de sensores
-        self.cargar_sensores_desde_db()
+        # Carga inicial
+        self.cargar_elementos_desde_db()
 
-    def cargar_sensores_desde_db(self):
-        """Consulta la BDD y crea un widget por cada sensor existente."""
-        # Limpiar widgets previos si existen
-        for i in reversed(range(self.layout_sensores.count())):
-            self.layout_sensores.itemAt(i).widget().setParent(None)
+    def cargar_elementos_desde_db(self):
+        """Crea los widgets para sensores y actuadores basándose en la BDD."""
+        # Limpiar widgets previos
+        while self.layout_monitor.count():
+            item = self.layout_monitor.takeAt(0)
+            if item.widget(): item.widget().deleteLater()
+
         self.sensor_widgets.clear()
+        self.actuador_widgets.clear()
 
-        conn = self.db.conectar()
-        if not conn: return
+        # 1. SECCIÓN SENSORES
+        lbl_sec_sens = QLabel("📡 SENSORES")
+        lbl_sec_sens.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
+        self.layout_monitor.addWidget(lbl_sec_sens)
 
-        try:
-            cursor = conn.cursor(dictionary=True)
-            # Solo traemos los sensores (nombre, tipo, ubicacion)
-            cursor.execute("SELECT id, tipo_sensor, ubicacion, escuela FROM sensor")
-            sensores = cursor.fetchall()
+        sensores = self.db.obtener_sensores()
+        for s in sensores:
+            fila, valor_lbl = self.crear_fila_monitoreo(f"{s['tipo_sensor']} ({s['ubicacion']})")
+            self.sensor_widgets[s['id']] = valor_lbl
+            self.layout_monitor.addWidget(fila)
 
-            for s in sensores:
-                # Creamos una fila para el sensor
-                fila = QWidget()
-                fila_layout = QHBoxLayout(fila)
+        # Separador
+        linea = QFrame()
+        linea.setFrameShape(QFrame.HLine)
+        linea.setStyleSheet("background-color: #555;")
+        self.layout_monitor.addWidget(linea)
 
-                nombre_lbl = QLabel(f"<b>{s['tipo_sensor']}</b> ({s['ubicacion']}):")
-                valor_lbl = QLabel("Cargando...")
-                valor_lbl.setStyleSheet("color: #00ff00; font-family: monospace; font-size: 14px;")
+        # 2. SECCIÓN ACTUADORES
+        lbl_sec_act = QLabel("⚙️ ACTUADORES")
+        lbl_sec_act.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
+        self.layout_monitor.addWidget(lbl_sec_act)
 
-                fila_layout.addWidget(nombre_lbl)
-                fila_layout.addStretch()
-                fila_layout.addWidget(valor_lbl)
+        # Necesitas implementar 'obtener_actuadores' en basedatos.py
+        actuadores = self.db.obtener_actuadores_con_sensor()
+        for a in actuadores:
+            fila, estado_lbl = self.crear_fila_monitoreo(f"{a['nombre']} - [{a['tipo']}]")
+            self.actuador_widgets[a['id']] = estado_lbl
+            self.layout_monitor.addWidget(fila)
 
-                self.layout_sensores.addWidget(fila)
-                # Guardamos la referencia para actualizar el valor_lbl luego
-                self.sensor_widgets[s['id']] = valor_lbl
+    def crear_fila_monitoreo(self, nombre_texto):
+        fila = QWidget()
+        f_layout = QHBoxLayout(fila)
+        nombre_lbl = QLabel(f"<b>{nombre_texto}</b>:")
+        valor_lbl = QLabel("...")
+        valor_lbl.setStyleSheet("color: #00ff00; font-family: monospace; font-size: 14px;")
+        f_layout.addWidget(nombre_lbl)
+        f_layout.addStretch()
+        f_layout.addWidget(valor_lbl)
+        return fila, valor_lbl
 
-        except Exception as e:
-            print(f"Error al cargar sensores: {e}")
-        finally:
-            conn.close()
+    def actualizar_todo_desde_db(self):
+        """Actualiza valores de sensores y estados de actuadores."""
+        # Actualizar Sensores
+        for id_s, label in self.sensor_widgets.items():
+            medida = self.db.obtener_ultima_medida(id_s)
+            label.setText(f"{medida:.2f}" if medida is not None else "Sin datos")
 
-    def actualizar_datos_desde_db(self):
-        """Busca la última medida en la tabla 'registros' para cada sensor cargado."""
-        conn = self.db.conectar()
-        if not conn: return
-
-        try:
-            cursor = conn.cursor(dictionary=True)
-            for id_sensor, label_widget in self.sensor_widgets.items():
-                # Buscamos el último registro de este sensor
-                query = "SELECT medida FROM registros WHERE id_sensor = %s ORDER BY hora DESC LIMIT 1"
-                cursor.execute(query, (id_sensor,))
-                resultado = cursor.fetchone()
-
-                if resultado:
-                    medida = resultado['medida']
-                    label_widget.setText(f"{medida:.2f}")
-                else:
-                    label_widget.setText("Sin datos")
-
-        except Exception as e:
-            print(f"Error actualizando lecturas: {e}")
-        finally:
-            conn.close()
+        # Actualizar Actuadores
+        actuadores = self.db.obtener_actuadores_con_sensor()
+        for a in actuadores:
+            if a['id'] in self.actuador_widgets:
+                estado_txt = "ENCENDIDO" if a['estado_actual'] == 1 else "APAGADO"
+                color = "#00ff00" if a['estado_actual'] == 1 else "#ff4444"
+                self.actuador_widgets[a['id']].setText(estado_txt)
+                self.actuador_widgets[a['id']].setStyleSheet(f"color: {color}; font-weight: bold;")
 
     def get_groupbox_style(self):
         return """
-        QGroupBox {
-            border: 1px solid #555;
-            margin-top: 18px;
-            padding-top: 10px;
-            font-weight: bold;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            subcontrol-position: top left;
-            padding: 0 6px;
-        }
+        QGroupBox { border: 1px solid #555; margin-top: 18px; padding-top: 10px; font-weight: bold; }
+        QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 6px; }
         """
 
     def abrir_gestion_usuarios(self):

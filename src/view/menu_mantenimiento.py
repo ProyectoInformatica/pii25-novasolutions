@@ -69,13 +69,13 @@ BTN_NEUTRAL = """
 class MenuMantenimiento(QWidget):
     def __init__(self, usuario: Usuario):
         super().__init__()
+        self.actuator_labels = {}
         self.usuario = usuario
         self.db = BaseDatos()
 
-        # Referencias para actualización en tiempo real
         self.sensor_labels: Dict[int, QLabel] = {}
+        self.actuador_labels_db: Dict[int, QLabel] = {}
 
-        # Actuadores (estos suelen ser fijos por hardware, pero los mantenemos)
         self.actuators = [
             Ventilador(id="fan1"),
             Rociador(id="rociador1"),
@@ -83,7 +83,6 @@ class MenuMantenimiento(QWidget):
             LuzPasillo(id="luzpasillo1")
         ]
 
-        # Sistema mínimo para el controlador (ahora los sensores vendrán de la DB)
         self.sistema = Sistema(sensors=[], actuators=self.actuators)
         self.ctrl_sistema = Controlador_Sistema(self.sistema)
 
@@ -93,15 +92,17 @@ class MenuMantenimiento(QWidget):
 
         self.init_ui()
 
-        # Timer de actualización (cada 1.5 segundos para no saturar la BDD)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.actualizar_todo)
         self.timer.start(1500)
 
+        self.cargar_sensores_ui()
+        self.cargar_sensores_en_combo()
+        self.cargar_actuadores_ui()
+
     def init_ui(self):
         main_layout = QVBoxLayout()
 
-        # Header
         titulo = QLabel(f"Panel Técnico: {self.usuario.nombre} {self.usuario.apellido}")
         titulo.setAlignment(Qt.AlignHCenter)
         titulo.setStyleSheet("font-size:20px; font-weight:700; margin-bottom:10px;")
@@ -109,10 +110,8 @@ class MenuMantenimiento(QWidget):
 
         body_layout = QHBoxLayout()
 
-        # --- COLUMNA IZQUIERDA: CONTROLES Y CREACIÓN ---
         left_column = QVBoxLayout()
 
-        # 1. Grupo de Control de Actuadores (Tu lógica original)
         control_group = QGroupBox("Control de Climatización")
         control_group.setStyleSheet(PANEL_STYLE)
         c_layout = QVBoxLayout()
@@ -131,7 +130,6 @@ class MenuMantenimiento(QWidget):
         c_layout.addWidget(self.spin_target)
         control_group.setLayout(c_layout)
 
-        # 2. Grupo de Creación de Sensores (NUEVO)
         crear_group = QGroupBox("Registrar Nuevo Sensor")
         crear_group.setStyleSheet(PANEL_STYLE)
         f_layout = QVBoxLayout()
@@ -164,35 +162,57 @@ class MenuMantenimiento(QWidget):
         left_column.addWidget(crear_group)
         left_column.addStretch()
 
-        # --- COLUMNA DERECHA: LISTA DINÁMICA ---
-        right_column = QVBoxLayout()
+        self.crear_act_group = QGroupBox("Registrar y Vincular Actuador")
+        self.crear_act_group.setStyleSheet(PANEL_STYLE)
+        act_layout = QVBoxLayout()
 
-        status_group = QGroupBox("Sensores Activos y Actuadores")
+        self.input_nom_act = QLineEdit()
+        self.input_nom_act.setPlaceholderText("Ej: Ventilador Norte")
+
+        self.combo_tipo_act = QComboBox()
+        self.combo_tipo_act.addItems(["Ventilador", "Rociador", "Luz Exterior", "Luz Pasillo"])
+
+        self.combo_sensor_vinc = QComboBox()
+
+        btn_vincular = QPushButton("Crear y Vincular")
+        btn_vincular.setStyleSheet(BTN_PRIMARY)
+        btn_vincular.clicked.connect(self.crear_actuador_db)
+
+        act_layout.addWidget(QLabel("Nombre Actuador:"))
+        act_layout.addWidget(self.input_nom_act)
+        act_layout.addWidget(QLabel("Tipo de Actuador:"))
+        act_layout.addWidget(self.combo_tipo_act)
+        act_layout.addWidget(QLabel("Vincular a Sensor:"))
+        act_layout.addWidget(self.combo_sensor_vinc)
+        act_layout.addWidget(btn_vincular)
+        self.crear_act_group.setLayout(act_layout)
+
+        left_column.addWidget(self.crear_act_group)
+
+        right_column = QVBoxLayout()
+        status_group = QGroupBox("Estado Global de Dispositivos")
         status_group.setStyleSheet(PANEL_STYLE)
         status_main_layout = QVBoxLayout()
 
-        # Scroll para sensores
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("border:none; background:transparent;")
 
-        self.sensor_container = QWidget()
-        self.sensor_layout = QVBoxLayout(self.sensor_container)
-        self.sensor_layout.setAlignment(Qt.AlignTop)
-        scroll.setWidget(self.sensor_container)
+        container = QWidget()
+        self.scroll_layout = QVBoxLayout(container)
 
-        status_main_layout.addWidget(QLabel("<b>LECTURAS EN TIEMPO REAL</b>"))
+        self.scroll_layout.addWidget(QLabel("<b>📡 SENSORES (LECTURAS)</b>"))
+        self.sensor_layout = QVBoxLayout()
+        self.scroll_layout.addLayout(self.sensor_layout)
+
+        self.scroll_layout.addWidget(QLabel("<b>⚙️ ACTUADORES CONFIGURADOS</b>"))
+        self.actuador_db_layout = QVBoxLayout()
+        self.scroll_layout.addLayout(self.actuador_db_layout)
+
+        scroll.setWidget(container)
         status_main_layout.addWidget(scroll)
-
-        # Actuadores (fijos al final)
-        status_main_layout.addWidget(QLabel("<b>ESTADO ACTUADORES</b>"))
-        self.actuator_labels = {}
-        for a in self.actuators:
-            l = QLabel(f"{a.name}: OFF")
-            self.actuator_labels[a.id] = l
-            status_main_layout.addWidget(l)
-
         status_group.setLayout(status_main_layout)
+
         right_column.addWidget(status_group)
 
         body_layout.addLayout(left_column, 1)
@@ -206,14 +226,12 @@ class MenuMantenimiento(QWidget):
         main_layout.addWidget(btn_salir)
 
         self.setLayout(main_layout)
-        self.cargar_sensores_ui()
-
-    # --- LÓGICA DE BASE DE DATOS ---
 
     def cargar_sensores_ui(self):
-        """Limpia y reconstruye la lista de sensores desde la BDD."""
         for i in reversed(range(self.sensor_layout.count())):
-            self.sensor_layout.itemAt(i).widget().setParent(None)
+            item = self.sensor_layout.itemAt(i)
+            if item.widget():
+                item.widget().setParent(None)
         self.sensor_labels.clear()
 
         sensores = self.db.obtener_sensores()
@@ -229,7 +247,7 @@ class MenuMantenimiento(QWidget):
             btn_del = QPushButton("✕")
             btn_del.setFixedSize(30, 30)
             btn_del.setStyleSheet("background:#883333; color:white; border-radius:15px;")
-            btn_del.clicked.connect(lambda checked, id_s=s['id']: self.eliminar_sensor(id_s))
+            btn_del.clicked.connect(lambda _, id_s=s['id']: self.eliminar_sensor(id_s))
 
             item_layout.addWidget(info)
             item_layout.addStretch()
@@ -251,7 +269,9 @@ class MenuMantenimiento(QWidget):
         id_nuevo = self.db.crear_sensor(tipo, ubica, escuela)
         if id_nuevo:
             self.input_ubica.clear()
+            self.input_escuela.clear()
             self.cargar_sensores_ui()
+            self.cargar_sensores_en_combo()
         else:
             QMessageBox.critical(self, "Error", "No se pudo conectar a la BDD.")
 
@@ -261,10 +281,9 @@ class MenuMantenimiento(QWidget):
         if reply == QMessageBox.Yes:
             if self.db.eliminar_sensor(id_s):
                 self.cargar_sensores_ui()
+                self.cargar_sensores_en_combo()
 
     def actualizar_todo(self):
-        """Actualiza lecturas de sensores y lógica de actuadores."""
-        # 1. Actualizar valores de sensores desde registros
         for id_s, label in self.sensor_labels.items():
             valor = self.db.obtener_ultima_medida(id_s)
             if valor is not None:
@@ -272,14 +291,95 @@ class MenuMantenimiento(QWidget):
             else:
                 label.setText("N/A")
 
-        # 2. Ejecutar lógica de control (opcional, si quieres que el controlador reaccione)
-        self.ctrl_sistema.update()
-        for a in self.actuators:
-            self.actuator_labels[a.id].setText(f"{a.name}: {'ON' if a.state else 'OFF'}")
+        actuadores_db = self.db.obtener_actuadores_con_sensor()
+        for a_db in actuadores_db:
+            idx = a_db['id']
+            if idx in self.actuador_labels_db:
+                estado_txt = "ON" if a_db['estado_actual'] else "OFF"
+                color = "#00ff00" if a_db['estado_actual'] else "#ff4444"
+                self.actuador_labels_db[idx].setText(estado_txt)
+                self.actuador_labels_db[idx].setStyleSheet(f"color: {color}; font-weight:bold;")
 
-    # --- MANTENER TUS FUNCIONES ORIGINALES ---
+        self.ctrl_sistema.update()
+        for a_hw in self.actuators:
+            if a_hw.id in self.actuator_labels:
+                self.actuator_labels[a_hw.id].setText(f"{a_hw.name}: {'ON' if a_hw.state else 'OFF'}")
+
+    def cargar_actuadores_ui(self):
+        for i in reversed(range(self.actuador_db_layout.count())):
+            item = self.actuador_db_layout.itemAt(i)
+            if item.widget():
+                item.widget().setParent(None)
+        self.actuador_labels_db.clear()
+
+        actuadores = self.db.obtener_actuadores_con_sensor()
+        for a in actuadores:
+            item = QWidget()
+            item_layout = QHBoxLayout(item)
+            item.setStyleSheet("background: rgba(52, 137, 226, 0.1); border-radius:5px; margin:2px;")
+
+            info = QLabel(f"<b>{a['nombre']}</b> ({a['tipo']})\nSensor: {a['tipo_sensor']}")
+            est_lbl = QLabel("OFF")
+            est_lbl.setStyleSheet("font-weight:bold; color: #ff4444;")
+
+            item_layout.addWidget(info)
+            item_layout.addStretch()
+            item_layout.addWidget(est_lbl)
+
+            self.actuador_db_layout.addWidget(item)
+            self.actuador_labels_db[a['id']] = est_lbl
+
+    def cargar_sensores_en_combo(self):
+        self.combo_sensor_vinc.clear()
+        sensores = self.db.obtener_sensores()
+        for s in sensores:
+            self.combo_sensor_vinc.addItem(
+                f"ID:{s['id']} - {s['tipo_sensor']} ({s['ubicacion']})",
+                s['id']
+            )
+
+    def crear_actuador_db(self):
+        nombre = self.input_nom_act.text()
+        tipo_act = self.combo_tipo_act.currentText()
+        id_sensor = self.combo_sensor_vinc.currentData()
+
+        if not nombre or id_sensor is None:
+            QMessageBox.warning(self, "Error", "Falta nombre o seleccionar sensor.")
+            return
+
+        reglas = {
+            "Ventilador": "temperature",
+            "Rociador": "smoke",
+            "Luz Exterior": "light",
+            "Luz Pasillo": "distance"
+        }
+
+        sensores = self.db.obtener_sensores()
+        tipo_sensor_sel = next(
+            (s['tipo_sensor'] for s in sensores if s['id'] == id_sensor),
+            None
+        )
+
+        if tipo_sensor_sel is None:
+            QMessageBox.warning(self, "Error", "Sensor no encontrado.")
+            return
+
+        if reglas.get(tipo_act) != tipo_sensor_sel:
+            QMessageBox.warning(
+                self,
+                "Error",
+                f"Un {tipo_act} solo se asigna a {reglas.get(tipo_act)}."
+            )
+            return
+
+        if self.db.crear_actuador(nombre, tipo_act, id_sensor):
+            QMessageBox.information(self, "Éxito", "Actuador creado.")
+            self.input_nom_act.clear()
+            self.cargar_actuadores_ui()
+        else:
+            QMessageBox.critical(self, "Error", "Error al guardar en BDD.")
+
     def cambiar_modo(self):
-        # ... misma lógica que tenías para manual/auto ...
         pass
 
     def cerrar_sesion(self):
