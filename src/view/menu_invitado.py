@@ -3,9 +3,10 @@ from PySide6.QtWidgets import (
     QScrollArea, QGridLayout, QFrame
 )
 from PySide6.QtCore import Qt, QTimer
-from src.model.basedatos import BaseDatos
 
-# Estilos visuales para usuarios comunes
+from src.control.controlador_sensores import ControladorSensores
+from src.view.estilos import BTN_PRIMARY, BTN_DANGER
+
 CARD_STYLE = """
 QFrame#SensorCard {
     background-color: #1c224d;
@@ -32,15 +33,15 @@ QLabel#TypeLabel {
 class MenuInvitado(QWidget):
     def __init__(self):
         super().__init__()
-        self.db = BaseDatos()
+        self.ctrl_sensores = ControladorSensores()
+        self.cards = {}
+
         self.setWindowTitle("Monitor Público - Nova Solutions")
         self.setGeometry(200, 150, 850, 600)
         self.setStyleSheet("background-color:#0e143b; color:white;")
 
-        self.cards = {}  # Diccionario para actualizar valores en tiempo real
         self.init_ui()
 
-        # Actualización automática cada 2 segundos
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.actualizar_lecturas)
         self.timer.start(2000)
@@ -49,13 +50,11 @@ class MenuInvitado(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
 
-        # Header
         header = QLabel("Estado General de la Escuela")
         header.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
         header.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(header)
 
-        # Área de Scroll
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("border: none; background: transparent;")
@@ -64,33 +63,19 @@ class MenuInvitado(QWidget):
         self.grid_layout = QGridLayout(container)
         self.grid_layout.setSpacing(15)
         scroll.setWidget(container)
-
         main_layout.addWidget(scroll)
 
-        # Panel de Botones inferior
         button_layout = QHBoxLayout()
 
         btn_historial = QPushButton("Ver Historial de Datos")
         btn_historial.setCursor(Qt.PointingHandCursor)
-        btn_historial.setStyleSheet("""
-            QPushButton {
-                background-color: #3489e2; color: white; padding: 12px; 
-                border-radius: 10px; font-weight: bold;
-            }
-            QPushButton:hover { background-color: #2a72ba; }
-        """)
+        btn_historial.setStyleSheet(BTN_PRIMARY)
         btn_historial.clicked.connect(self.abrir_reportes)
 
         btn_volver = QPushButton("Volver al Inicio")
         btn_volver.setCursor(Qt.PointingHandCursor)
-        btn_volver.setStyleSheet("""
-            QPushButton {
-                background-color: #AA3333; color: white; padding: 12px; 
-                border-radius: 10px; font-weight: bold;
-            }
-            QPushButton:hover { background-color: #822727; }
-        """)
-        btn_volver.clicked.connect(self.volver_inicio)  # Llamada a la nueva función
+        btn_volver.setStyleSheet(BTN_DANGER)
+        btn_volver.clicked.connect(self.volver_inicio)
 
         button_layout.addWidget(btn_historial)
         button_layout.addWidget(btn_volver)
@@ -99,11 +84,9 @@ class MenuInvitado(QWidget):
         self.cargar_tarjetas()
 
     def cargar_tarjetas(self):
-        """Crea las tarjetas iniciales basadas en los sensores de la BDD."""
-        sensores = self.db.obtener_sensores()
         row, col = 0, 0
 
-        for s in sensores:
+        for s in self.ctrl_sensores.get_all_sensors():
             card = QFrame()
             card.setObjectName("SensorCard")
             card.setFixedSize(240, 140)
@@ -111,12 +94,10 @@ class MenuInvitado(QWidget):
 
             layout_c = QVBoxLayout(card)
 
-            # Texto descriptivo
-            nombre_tipo = s['tipo_sensor'].upper()
-            lbl_tipo = QLabel(f"● {nombre_tipo}")
+            lbl_tipo = QLabel(f"● {s.type.upper()}")
             lbl_tipo.setObjectName("TypeLabel")
 
-            lbl_ubica = QLabel(s['ubicacion'])
+            lbl_ubica = QLabel(s.ubicacion)
             lbl_ubica.setStyleSheet("font-size: 14px; font-weight: 500;")
 
             lbl_valor = QLabel("--")
@@ -129,21 +110,17 @@ class MenuInvitado(QWidget):
             layout_c.addWidget(lbl_valor)
 
             self.grid_layout.addWidget(card, row, col)
-            self.cards[s['id']] = lbl_valor  # Guardamos referencia
+            self.cards[s.id] = lbl_valor
 
             col += 1
-            if col > 2:  # Máximo 3 columnas
+            if col > 2:
                 col = 0
                 row += 1
 
     def actualizar_lecturas(self):
-        """Busca el último registro en la BDD para cada tarjeta."""
         for id_s, label in self.cards.items():
-            valor = self.db.obtener_ultima_medida(id_s)
-            if valor is not None:
-                label.setText(f"{valor:.1f}")
-            else:
-                label.setText("N/A")
+            valor = self.ctrl_sensores.get_ultima_medida(id_s)
+            label.setText(f"{valor:.1f}" if valor is not None else "N/A")
 
     def abrir_reportes(self):
         from src.view.reporte_view import ReporteHistorialView
@@ -151,9 +128,8 @@ class MenuInvitado(QWidget):
         self.rep_win.show()
 
     def volver_inicio(self):
-        """Regresa a la pantalla de selección de roles."""
-        from src.view.inicio import Inicio  # Import local para evitar importación circular
-        self.timer.stop()  # Importante detener el timer
+        from src.view.inicio import Inicio
+        self.timer.stop()
         self.inicio_win = Inicio()
         self.inicio_win.show()
         self.close()

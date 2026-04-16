@@ -1,10 +1,13 @@
-from typing import Optional
+import logging
+
+logger = logging.getLogger("Actuador")
+
 
 class Actuador:
     def __init__(self, id: str, name: str = "actuator"):
         self.id = id
         self.name = name
-        self._state: bool = False  # False = OFF, True = ON
+        self._state: bool = False
 
     @property
     def state(self) -> bool:
@@ -13,24 +16,22 @@ class Actuador:
     def on(self):
         if not self._state:
             self._state = True
-            # Lógica real de encendido (por ahora solo simulación)
-            print(f"[Actuador] {self.name} -> ON")
+            logger.debug(f"[{self.name}] -> ON")
 
     def off(self):
         if self._state:
             self._state = False
-            # Lógica real de apagado (por ahora solo simulación)
-            print(f"[Actuador] {self.name} -> OFF")
+            logger.debug(f"[{self.name}] -> OFF")
 
-    # Mantener set_state para compatibilidad con Controlador_Sistema
     def set_state(self, on: bool):
         if on:
             self.on()
         else:
             self.off()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Actuador id={self.id}, name={self.name}, state={'ON' if self.state else 'OFF'}>"
+
 
 class Ventilador(Actuador):
     def __init__(self, id: str = "fan1"):
@@ -45,6 +46,7 @@ class Rociador(Actuador):
 class LuzExterior(Actuador):
     def __init__(self, id: str = "lightext1"):
         super().__init__(id, name="Luz Exterior")
+
 
 class LuzPasillo(Actuador):
     def __init__(self, id: str = "lightpasillo1"):

@@ -1,36 +1,31 @@
-from typing import Optional
-
-from src.model.sistema import Sistema
-from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 import logging
+from src.model.sistema import Sistema
+from src.model.basedatos import BaseDatos
+from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 
 logger = logging.getLogger("ControladorSistema")
 logger.setLevel(logging.INFO)
 
 
-class Controlador_Sistema:
+class ControladorSistema:
+    UMBRAL_TEMP_MAX = 35.0
+    UMBRAL_HUMO = 0.6
+    UMBRAL_LUZ = 400.0
+    UMBRAL_DISTANCIA = 50.0
 
-    def __init__(self, sistema: Sistema, deadband: float = 0.3):
+    def __init__(self, sistema: Sistema, db: BaseDatos = None, deadband: float = 0.3):
         self.sistema = sistema
+        self.db = db or BaseDatos()
         self.deadband = deadband
-        self.UMBRAL_TEMP_MAX = 35.0
-        self.UMBRAL_HUMO = 0.6
-        self.UMBRAL_LUZ = 400.0
-        self.UMBRAL_DISTANCIA = 50.0
 
     def update(self):
-        temp = None
-        try:
-            temp = self.sistema.get_temperature()
-        except RuntimeError:
-            return
+        temp = self.sistema.get_temperature()
 
         if self.sistema.mode == "manual":
             if self.sistema.manual_enabled and temp is not None:
                 self._control_temperatura_manual(temp)
             else:
                 self._set_actuators_by_type(Ventilador, False)
-
         elif self.sistema.mode == "auto":
             self._control_temperatura_auto(temp)
 
@@ -54,34 +49,14 @@ class Controlador_Sistema:
         if current_temp is None:
             return
 
-        target = self.UMBRAL_TEMP_MAX
         should_be_on = None
-
-        if current_temp > target:
+        if current_temp > self.UMBRAL_TEMP_MAX:
             should_be_on = True
-        elif current_temp < (target - self.deadband):
+        elif current_temp < (self.UMBRAL_TEMP_MAX - self.deadband):
             should_be_on = False
 
         if should_be_on is not None:
             self._set_actuators_by_type(Ventilador, should_be_on)
-
-    def _set_actuators_by_type(self, actuator_class: type, on: bool):
-        for a in self.sistema.actuators:
-            if isinstance(a, actuator_class):
-                try:
-                    a.set_state(on)  # Cambio lógico
-
-                    # AGREGAR ESTO: Actualización en BDD
-                    conexion = self.sistema.db.conectar()
-                    if conexion:
-                        cursor = conexion.cursor()
-                        # Se usa a.id que debe ser el ID numérico de la tabla
-                        cursor.execute("UPDATE actuador SET estado_actual = %s WHERE id = %s",
-                                       (1 if on else 0, a.id))
-                        conexion.commit()
-                        conexion.close()
-                except Exception as e:
-                    logger.error(f"Error: {e}")
 
     def _control_humo(self):
         smoke_level = self.sistema.get_sensor_reading("smoke")
@@ -106,3 +81,12 @@ class Controlador_Sistema:
                 self._set_actuators_by_type(LuzPasillo, True)
             elif distance > (self.UMBRAL_DISTANCIA + 10.0):
                 self._set_actuators_by_type(LuzPasillo, False)
+
+    def _set_actuators_by_type(self, actuator_class: type, on: bool):
+        for a in self.sistema.actuators:
+            if isinstance(a, actuator_class):
+                try:
+                    a.set_state(on)
+                    self.db.actualizar_estado_actuador(a.id, on)
+                except Exception as e:
+                    logger.error(f"Error al actualizar actuador {a.id}: {e}")

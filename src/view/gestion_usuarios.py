@@ -1,67 +1,11 @@
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QListWidget, QListWidgetItem
+    QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton,
+    QMessageBox, QListWidget, QListWidgetItem
 )
 from PySide6.QtCore import Qt
+
 from src.control.controlador_usuarios import ControladorUsuarios
-
-
-BTN_PRIMARY = """
-QPushButton{
-    background-color:#3489e2;
-    color:white;
-    padding:10px;
-    border-radius:10px;
-    font-size:14px;
-}
-QPushButton:hover{ background-color:#2f7fd1; }
-QPushButton:pressed{ background-color:#2a72ba; }
-"""
-
-BTN_DANGER = """
-QPushButton{
-    background-color:#AA3333;
-    color:white;
-    padding:10px;
-    border-radius:10px;
-    font-size:14px;
-}
-QPushButton:hover{ background-color:#972d2d; }
-QPushButton:pressed{ background-color:#822727; }
-"""
-
-INPUT_STYLE = """
-QLineEdit{
-    padding:10px;
-    border-radius:10px;
-    background:#1b214d;
-    border:1px solid rgba(255,255,255,0.15);
-    color:white;
-}
-QLineEdit:focus{
-    border:1px solid rgba(52,137,226,0.85);
-}
-"""
-
-LIST_STYLE = """
-QListWidget{
-    background:#141b44;
-    color:white;
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:10px;
-    padding:6px;
-}
-QListWidget::item{
-    padding:8px;
-    border-radius:8px;
-}
-QListWidget::item:selected{
-    background: rgba(52,137,226,0.45);
-    border: 1px solid rgba(52,137,226,0.75);
-}
-QListWidget::item:hover{
-    background: rgba(255,255,255,0.06);
-}
-"""
+from src.view.estilos import BTN_PRIMARY, BTN_DANGER, INPUT_STYLE, LIST_STYLE
 
 TITLE_STYLE = "font-size:18px; font-weight:700; margin:8px 0 12px 0;"
 
@@ -70,12 +14,11 @@ class GestionUsuariosDirector(QWidget):
     def __init__(self, usuario=None):
         super().__init__()
         self.usuario_actual = usuario
+        self.ctrl_usuarios = ControladorUsuarios()
 
         self.setWindowTitle("Gestión de Usuarios (Director)")
         self.setGeometry(250, 200, 560, 500)
         self.setStyleSheet("background-color:#0e143b; color:white;")
-
-        self.ctrl_usuarios = ControladorUsuarios()
 
         layout = QVBoxLayout()
         layout.setSpacing(12)
@@ -109,7 +52,7 @@ class GestionUsuariosDirector(QWidget):
 
         btn_registrar = QPushButton("Registrar usuario de mantenimiento")
         btn_registrar.setStyleSheet(BTN_PRIMARY)
-        btn_registrar.clicked.connect(self.registrar_usuario_mantenimiento)
+        btn_registrar.clicked.connect(self.registrar_usuario)
         layout.addWidget(btn_registrar)
 
         lbl_lista = QLabel("Usuarios registrados")
@@ -120,7 +63,7 @@ class GestionUsuariosDirector(QWidget):
         self.lista_usuarios = QListWidget()
         self.lista_usuarios.setStyleSheet(LIST_STYLE)
         layout.addWidget(self.lista_usuarios, 1)
-        self.actualizar_lista_usuarios()
+        self.actualizar_lista()
 
         btn_eliminar = QPushButton("Eliminar usuario seleccionado")
         btn_eliminar.setStyleSheet(BTN_DANGER)
@@ -129,7 +72,7 @@ class GestionUsuariosDirector(QWidget):
 
         self.setLayout(layout)
 
-    def registrar_usuario_mantenimiento(self):
+    def registrar_usuario(self):
         correo = self.nuevo_correo.text().strip().lower()
         nombre = self.nuevo_nombre.text().strip()
         apellido = self.nuevo_apellido.text().strip()
@@ -140,28 +83,16 @@ class GestionUsuariosDirector(QWidget):
             return
 
         if not correo.endswith("@escuela.com"):
-            QMessageBox.warning(
-                self,
-                "Correo inválido",
-                "El correo debe terminar en @escuela.com"
-            )
+            QMessageBox.warning(self, "Correo inválido", "El correo debe terminar en @escuela.com")
             return
 
-        parte_local = correo.split("@")[0]
-        if not parte_local:
-            QMessageBox.warning(
-                self,
-                "Correo inválido",
-                "El correo debe tener un nombre antes de @escuela.com"
-            )
+        if not correo.split("@")[0]:
+            QMessageBox.warning(self, "Correo inválido", "El correo debe tener un nombre antes de @escuela.com")
             return
 
         exito = self.ctrl_usuarios.registrar_usuario(
-            email=correo,
-            nombre=nombre,
-            apellido=apellido,
-            contrasena=clave,
-            rol="mantenimiento"
+            email=correo, nombre=nombre, apellido=apellido,
+            contrasena=clave, rol="mantenimiento"
         )
 
         if exito:
@@ -170,11 +101,11 @@ class GestionUsuariosDirector(QWidget):
             self.nuevo_nombre.clear()
             self.nuevo_apellido.clear()
             self.nueva_clave.clear()
-            self.actualizar_lista_usuarios()
+            self.actualizar_lista()
         else:
             QMessageBox.warning(self, "Error", f"El correo '{correo}' ya está registrado.")
 
-    def actualizar_lista_usuarios(self):
+    def actualizar_lista(self):
         self.lista_usuarios.clear()
         for usuario in self.ctrl_usuarios.usuarios:
             texto = f"{usuario.nombre} {usuario.apellido} <{usuario.email}> ({usuario.rol})"
@@ -184,7 +115,6 @@ class GestionUsuariosDirector(QWidget):
 
     def eliminar_usuario(self):
         item = self.lista_usuarios.currentItem()
-
         if not item:
             QMessageBox.warning(self, "Error", "Seleccione un usuario para eliminar.")
             return
@@ -197,16 +127,14 @@ class GestionUsuariosDirector(QWidget):
             return
 
         confirm = QMessageBox.question(
-            self,
-            "Confirmar",
+            self, "Confirmar",
             f"¿Está seguro de eliminar al usuario '{email}'?",
             QMessageBox.Yes | QMessageBox.No
         )
 
         if confirm == QMessageBox.Yes:
-            exito = self.ctrl_usuarios.eliminar_usuario(email)
-            if exito:
+            if self.ctrl_usuarios.eliminar_usuario(email):
                 QMessageBox.information(self, "Éxito", f"Usuario '{email}' eliminado.")
-                self.actualizar_lista_usuarios()
+                self.actualizar_lista()
             else:
                 QMessageBox.warning(self, "Error", "No fue posible eliminar el usuario.")

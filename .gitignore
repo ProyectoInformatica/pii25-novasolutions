@@ -1,45 +1,35 @@
-# ----------------------------------------------------------------------
-# Configuraciones del IDE (IntelliJ, PyCharm, WebStorm, etc.)
-# Esto es la causa principal del "desorden" y debe IGNORARSE.
-# ----------------------------------------------------------------------
-.idea/                          # Carpeta de configuración del IDE
+# IDE
+.idea/
 .vscode/
-*.iml                           # Archivos de módulo del IDE (e.g., Proyecto.iml)
-*.ipr                           # Archivos de proyecto del IDE
-*.iws                           # Archivos de espacio de trabajo del IDE
-vcs.xml                         # Configuración de control de versiones del IDE
-misc.xml                        # Configuración miscelánea del IDE
-modules.xml                     # Configuración de módulos del IDE
-inspectionProfiles/             # Perfiles de inspección del IDE (si no están en .idea/)
+*.iml
+*.ipr
+*.iws
 
-# ----------------------------------------------------------------------
-# Entornos y Dependencias de Python
-# ----------------------------------------------------------------------
-venv/                           # Entornos virtuales de Python
+# Entorno virtual Python
+venv/
 ENV/
 venv.bak/
 env/
 .venv/
-bin/                            # Binarios de entornos virtuales (a veces)
 
-# ----------------------------------------------------------------------
-# Archivos de Compilación y Caché de Python
-# ----------------------------------------------------------------------
-__pycache__/                    # Carpeta de caché de bytecodes
-*/__pycache__/
-*.pyc                           # Archivos de bytecode compilado
-.pytest_cache/                  # Caché de Pytest
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+.pytest_cache/
+
+# Build
 build/
 dist/
 .eggs/
 *.egg
 *.egg-info/
-*.pyo
-*.py[cod]
 
+# Sistema operativo
+.DS_Store
+Thumbs.db
 
-# ----------------------------------------------------------------------
-# Archivos del Sistema Operativo
-# ----------------------------------------------------------------------
-.DS_Store                       # macOS
-Thumbs.db                       # Windows.idea/
+# Datos JSON legacy (ya no se usan)
+resources/sensor_history.json
+resources/escuela_data.json

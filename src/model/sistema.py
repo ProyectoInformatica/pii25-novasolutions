@@ -24,7 +24,7 @@ class Sistema(QObject):
 
     @mode.setter
     def mode(self, new_mode: str):
-        if new_mode in ["auto", "manual"] and new_mode != self._mode:
+        if new_mode in ("auto", "manual") and new_mode != self._mode:
             self._mode = new_mode
             self.mode_changed.emit(new_mode)
 
@@ -53,10 +53,7 @@ class Sistema(QObject):
         for s in self.sensors:
             if s.type == sensor_type:
                 return s.last_reading
-
         return None
-
-        raise RuntimeError(f"Sensor de tipo '{sensor_type}' no encontrado en el sistema.")
 
     def get_temperature(self) -> Optional[float]:
         return self.get_sensor_reading("temperature")
