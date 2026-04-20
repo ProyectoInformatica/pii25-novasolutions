@@ -33,7 +33,8 @@ class ControladorSensores:
         return False
 
     def eliminar_sensor(self, id_sensor: int) -> bool:
-        if self.db.eliminar_sensor(id_sensor):
+        """Baja lógica: no borra la fila, solo la marca como inactiva."""
+        if self.db.dar_baja_sensor(id_sensor):
             self.sensors = [s for s in self.sensors if s.id != id_sensor]
             return True
         return False

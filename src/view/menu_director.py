@@ -102,7 +102,7 @@ class MenuDirector(QWidget):
         self.sensor_widgets.clear()
         self.actuador_widgets.clear()
 
-        lbl_sensores = QLabel("📡 SENSORES")
+        lbl_sensores = QLabel("SENSORES")
         lbl_sensores.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
         self.layout_monitor.addWidget(lbl_sensores)
 
@@ -117,7 +117,7 @@ class MenuDirector(QWidget):
         linea.setStyleSheet("background-color: #555;")
         self.layout_monitor.addWidget(linea)
 
-        lbl_actuadores = QLabel("⚙️ ACTUADORES")
+        lbl_actuadores = QLabel("ACTUADORES")
         lbl_actuadores.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
         self.layout_monitor.addWidget(lbl_actuadores)
 

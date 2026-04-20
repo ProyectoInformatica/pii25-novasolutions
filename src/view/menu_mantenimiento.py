@@ -24,16 +24,7 @@ class MenuMantenimiento(QWidget):
 
         self.sensor_labels: Dict[int, QLabel] = {}
         self.actuador_labels: Dict[int, QLabel] = {}
-        self.actuator_labels = {}
-
-        self.actuators = [
-            Ventilador(id="fan1"),
-            Rociador(id="rociador1"),
-            LuzExterior(id="luzext1"),
-            LuzPasillo(id="luzpasillo1")
-        ]
-
-        self.sistema = Sistema(sensors=[], actuators=self.actuators)
+        self.sistema = Sistema(sensors=[], actuators=[])
         self.ctrl_sistema = ControladorSistema(self.sistema)
 
         self.setWindowTitle("Gestión de Infraestructura - Nova Solutions")
@@ -67,17 +58,21 @@ class MenuMantenimiento(QWidget):
         control_group.setStyleSheet(PANEL_STYLE)
         c_layout = QVBoxLayout()
 
-        self.btn_modo = QPushButton("Modo: AUTO")
+        self.btn_modo = QPushButton("Modo de operacion: AUTOMATICO")
         self.btn_modo.setStyleSheet(BTN_PRIMARY)
         self.btn_modo.clicked.connect(self.cambiar_modo)
 
         self.spin_target = QDoubleSpinBox()
-        self.spin_target.setRange(15, 35)
-        self.spin_target.setValue(22.0)
+        self.spin_target.setRange(15, 40)
+        self.spin_target.setValue(35.0)
+        self.spin_target.setEnabled(False)
         self.spin_target.setStyleSheet("padding:5px; background:#1b214d; color:white;")
+        self.spin_target.valueChanged.connect(
+            lambda v: setattr(self.sistema, 'manual_target', v)
+        )
 
         c_layout.addWidget(self.btn_modo)
-        c_layout.addWidget(QLabel("Temp. Objetivo (Manual):"))
+        c_layout.addWidget(QLabel("Temperatura objetivo (grados C):"))
         c_layout.addWidget(self.spin_target)
         control_group.setLayout(c_layout)
 
@@ -97,7 +92,7 @@ class MenuMantenimiento(QWidget):
         self.input_escuela.setPlaceholderText("Nombre de la Escuela")
         self.input_escuela.setStyleSheet("background: #1b214d; color:white; padding:5px;")
 
-        btn_crear = QPushButton("Añadir a BDD")
+        btn_crear = QPushButton("Registrar Sensor")
         btn_crear.setStyleSheet(BTN_PRIMARY)
         btn_crear.clicked.connect(self.crear_sensor)
 
@@ -115,7 +110,7 @@ class MenuMantenimiento(QWidget):
         left_column.addStretch()
 
         # Registrar actuador
-        crear_act_group = QGroupBox("Registrar y Vincular Actuador")
+        crear_act_group = QGroupBox("Registrar Nuevo Actuador")
         crear_act_group.setStyleSheet(PANEL_STYLE)
         act_layout = QVBoxLayout()
 
@@ -128,7 +123,7 @@ class MenuMantenimiento(QWidget):
 
         self.combo_sensor_vinc = QComboBox()
 
-        btn_vincular = QPushButton("Crear y Vincular")
+        btn_vincular = QPushButton("Registrar Actuador")
         btn_vincular.setStyleSheet(BTN_PRIMARY)
         btn_vincular.clicked.connect(self.crear_actuador)
 
@@ -156,11 +151,11 @@ class MenuMantenimiento(QWidget):
         container = QWidget()
         self.scroll_layout = QVBoxLayout(container)
 
-        self.scroll_layout.addWidget(QLabel("<b>📡 SENSORES (LECTURAS)</b>"))
+        self.scroll_layout.addWidget(QLabel("<b>SENSORES — LECTURAS EN TIEMPO REAL</b>"))
         self.sensor_layout = QVBoxLayout()
         self.scroll_layout.addLayout(self.sensor_layout)
 
-        self.scroll_layout.addWidget(QLabel("<b>⚙️ ACTUADORES CONFIGURADOS</b>"))
+        self.scroll_layout.addWidget(QLabel("<b>ACTUADORES REGISTRADOS</b>"))
         self.actuador_db_layout = QVBoxLayout()
         self.scroll_layout.addLayout(self.actuador_db_layout)
 
@@ -197,9 +192,9 @@ class MenuMantenimiento(QWidget):
             val_lbl = QLabel("--")
             val_lbl.setStyleSheet("color: #00ff00; font-size:14px; font-weight:bold;")
 
-            btn_del = QPushButton("✕")
+            btn_del = QPushButton("X")
             btn_del.setFixedSize(30, 30)
-            btn_del.setStyleSheet("background:#883333; color:white; border-radius:15px;")
+            btn_del.setStyleSheet("background:#883333; color:white; border-radius:15px; font-weight:bold;")
             btn_del.clicked.connect(lambda _, id_s=s.id: self.eliminar_sensor(id_s))
 
             item_layout.addWidget(info)
@@ -216,6 +211,20 @@ class MenuMantenimiento(QWidget):
             if item.widget():
                 item.widget().setParent(None)
         self.actuador_labels.clear()
+
+        tipo_map = {
+            "Ventilador": Ventilador,
+            "Rociador": Rociador,
+            "Luz Exterior": LuzExterior,
+            "Luz Pasillo": LuzPasillo,
+        }
+        self.sistema.actuators = []
+        for a in self.ctrl_actuadores.get_all_con_sensor():
+            cls = tipo_map.get(a['tipo'])
+            if cls:
+                self.sistema.actuators.append(
+                    cls(id=str(a['id']), id_sensor=a['id_sensor_vinculado'])
+                )
 
         for a in self.ctrl_actuadores.get_all_con_sensor():
             item = QWidget()
@@ -303,9 +312,14 @@ class MenuMantenimiento(QWidget):
             QMessageBox.critical(self, "Error", "Error al guardar en BDD.")
 
     def actualizar_todo(self):
+        self.ctrl_sensores.actualizar_lecturas()
+        self.sistema.sensors = self.ctrl_sensores.get_all_sensors()
+
         for id_s, label in self.sensor_labels.items():
             valor = self.ctrl_sensores.get_ultima_medida(id_s)
             label.setText(f"{valor:.2f}" if valor is not None else "N/A")
+
+        self.ctrl_sistema.update()
 
         for a in self.ctrl_actuadores.get_all_con_sensor():
             idx = a['id']
@@ -315,13 +329,14 @@ class MenuMantenimiento(QWidget):
                 self.actuador_labels[idx].setText(estado_txt)
                 self.actuador_labels[idx].setStyleSheet(f"color: {color}; font-weight:bold;")
 
-        self.ctrl_sistema.update()
-        for a_hw in self.actuators:
-            if a_hw.id in self.actuator_labels:
-                self.actuator_labels[a_hw.id].setText(f"{a_hw.name}: {'ON' if a_hw.state else 'OFF'}")
-
     def cambiar_modo(self):
-        pass
+        nuevo_modo = "manual" if self.sistema.mode == "auto" else "auto"
+        self.sistema.mode = nuevo_modo
+        self.sistema.manual_enabled = (nuevo_modo == "manual")
+        etiqueta = "MANUAL" if nuevo_modo == "manual" else "AUTOMATICO"
+        self.btn_modo.setText(f"Modo de operacion: {etiqueta}")
+        self.spin_target.setEnabled(nuevo_modo == "manual")
+        self.actualizar_todo()
 
     def cerrar_sesion(self):
         from src.view.inicio import Inicio

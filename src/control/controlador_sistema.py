@@ -19,44 +19,44 @@ class ControladorSistema:
         self.deadband = deadband
 
     def update(self):
-        temp = self.sistema.get_temperature()
-
         if self.sistema.mode == "manual":
-            if self.sistema.manual_enabled and temp is not None:
-                self._control_temperatura_manual(temp)
+            if self.sistema.manual_enabled:
+                self._control_temperatura_manual()
             else:
                 self._set_actuators_by_type(Ventilador, False)
         elif self.sistema.mode == "auto":
-            self._control_temperatura_auto(temp)
+            self._control_temperatura_auto()
 
         self._control_humo()
         self._control_luz_exterior()
         self._control_luz_pasillo()
 
-    def _control_temperatura_manual(self, current_temp: float):
-        target = self.sistema.manual_target
-        should_be_on = None
-
-        if current_temp > (target + self.deadband):
-            should_be_on = True
-        elif current_temp < (target - self.deadband):
-            should_be_on = False
-
-        if should_be_on is not None:
-            self._set_actuators_by_type(Ventilador, should_be_on)
-
-    def _control_temperatura_auto(self, current_temp: float):
-        if current_temp is None:
+    def _evaluar_ventilador(self, a: Ventilador, umbral: float):
+        temp = self.sistema.get_sensor_reading_by_id(a.id_sensor) if a.id_sensor is not None else None
+        if temp is None:
             return
-
-        should_be_on = None
-        if current_temp > self.UMBRAL_TEMP_MAX:
+        if temp > (umbral + self.deadband):
             should_be_on = True
-        elif current_temp < (self.UMBRAL_TEMP_MAX - self.deadband):
+        elif temp < (umbral - self.deadband):
             should_be_on = False
+        else:
+            return
+        try:
+            a.set_state(should_be_on)
+            self.db.actualizar_estado_actuador(a.id, should_be_on)
+        except Exception as e:
+            logger.error(f"Error al actualizar ventilador {a.id}: {e}")
 
-        if should_be_on is not None:
-            self._set_actuators_by_type(Ventilador, should_be_on)
+    def _control_temperatura_manual(self):
+        target = self.sistema.manual_target
+        for a in self.sistema.actuators:
+            if isinstance(a, Ventilador):
+                self._evaluar_ventilador(a, target)
+
+    def _control_temperatura_auto(self):
+        for a in self.sistema.actuators:
+            if isinstance(a, Ventilador):
+                self._evaluar_ventilador(a, self.UMBRAL_TEMP_MAX)
 
     def _control_humo(self):
         smoke_level = self.sistema.get_sensor_reading("smoke")

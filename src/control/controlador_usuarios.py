@@ -18,8 +18,9 @@ class ControladorUsuarios:
         tipo_db = '1' if rol == "director" else '0'
         return self.db.registrar_usuario(nombre, contrasena, apellido, email, tipo_db)
 
-    def eliminar_usuario(self, email: str) -> bool:
-        return self.db.eliminar_usuario(email)
+    def eliminar_usuario(self, id_user: int) -> bool:
+        """Baja lógica por PK. No borra la fila de la base de datos."""
+        return self.db.dar_baja_usuario(id_user)
 
     def obtener_usuario_por_email(self, email: str) -> Optional[Usuario]:
         row = self.db.obtener_usuario_por_email(email)
@@ -33,7 +34,7 @@ class ControladorUsuarios:
     def _fila_a_usuario(row: dict) -> Usuario:
         return Usuario(
             email=row['mail'],
-            contrasena=row['password'],
+            contrasena=row.get('password', ''),
             rol=row['tipo'],
             nombre=row['nombre'],
             apellido=row['apellido'],

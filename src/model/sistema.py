@@ -15,7 +15,7 @@ class Sistema(QObject):
         self.actuators = actuators if actuators is not None else []
 
         self._mode: str = "auto"
-        self._manual_target: float = 22.0
+        self._manual_target: float = 35.0
         self._manual_enabled: bool = False
 
     @property
@@ -52,6 +52,12 @@ class Sistema(QObject):
     def get_sensor_reading(self, sensor_type: str) -> Optional[float]:
         for s in self.sensors:
             if s.type == sensor_type:
+                return s.last_reading
+        return None
+
+    def get_sensor_reading_by_id(self, id_sensor: int) -> Optional[float]:
+        for s in self.sensors:
+            if s.id == id_sensor:
                 return s.last_reading
         return None
 

@@ -5,24 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="918074fc-6c49-4386-aa3e-b4c1e4cead0b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pii25-novasolutions.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/control/controlador_sensores.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sensores.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/control/controlador_sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_sistema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/control/controlador_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_usuarios.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/actuador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/actuador.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/basedatos.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/basedatos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/reporte.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/sistema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/sistema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/usuario.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/gestion_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/gestion_usuarios.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/menu_director.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_director.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/menu_invitado.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_invitado.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/menu_mantenimiento.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/reporte_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/reporte_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/ventana_principal.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

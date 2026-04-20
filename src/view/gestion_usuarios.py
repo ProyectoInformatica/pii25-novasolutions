@@ -122,19 +122,23 @@ class GestionUsuariosDirector(QWidget):
         email = item.data(Qt.UserRole)
         usuario = self.ctrl_usuarios.obtener_usuario_por_email(email)
 
-        if usuario and usuario.es_director():
+        if not usuario:
+            QMessageBox.warning(self, "Error", "Usuario no encontrado.")
+            return
+
+        if usuario.es_director():
             QMessageBox.warning(self, "Error", "No se puede eliminar al usuario director.")
             return
 
         confirm = QMessageBox.question(
             self, "Confirmar",
-            f"¿Está seguro de eliminar al usuario '{email}'?",
+            f"¿Está seguro de dar de baja al usuario '{email}'?",
             QMessageBox.Yes | QMessageBox.No
         )
 
         if confirm == QMessageBox.Yes:
-            if self.ctrl_usuarios.eliminar_usuario(email):
-                QMessageBox.information(self, "Éxito", f"Usuario '{email}' eliminado.")
+            if self.ctrl_usuarios.eliminar_usuario(usuario.id_db):
+                QMessageBox.information(self, "Éxito", f"Usuario '{email}' dado de baja.")
                 self.actualizar_lista()
             else:
                 QMessageBox.warning(self, "Error", "No fue posible eliminar el usuario.")
