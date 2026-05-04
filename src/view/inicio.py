@@ -8,7 +8,7 @@ from PySide6.QtGui import (
 from pathlib import Path
 
 # UBICACIONES DE ARCHIVOS
-RESOURCES_DIR = Path("resources")
+RESOURCES_DIR = Path(__file__).parent.parent.parent / "resources"
 LOGO_MADRID_PATH = str(RESOURCES_DIR / "cdm.png")
 LOGO_NOVASOLUTIONS_PATH = str(RESOURCES_DIR / "novasolutions.jpg")
 

@@ -5,7 +5,6 @@ from typing import Optional
 
 logger = logging.getLogger("SensorModel")
 
-
 class Sensor(QObject):
     # Señales para comunicar cambios a la Interfaz (View)
     lectura_actualizada = Signal(float)
@@ -16,7 +15,7 @@ class Sensor(QObject):
         super().__init__()
         # Atributos según tu tabla 'sensor'
         self.id = id_bd
-        self.sensor_type = tipo
+        self.sensor_type = tipo  # Usaremos este nombre consistentemente
         self.ubicacion = ubicacion
         self.escuela = escuela
         self.last_reading: Optional[float] = None
@@ -27,7 +26,6 @@ class Sensor(QObject):
             return
 
         # Solo emitimos si el valor realmente cambió para ahorrar recursos.
-        # Usamos math.isclose para evitar falsos positivos por precisión flotante.
         if self.last_reading is None or not math.isclose(nuevo_valor, self.last_reading, rel_tol=1e-6):
             logger.debug("Sensor %s: valor actualizado %.4f -> %.4f", self.id, self.last_reading, nuevo_valor)
             self.last_reading = nuevo_valor

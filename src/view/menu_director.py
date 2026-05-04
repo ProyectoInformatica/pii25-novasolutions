@@ -121,7 +121,8 @@ class MenuDirector(QWidget):
 
         self.ctrl_sensores.cargar_desde_bd()
         for s in self.ctrl_sensores.get_all_sensors():
-            fila, valor_lbl = self._crear_fila(f"{s.type} ({s.ubicacion})")
+            # CORRECCIÓN: s.sensor_type en lugar de s.type
+            fila, valor_lbl = self._crear_fila(f"{s.sensor_type} ({s.ubicacion})")
             self.sensor_widgets[s.id] = valor_lbl
             self.layout_monitor.addWidget(fila)
 
