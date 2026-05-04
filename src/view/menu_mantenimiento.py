@@ -11,6 +11,7 @@ from src.model.sistema import Sistema
 from src.control.controlador_sensores import ControladorSensores
 from src.control.controlador_actuadores import ControladorActuadores
 from src.control.controlador_sistema import ControladorSistema
+from src.control.controlador_mensajes import ControladorMensajes
 from src.view.estilos import BTN_PRIMARY, BTN_DANGER, PANEL_STYLE
 
 
@@ -21,6 +22,7 @@ class MenuMantenimiento(QWidget):
 
         self.ctrl_sensores = ControladorSensores()
         self.ctrl_actuadores = ControladorActuadores()
+        self.ctrl_mensajes = ControladorMensajes()
 
         self.sensor_labels: Dict[int, QLabel] = {}
         self.actuador_labels: Dict[int, QLabel] = {}
@@ -40,6 +42,7 @@ class MenuMantenimiento(QWidget):
         self.cargar_sensores_ui()
         self.cargar_sensores_en_combo()
         self.cargar_actuadores_ui()
+        self.cargar_escuelas_en_combo()
 
     def init_ui(self):
         main_layout = QVBoxLayout()
@@ -88,9 +91,8 @@ class MenuMantenimiento(QWidget):
         self.input_ubica.setPlaceholderText("Laboratorio")
         self.input_ubica.setStyleSheet("background: #1b214d; color:white; padding:5px;")
 
-        self.input_escuela = QLineEdit()
-        self.input_escuela.setPlaceholderText("Nombre de la Escuela")
-        self.input_escuela.setStyleSheet("background: #1b214d; color:white; padding:5px;")
+        self.combo_escuela = QComboBox()
+        self.combo_escuela.setStyleSheet("background: #1b214d; color:white; padding:5px;")
 
         btn_crear = QPushButton("Registrar Sensor")
         btn_crear.setStyleSheet(BTN_PRIMARY)
@@ -101,7 +103,7 @@ class MenuMantenimiento(QWidget):
         f_layout.addWidget(QLabel("Ubicación:"))
         f_layout.addWidget(self.input_ubica)
         f_layout.addWidget(QLabel("Escuela:"))
-        f_layout.addWidget(self.input_escuela)
+        f_layout.addWidget(self.combo_escuela)
         f_layout.addWidget(btn_crear)
         crear_group.setLayout(f_layout)
 
@@ -137,6 +139,18 @@ class MenuMantenimiento(QWidget):
         crear_act_group.setLayout(act_layout)
 
         left_column.addWidget(crear_act_group)
+
+        # Mensajería interna
+        msg_group = QGroupBox("Comunicación")
+        msg_group.setStyleSheet(PANEL_STYLE)
+        msg_layout = QVBoxLayout(msg_group)
+
+        self.btn_mensajes = QPushButton("Mensajes")
+        self.btn_mensajes.setStyleSheet(BTN_PRIMARY)
+        self.btn_mensajes.clicked.connect(self.abrir_mensajeria)
+
+        msg_layout.addWidget(self.btn_mensajes)
+        left_column.addWidget(msg_group)
 
         # Panel derecho: estado global
         right_column = QVBoxLayout()
@@ -242,6 +256,14 @@ class MenuMantenimiento(QWidget):
             self.actuador_db_layout.addWidget(item)
             self.actuador_labels[a['id']] = est_lbl
 
+    def cargar_escuelas_en_combo(self):
+        self.combo_escuela.clear()
+        escuelas = self.ctrl_sensores.db.obtener_escuelas()
+        if not escuelas:
+            self.combo_escuela.addItem("Sin escuelas disponibles", None)
+        for e in escuelas:
+            self.combo_escuela.addItem(e['nombre'], e['id'])
+
     def cargar_sensores_en_combo(self):
         self.combo_sensor_vinc.clear()
         self.ctrl_sensores.cargar_desde_bd()
@@ -253,16 +275,16 @@ class MenuMantenimiento(QWidget):
 
     def crear_sensor(self):
         tipo = self.input_tipo.currentText()
-        ubica = self.input_ubica.text()
-        escuela = self.input_escuela.text()
+        ubica = self.input_ubica.text().strip()
+        id_escuela = self.combo_escuela.currentData()
+        nombre_escuela = self.combo_escuela.currentText()
 
-        if not ubica or not escuela:
-            QMessageBox.warning(self, "Error", "Completa todos los campos.")
+        if not ubica or id_escuela is None:
+            QMessageBox.warning(self, "Error", "Completa la ubicación y selecciona una escuela.")
             return
 
-        if self.ctrl_sensores.crear_sensor(tipo, ubica, escuela):
+        if self.ctrl_sensores.crear_sensor(tipo, ubica, id_escuela, nombre_escuela):
             self.input_ubica.clear()
-            self.input_escuela.clear()
             self.cargar_sensores_ui()
             self.cargar_sensores_en_combo()
         else:
@@ -311,6 +333,18 @@ class MenuMantenimiento(QWidget):
         else:
             QMessageBox.critical(self, "Error", "Error al guardar en BDD.")
 
+    def _actualizar_badge_mensajes(self):
+        cantidad = self.ctrl_mensajes.contar_no_leidos(self.usuario.id_db)
+        if cantidad > 0:
+            self.btn_mensajes.setText(f"Mensajes  [{cantidad}]")
+        else:
+            self.btn_mensajes.setText("Mensajes")
+
+    def abrir_mensajeria(self):
+        from src.view.mensajeria_view import MensajeriaView
+        ventana_chat = MensajeriaView(self.usuario)
+        ventana_chat.exec()
+
     def actualizar_todo(self):
         self.ctrl_sensores.actualizar_lecturas()
         self.sistema.sensors = self.ctrl_sensores.get_all_sensors()
@@ -328,6 +362,8 @@ class MenuMantenimiento(QWidget):
                 color = "#00ff00" if a['estado_actual'] else "#ff4444"
                 self.actuador_labels[idx].setText(estado_txt)
                 self.actuador_labels[idx].setStyleSheet(f"color: {color}; font-weight:bold;")
+
+        self._actualizar_badge_mensajes()
 
     def cambiar_modo(self):
         nuevo_modo = "manual" if self.sistema.mode == "auto" else "auto"

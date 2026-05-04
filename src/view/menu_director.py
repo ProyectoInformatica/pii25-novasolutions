@@ -10,6 +10,8 @@ from src.control.controlador_sensores import ControladorSensores
 from src.control.controlador_actuadores import ControladorActuadores
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
+from src.view.gestion_escuelas import GestionEscuelas
+from src.control.controlador_mensajes import ControladorMensajes
 from src.view.estilos import BTN_PRIMARY, BTN_DANGER, GROUPBOX_STYLE
 
 
@@ -19,6 +21,7 @@ class MenuDirector(QWidget):
         self.usuario = usuario
         self.ctrl_sensores = ControladorSensores()
         self.ctrl_actuadores = ControladorActuadores()
+        self.ctrl_mensajes = ControladorMensajes()
 
         self.sensor_widgets: Dict[int, QLabel] = {}
         self.actuador_widgets: Dict[int, QLabel] = {}
@@ -53,12 +56,22 @@ class MenuDirector(QWidget):
         btn_usuarios.clicked.connect(self.abrir_gestion_usuarios)
         btn_usuarios.setStyleSheet(BTN_PRIMARY)
 
+        btn_escuelas = QPushButton("Gestionar Escuelas")
+        btn_escuelas.clicked.connect(self.abrir_gestion_escuelas)
+        btn_escuelas.setStyleSheet(BTN_PRIMARY)
+
         btn_reportes = QPushButton("Ver Reportes Históricos")
         btn_reportes.clicked.connect(self.abrir_reportes)
         btn_reportes.setStyleSheet(BTN_PRIMARY)
 
+        self.btn_mensajes = QPushButton("Mensajes")
+        self.btn_mensajes.clicked.connect(self.abrir_mensajeria)
+        self.btn_mensajes.setStyleSheet(BTN_PRIMARY)
+
         gestion_layout.addWidget(btn_usuarios)
+        gestion_layout.addWidget(btn_escuelas)
         gestion_layout.addWidget(btn_reportes)
+        gestion_layout.addWidget(self.btn_mensajes)
         gestion_layout.addStretch()
         gestion_group.setLayout(gestion_layout)
         gestion_group.setFixedWidth(240)
@@ -149,9 +162,27 @@ class MenuDirector(QWidget):
                 self.actuador_widgets[a['id']].setText(estado_txt)
                 self.actuador_widgets[a['id']].setStyleSheet(f"color: {color}; font-weight: bold;")
 
+        self._actualizar_badge_mensajes()
+
+    def _actualizar_badge_mensajes(self):
+        cantidad = self.ctrl_mensajes.contar_no_leidos(self.usuario.id_db)
+        if cantidad > 0:
+            self.btn_mensajes.setText(f"Mensajes  [{cantidad}]")
+        else:
+            self.btn_mensajes.setText("Mensajes")
+
     def abrir_gestion_usuarios(self):
         self.gestion = GestionUsuariosDirector(usuario=self.usuario)
         self.gestion.show()
+
+    def abrir_gestion_escuelas(self):
+        self.gestion_escuelas = GestionEscuelas()
+        self.gestion_escuelas.show()
+
+    def abrir_mensajeria(self):
+        from src.view.mensajeria_view import MensajeriaView
+        ventana_chat = MensajeriaView(self.usuario)
+        ventana_chat.exec()
 
     def abrir_reportes(self):
         self.reporte_view = ReporteHistorialView()

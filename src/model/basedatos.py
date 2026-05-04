@@ -120,22 +120,53 @@ class BaseDatos:
         finally:
             conexion.close()
 
-    # Métodos auxiliares de escuela
+    # Métodos de escuela
 
-    def _obtener_o_crear_escuela(self, nombre: str, cursor) -> int:
-        # Busca la escuela por nombre; si no existe la crea
-        cursor.execute(
-            "SELECT id FROM escuela WHERE nombre = %s AND activo = 1 LIMIT 1",
-            (nombre,)
-        )
-        fila = cursor.fetchone()
-        if fila:
-            return fila[0]
-        cursor.execute(
-            "INSERT INTO escuela (nombre, direccion) VALUES (%s, 'Sin direccion')",
-            (nombre,)
-        )
-        return cursor.lastrowid
+    def obtener_escuelas(self):
+        conexion = self.conectar()
+        if not conexion:
+            return []
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT id, nombre, direccion FROM escuela WHERE activo = 1 ORDER BY nombre"
+            )
+            return cursor.fetchall()
+        finally:
+            conexion.close()
+
+    def crear_escuela(self, nombre: str, direccion: str) -> bool:
+        conexion = self.conectar()
+        if not conexion:
+            return False
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "INSERT INTO escuela (nombre, direccion) VALUES (%s, %s)",
+                (nombre, direccion)
+            )
+            conexion.commit()
+            return True
+        except Exception as e:
+            logger.error(f"Error al crear escuela: {e}")
+            return False
+        finally:
+            conexion.close()
+
+    def dar_baja_escuela(self, id_escuela: int) -> bool:
+        conexion = self.conectar()
+        if not conexion:
+            return False
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "UPDATE escuela SET activo = 0, fecha_baja = NOW() WHERE id = %s",
+                (id_escuela,)
+            )
+            conexion.commit()
+            return cursor.rowcount > 0
+        finally:
+            conexion.close()
 
     # Métodos de sensor
 
@@ -156,13 +187,12 @@ class BaseDatos:
         finally:
             conexion.close()
 
-    def crear_sensor(self, tipo_sensor: str, ubicacion: str, escuela_nombre: str):
+    def crear_sensor(self, tipo_sensor: str, ubicacion: str, id_escuela: int):
         conexion = self.conectar()
         if not conexion:
             return None
         try:
             cursor = conexion.cursor()
-            id_escuela = self._obtener_o_crear_escuela(escuela_nombre, cursor)
             cursor.execute(
                 """INSERT INTO sensor (tipo_sensor, ubicacion, id_escuela)
                    VALUES (%s, %s, %s)""",
@@ -254,6 +284,138 @@ class BaseDatos:
             cursor.execute(
                 "UPDATE actuador SET estado_actual = %s WHERE id = %s",
                 (1 if estado else 0, id_actuador)
+            )
+            conexion.commit()
+            return True
+        finally:
+            conexion.close()
+
+    # Métodos de reportes e historial
+
+    # Métodos de mensajería
+
+    def obtener_usuarios_activos(self):
+        conexion = self.conectar()
+        if not conexion:
+            return []
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                """SELECT id, nombre, apellido, mail, tipo
+                   FROM user
+                   WHERE activo = 1
+                   ORDER BY apellido, nombre"""
+            )
+            return cursor.fetchall()
+        finally:
+            conexion.close()
+
+    def obtener_conversacion(self, id_user1: int, id_user2: int, limite: int = 50):
+        conexion = self.conectar()
+        if not conexion:
+            return []
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                """SELECT
+                       m.id          AS id_mensaje,
+                       m.contenido,
+                       m.hora,
+                       m.estado,
+                       er.id_user1   AS id_remitente,
+                       er.id_user2   AS id_destinatario,
+                       u.nombre      AS nombre_remitente,
+                       u.apellido    AS apellido_remitente
+                   FROM mensaje m
+                   JOIN envia_recibe er ON er.id_mensaje = m.id
+                   JOIN user u          ON u.id = er.id_user1
+                   WHERE m.activo = 1
+                     AND (
+                         (er.id_user1 = %s AND er.id_user2 = %s)
+                      OR (er.id_user1 = %s AND er.id_user2 = %s)
+                     )
+                   ORDER BY m.hora ASC
+                   LIMIT %s""",
+                (id_user1, id_user2, id_user2, id_user1, limite)
+            )
+            return cursor.fetchall()
+        finally:
+            conexion.close()
+
+    def enviar_mensaje(self, id_remitente: int, id_destinatario: int, contenido: str) -> bool:
+        conexion = self.conectar()
+        if not conexion:
+            return False
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "INSERT INTO mensaje (contenido, estado, activo) VALUES (%s, '0', 1)",
+                (contenido,)
+            )
+            id_mensaje = cursor.lastrowid
+            cursor.execute(
+                """INSERT INTO envia_recibe (id_mensaje, id_user1, id_user2, fecha_envio)
+                   VALUES (%s, %s, %s, NOW())""",
+                (id_mensaje, id_remitente, id_destinatario)
+            )
+            conexion.commit()
+            return True
+        except Exception as e:
+            logger.error(f"Error al enviar mensaje: {e}")
+            conexion.rollback()
+            return False
+        finally:
+            conexion.close()
+
+    def contar_no_leidos(self, id_destinatario: int) -> int:
+        conexion = self.conectar()
+        if not conexion:
+            return 0
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                """SELECT COUNT(*) FROM mensaje m
+                   JOIN envia_recibe er ON er.id_mensaje = m.id
+                   WHERE m.activo = 1 AND m.estado = '0'
+                     AND er.id_user2 = %s""",
+                (id_destinatario,)
+            )
+            resultado = cursor.fetchone()
+            return resultado[0] if resultado else 0
+        finally:
+            conexion.close()
+
+    def contar_no_leidos_de_contacto(self, id_remitente: int, id_destinatario: int) -> int:
+        conexion = self.conectar()
+        if not conexion:
+            return 0
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                """SELECT COUNT(*) FROM mensaje m
+                   JOIN envia_recibe er ON er.id_mensaje = m.id
+                   WHERE m.activo = 1 AND m.estado = '0'
+                     AND er.id_user1 = %s AND er.id_user2 = %s""",
+                (id_remitente, id_destinatario)
+            )
+            resultado = cursor.fetchone()
+            return resultado[0] if resultado else 0
+        finally:
+            conexion.close()
+
+    def marcar_leidos(self, id_remitente: int, id_destinatario: int) -> bool:
+        conexion = self.conectar()
+        if not conexion:
+            return False
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                """UPDATE mensaje m
+                   JOIN envia_recibe er ON er.id_mensaje = m.id
+                   SET m.estado = '1'
+                   WHERE m.activo = 1 AND m.estado = '0'
+                     AND er.id_user1 = %s AND er.id_user2 = %s""",
+                (id_remitente, id_destinatario)
             )
             conexion.commit()
             return True

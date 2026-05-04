@@ -23,10 +23,10 @@ class ControladorSensores:
             ))
         logger.info(f"Cargados {len(self.sensors)} sensores desde la base de datos.")
 
-    def crear_sensor(self, tipo: str, ubicacion: str, escuela: str) -> bool:
-        nuevo_id = self.db.crear_sensor(tipo, ubicacion, escuela)
+    def crear_sensor(self, tipo: str, ubicacion: str, id_escuela: int, nombre_escuela: str) -> bool:
+        nuevo_id = self.db.crear_sensor(tipo, ubicacion, id_escuela)
         if nuevo_id:
-            self.sensors.append(Sensor(nuevo_id, tipo, ubicacion, escuela))
+            self.sensors.append(Sensor(nuevo_id, tipo, ubicacion, nombre_escuela))
             logger.info(f"Sensor '{tipo}' en '{ubicacion}' creado con ID: {nuevo_id}")
             return True
         logger.error("No se pudo crear el sensor en la base de datos.")
