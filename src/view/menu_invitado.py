@@ -94,7 +94,7 @@ class MenuInvitado(QWidget):
 
             layout_c = QVBoxLayout(card)
 
-            lbl_tipo = QLabel(f"● {s.type.upper()}")
+            lbl_tipo = QLabel(f"● {s.sensor_type.upper()}")
             lbl_tipo.setObjectName("TypeLabel")
 
             lbl_ubica = QLabel(s.ubicacion)

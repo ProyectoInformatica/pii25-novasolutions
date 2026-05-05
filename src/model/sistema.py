@@ -51,7 +51,7 @@ class Sistema(QObject):
 
     def get_sensor_reading(self, sensor_type: str) -> Optional[float]:
         for s in self.sensors:
-            if s.type == sensor_type:
+            if s.sensor_type == sensor_type:
                 return s.last_reading
         return None
 

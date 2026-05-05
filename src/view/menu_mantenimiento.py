@@ -202,7 +202,8 @@ class MenuMantenimiento(QWidget):
             item_layout = QHBoxLayout(item)
             item.setStyleSheet("background: rgba(255,255,255,0.05); border-radius:5px; margin:2px;")
 
-            info = QLabel(f"ID:{s.id} | <b>{s.type.upper()}</b>\n{s.ubicacion}")
+            # CORRECCIÓN: s.sensor_type en lugar de s.type
+            info = QLabel(f"ID:{s.id} | <b>{s.sensor_type.upper()}</b>\n{s.ubicacion}")
             val_lbl = QLabel("--")
             val_lbl.setStyleSheet("color: #00ff00; font-size:14px; font-weight:bold;")
 
@@ -268,8 +269,9 @@ class MenuMantenimiento(QWidget):
         self.combo_sensor_vinc.clear()
         self.ctrl_sensores.cargar_desde_bd()
         for s in self.ctrl_sensores.get_all_sensors():
+            # CORRECCIÓN: s.sensor_type en lugar de s.type
             self.combo_sensor_vinc.addItem(
-                f"ID:{s.id} - {s.type} ({s.ubicacion})",
+                f"ID:{s.id} - {s.sensor_type} ({s.ubicacion})",
                 s.id
             )
 
@@ -319,7 +321,8 @@ class MenuMantenimiento(QWidget):
             QMessageBox.warning(self, "Error", "Sensor no encontrado.")
             return
 
-        if reglas.get(tipo_act) != sensor.type:
+        # CORRECCIÓN: sensor.sensor_type en lugar de sensor.type
+        if reglas.get(tipo_act) != sensor.sensor_type:
             QMessageBox.warning(
                 self, "Error",
                 f"Un {tipo_act} solo se asigna a sensor de tipo '{reglas.get(tipo_act)}'."
