@@ -22,6 +22,9 @@ class ControladorUsuarios:
         """Baja lógica por PK. No borra la fila de la base de datos."""
         return self.db.dar_baja_usuario(id_user)
 
+    def hay_administradores(self) -> bool:
+        return self.db.hay_directores_activos()
+
     def obtener_usuario_por_email(self, email: str) -> Optional[Usuario]:
         row = self.db.obtener_usuario_por_email(email)
         return self._fila_a_usuario(row) if row else None

@@ -193,9 +193,16 @@ class Inicio(QWidget):
         self.lbl_novasolutions.scale_logo(base_width_nova)
 
     def ir_login(self):
-        from src.view.login import Login
-        self.login = Login()
-        self.login.show()
+        from src.control.controlador_usuarios import ControladorUsuarios
+        ctrl = ControladorUsuarios()
+        if not ctrl.hay_administradores():
+            from src.view.crear_primer_admin import CrearPrimerAdmin
+            self.setup = CrearPrimerAdmin()
+            self.setup.show()
+        else:
+            from src.view.login import Login
+            self.login = Login()
+            self.login.show()
         self.close()
 
     def ir_estudiante(self):

@@ -101,6 +101,20 @@ class BaseDatos:
         finally:
             conexion.close()
 
+    def hay_directores_activos(self) -> bool:
+        conexion = self.conectar()
+        if not conexion:
+            return False
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "SELECT COUNT(*) FROM user WHERE tipo = '1' AND activo = 1"
+            )
+            resultado = cursor.fetchone()
+            return (resultado[0] if resultado else 0) > 0
+        finally:
+            conexion.close()
+
     def dar_baja_usuario(self, id_user: int) -> bool:
         # Baja lógica: no se borra la fila, se marca como inactivo
         conexion = self.conectar()
@@ -111,8 +125,7 @@ class BaseDatos:
             cursor.execute(
                 """UPDATE user
                    SET activo = 0, fecha_baja = NOW()
-                   WHERE id    = %s
-                     AND tipo != '1'""",
+                   WHERE id = %s""",
                 (id_user,)
             )
             conexion.commit()

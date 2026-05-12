@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(.venv/Scripts/python.exe -c ' *)",
-      "Bash(python -c \"from src.view.menu_director import MenuDirector\")",
-      "Bash(python -c \"from src.view.menu_mantenimiento import MenuMantenimiento\")"
-    ]
-  }
-}

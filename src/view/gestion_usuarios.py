@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton,
-    QMessageBox, QListWidget, QListWidgetItem
+    QMessageBox, QListWidget, QListWidgetItem, QComboBox
 )
 from PySide6.QtCore import Qt
 
@@ -9,6 +9,24 @@ from src.view.estilos import BTN_PRIMARY, BTN_DANGER, INPUT_STYLE, LIST_STYLE
 
 TITLE_STYLE = "font-size:18px; font-weight:700; margin:8px 0 12px 0;"
 
+COMBO_STYLE = """
+QComboBox{
+    padding:10px;
+    border-radius:10px;
+    background:#1b214d;
+    border:1px solid rgba(255,255,255,0.15);
+    color:white;
+    font-size:13px;
+}
+QComboBox::drop-down{ border:none; }
+QComboBox QAbstractItemView{
+    background:#1b214d;
+    color:white;
+    selection-background-color: rgba(52,137,226,0.55);
+    border-radius:8px;
+}
+"""
+
 
 class GestionUsuariosDirector(QWidget):
     def __init__(self, usuario=None):
@@ -16,21 +34,21 @@ class GestionUsuariosDirector(QWidget):
         self.usuario_actual = usuario
         self.ctrl_usuarios = ControladorUsuarios()
 
-        self.setWindowTitle("Gestión de Usuarios (Director)")
-        self.setGeometry(250, 200, 560, 500)
+        self.setWindowTitle("Gestión de Usuarios")
+        self.setGeometry(250, 200, 560, 540)
         self.setStyleSheet("background-color:#0e143b; color:white;")
 
         layout = QVBoxLayout()
         layout.setSpacing(12)
         layout.setContentsMargins(24, 18, 24, 18)
 
-        titulo = QLabel("Registrar nuevo usuario de mantenimiento")
+        titulo = QLabel("Registrar nuevo usuario")
         titulo.setAlignment(Qt.AlignCenter)
         titulo.setStyleSheet(TITLE_STYLE)
         layout.addWidget(titulo)
 
         self.nuevo_correo = QLineEdit()
-        self.nuevo_correo.setPlaceholderText("Correo electrónico")
+        self.nuevo_correo.setPlaceholderText("Correo electrónico (@escuela.com)")
         self.nuevo_correo.setStyleSheet(INPUT_STYLE)
         layout.addWidget(self.nuevo_correo)
 
@@ -50,7 +68,13 @@ class GestionUsuariosDirector(QWidget):
         self.nueva_clave.setStyleSheet(INPUT_STYLE)
         layout.addWidget(self.nueva_clave)
 
-        btn_registrar = QPushButton("Registrar usuario de mantenimiento")
+        self.combo_rol = QComboBox()
+        self.combo_rol.addItem("Mantenimiento", userData="mantenimiento")
+        self.combo_rol.addItem("Administrador (Director)", userData="director")
+        self.combo_rol.setStyleSheet(COMBO_STYLE)
+        layout.addWidget(self.combo_rol)
+
+        btn_registrar = QPushButton("Registrar usuario")
         btn_registrar.setStyleSheet(BTN_PRIMARY)
         btn_registrar.clicked.connect(self.registrar_usuario)
         layout.addWidget(btn_registrar)
@@ -77,6 +101,7 @@ class GestionUsuariosDirector(QWidget):
         nombre = self.nuevo_nombre.text().strip()
         apellido = self.nuevo_apellido.text().strip()
         clave = self.nueva_clave.text().strip()
+        rol = self.combo_rol.currentData()
 
         if not correo or not nombre or not apellido or not clave:
             QMessageBox.warning(self, "Error", "Debe completar todos los campos.")
@@ -92,15 +117,17 @@ class GestionUsuariosDirector(QWidget):
 
         exito = self.ctrl_usuarios.registrar_usuario(
             email=correo, nombre=nombre, apellido=apellido,
-            contrasena=clave, rol="mantenimiento"
+            contrasena=clave, rol=rol
         )
 
         if exito:
-            QMessageBox.information(self, "Éxito", f"Usuario '{correo}' registrado correctamente.")
+            rol_str = "administrador" if rol == "director" else "de mantenimiento"
+            QMessageBox.information(self, "Éxito", f"Usuario {rol_str} '{correo}' registrado correctamente.")
             self.nuevo_correo.clear()
             self.nuevo_nombre.clear()
             self.nuevo_apellido.clear()
             self.nueva_clave.clear()
+            self.combo_rol.setCurrentIndex(0)
             self.actualizar_lista()
         else:
             QMessageBox.warning(self, "Error", f"El correo '{correo}' ya está registrado.")
@@ -108,7 +135,8 @@ class GestionUsuariosDirector(QWidget):
     def actualizar_lista(self):
         self.lista_usuarios.clear()
         for usuario in self.ctrl_usuarios.usuarios:
-            texto = f"{usuario.nombre} {usuario.apellido} <{usuario.email}> ({usuario.rol})"
+            rol_etiqueta = "Administrador" if usuario.es_director() else "Mantenimiento"
+            texto = f"{usuario.nombre} {usuario.apellido} <{usuario.email}> [{rol_etiqueta}]"
             item = QListWidgetItem(texto)
             item.setData(Qt.UserRole, usuario.email)
             self.lista_usuarios.addItem(item)
@@ -126,8 +154,9 @@ class GestionUsuariosDirector(QWidget):
             QMessageBox.warning(self, "Error", "Usuario no encontrado.")
             return
 
-        if usuario.es_director():
-            QMessageBox.warning(self, "Error", "No se puede eliminar al usuario director.")
+        if self.usuario_actual and usuario.id_db == self.usuario_actual.id_db:
+            QMessageBox.warning(self, "Operación no permitida",
+                                "No puede eliminar su propio usuario mientras está conectado.")
             return
 
         confirm = QMessageBox.question(
