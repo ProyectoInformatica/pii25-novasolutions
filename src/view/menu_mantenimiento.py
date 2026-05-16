@@ -13,6 +13,7 @@ from src.control.controlador_actuadores import ControladorActuadores
 from src.control.controlador_sistema import ControladorSistema
 from src.control.controlador_mensajes import ControladorMensajes
 from src.view.estilos import BTN_PRIMARY, BTN_DANGER, PANEL_STYLE
+from src.view.Etiquetas_Sensores import formatear_medida  # ← nuevo
 
 
 class MenuMantenimiento(QWidget):
@@ -26,6 +27,7 @@ class MenuMantenimiento(QWidget):
 
         self.sensor_labels: Dict[int, QLabel] = {}
         self.actuador_labels: Dict[int, QLabel] = {}
+        self.sensor_tipos: Dict[int, str] = {}  # ← nuevo
         self.sistema = Sistema(sensors=[], actuators=[])
         self.ctrl_sistema = ControladorSistema(self.sistema)
 
@@ -195,6 +197,7 @@ class MenuMantenimiento(QWidget):
             if item.widget():
                 item.widget().setParent(None)
         self.sensor_labels.clear()
+        self.sensor_tipos.clear()  # ← nuevo
 
         self.ctrl_sensores.cargar_desde_bd()
         for s in self.ctrl_sensores.get_all_sensors():
@@ -202,7 +205,6 @@ class MenuMantenimiento(QWidget):
             item_layout = QHBoxLayout(item)
             item.setStyleSheet("background: rgba(255,255,255,0.05); border-radius:5px; margin:2px;")
 
-            # CORRECCIÓN: s.sensor_type en lugar de s.type
             info = QLabel(f"ID:{s.id} | <b>{s.sensor_type.upper()}</b>\n{s.ubicacion}")
             val_lbl = QLabel("--")
             val_lbl.setStyleSheet("color: #00ff00; font-size:14px; font-weight:bold;")
@@ -219,6 +221,7 @@ class MenuMantenimiento(QWidget):
 
             self.sensor_layout.addWidget(item)
             self.sensor_labels[s.id] = val_lbl
+            self.sensor_tipos[s.id] = s.sensor_type  # ← nuevo
 
     def cargar_actuadores_ui(self):
         for i in reversed(range(self.actuador_db_layout.count())):
@@ -269,7 +272,6 @@ class MenuMantenimiento(QWidget):
         self.combo_sensor_vinc.clear()
         self.ctrl_sensores.cargar_desde_bd()
         for s in self.ctrl_sensores.get_all_sensors():
-            # CORRECCIÓN: s.sensor_type en lugar de s.type
             self.combo_sensor_vinc.addItem(
                 f"ID:{s.id} - {s.sensor_type} ({s.ubicacion})",
                 s.id
@@ -321,7 +323,6 @@ class MenuMantenimiento(QWidget):
             QMessageBox.warning(self, "Error", "Sensor no encontrado.")
             return
 
-        # CORRECCIÓN: sensor.sensor_type en lugar de sensor.type
         if reglas.get(tipo_act) != sensor.sensor_type:
             QMessageBox.warning(
                 self, "Error",
@@ -354,7 +355,10 @@ class MenuMantenimiento(QWidget):
 
         for id_s, label in self.sensor_labels.items():
             valor = self.ctrl_sensores.get_ultima_medida(id_s)
-            label.setText(f"{valor:.2f}" if valor is not None else "N/A")
+            tipo = self.sensor_tipos.get(id_s, "")
+            texto, color = formatear_medida(tipo, valor)  # ← nuevo
+            label.setText(texto)
+            label.setStyleSheet(f"color: {color}; font-size:14px; font-weight:bold;")
 
         self.ctrl_sistema.update()
 

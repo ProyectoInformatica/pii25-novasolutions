@@ -116,7 +116,6 @@ class BaseDatos:
             conexion.close()
 
     def dar_baja_usuario(self, id_user: int) -> bool:
-        # Baja lógica: no se borra la fila, se marca como inactivo
         conexion = self.conectar()
         if not conexion:
             return False

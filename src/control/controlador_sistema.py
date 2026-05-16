@@ -8,10 +8,10 @@ logger.setLevel(logging.INFO)
 
 
 class ControladorSistema:
-    UMBRAL_TEMP_MAX = 35.0
-    UMBRAL_HUMO = 0.6
-    UMBRAL_LUZ = 400.0
-    UMBRAL_DISTANCIA = 50.0
+    UMBRAL_TEMP_MAX = 28.0
+    UMBRAL_HUMO = 2500
+    UMBRAL_LUZ = 1200
+    UMBRAL_DISTANCIA = 30.0
 
     def __init__(self, sistema: Sistema, db: BaseDatos = None, deadband: float = 0.3):
         self.sistema = sistema
