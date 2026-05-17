@@ -1,89 +1,62 @@
-# src/control/controlador_sistema.py
-
-from typing import Optional
-
+import logging
 from src.model.sistema import Sistema
-# Importar el nuevo actuador
+from src.model.basedatos import BaseDatos
 from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 
+logger = logging.getLogger("ControladorSistema")
+logger.setLevel(logging.INFO)
 
-class Controlador_Sistema:
 
-    def __init__(self, sistema: Sistema, deadband: float = 0.3):
+class ControladorSistema:
+    UMBRAL_TEMP_MAX = 28.0
+    UMBRAL_HUMO = 2500
+    UMBRAL_LUZ = 1200
+    UMBRAL_DISTANCIA = 30.0
+
+    def __init__(self, sistema: Sistema, db: BaseDatos = None, deadband: float = 0.3):
         self.sistema = sistema
+        self.db = db or BaseDatos()
         self.deadband = deadband
-        # Umbrales para control (ajustar según sea necesario)
-        self.UMBRAL_TEMP_MAX = 25.0  # <--- Temperatura MÁXIMA deseada (Auto)
-        self.UMBRAL_HUMO = 0.6
-        self.UMBRAL_LUZ = 400.0
-        self.UMBRAL_DISTANCIA = 50.0  # cm. Distancia para detectar presencia
 
     def update(self):
-        # 1. Leer temperatura
-        temp = None
-        try:
-            temp = self.sistema.get_temperature()
-        except RuntimeError as e:
-            print(f"[Controlador] Error leyendo temperatura: {e}")
-            return
-
-        # 2. Controlar la temperatura (Manual o Auto)
-        if self.sistema.mode == "manual" and self.sistema.manual_enabled:
-            # Lógica de control manual: Si la temperatura es > Target, encender Ventilador. Si es < Target, apagarlo.
-            if temp is not None:
-                target = self.sistema.manual_target
-                should_be_on = None
-
-                # Si la temperatura sube por encima del target, encender ventilador (para enfriar)
-                if temp > (target + self.deadband):
-                    should_be_on = True
-                    # Si la temperatura baja por debajo del target, apagar ventilador
-                elif temp < (target - self.deadband):
-                    should_be_on = False
-
-                if should_be_on is not None:
-                    self._set_actuators_by_type(Ventilador, should_be_on)
-
+        if self.sistema.mode == "manual":
+            if self.sistema.manual_enabled:
+                self._control_temperatura_manual()
+            else:
+                self._set_actuators_by_type(Ventilador, False)
         elif self.sistema.mode == "auto":
-            self._control_temperatura_auto(temp)
+            self._control_temperatura_auto()
 
-        # 3. Controlar Humo, Luz Ambiente y Luz de Pasillo
         self._control_humo()
         self._control_luz_exterior()
-        self._control_luz_pasillo()  # <-- NUEVO CONTROL
+        self._control_luz_pasillo()
 
-    def _control_temperatura_auto(self, current_temp: float):
-        if current_temp is None:
+    def _evaluar_ventilador(self, a: Ventilador, umbral: float):
+        temp = self.sistema.get_sensor_reading_by_id(a.id_sensor) if a.id_sensor is not None else None
+        if temp is None:
             return
-
-        target = self.UMBRAL_TEMP_MAX
-        should_be_on = None
-
-        # Si la temperatura es demasiado ALTA (supera el umbral), encender el ventilador
-        if current_temp > target:
+        if temp > (umbral + self.deadband):
             should_be_on = True
-
-        # Si la temperatura baja por debajo del umbral menos la banda muerta, apagar el ventilador
-        elif current_temp < (target - self.deadband):
+        elif temp < (umbral - self.deadband):
             should_be_on = False
+        else:
+            return
+        try:
+            a.set_state(should_be_on)
+            self.db.actualizar_estado_actuador(a.id, should_be_on)
+        except Exception as e:
+            logger.error(f"Error al actualizar ventilador {a.id}: {e}")
 
-        if should_be_on is not None:
-            self._set_actuators_by_type(Ventilador, should_be_on)
-
-    def _set_actuators(self, on: bool):
+    def _control_temperatura_manual(self):
+        target = self.sistema.manual_target
         for a in self.sistema.actuators:
-            try:
-                a.set_state(on)
-            except Exception as e:
-                print(f"[Controlador] Error al cambiar actuador {a}: {e}")
+            if isinstance(a, Ventilador):
+                self._evaluar_ventilador(a, target)
 
-    def _set_actuators_by_type(self, actuator_class: type, on: bool):
+    def _control_temperatura_auto(self):
         for a in self.sistema.actuators:
-            if isinstance(a, actuator_class):
-                try:
-                    a.set_state(on)
-                except Exception as e:
-                    print(f"[Controlador] Error al cambiar actuador {a}: {e}")
+            if isinstance(a, Ventilador):
+                self._evaluar_ventilador(a, self.UMBRAL_TEMP_MAX)
 
     def _control_humo(self):
         smoke_level = self.sistema.get_sensor_reading("smoke")
@@ -104,9 +77,16 @@ class Controlador_Sistema:
     def _control_luz_pasillo(self):
         distance = self.sistema.get_sensor_reading("distance")
         if distance is not None:
-            # Si la distancia es menor (hay presencia)
             if distance < self.UMBRAL_DISTANCIA:
                 self._set_actuators_by_type(LuzPasillo, True)
-            # Si la distancia es mayor (no hay presencia)
-            elif distance > (self.UMBRAL_DISTANCIA + 10.0):  # Histéresis de 10cm
+            elif distance > (self.UMBRAL_DISTANCIA + 10.0):
                 self._set_actuators_by_type(LuzPasillo, False)
+
+    def _set_actuators_by_type(self, actuator_class: type, on: bool):
+        for a in self.sistema.actuators:
+            if isinstance(a, actuator_class):
+                try:
+                    a.set_state(on)
+                    self.db.actualizar_estado_actuador(a.id, on)
+                except Exception as e:
+                    logger.error(f"Error al actualizar actuador {a.id}: {e}")

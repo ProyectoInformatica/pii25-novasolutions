@@ -1,172 +1,230 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout,
-    QGroupBox, QGridLayout
+    QGroupBox, QScrollArea, QFrame
 )
 from PySide6.QtCore import QTimer, Qt
+from typing import Dict
 
-# Importar las clases necesarias del modelo y control
-# ASUME que estas rutas son correctas y accesibles desde este archivo
+from src.model.usuario import Usuario
+from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
 from src.model.sistema import Sistema
-from src.model.sensor import Sensor
-from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo, Actuador
-from src.control.controlador_sistema import Controlador_Sistema
-from src.control.controlador_sensores import Controlador_Sensores
+from src.control.controlador_sensores import ControladorSensores
+from src.control.controlador_actuadores import ControladorActuadores
+from src.control.controlador_sistema import ControladorSistema
+from src.view.gestion_usuarios import GestionUsuariosDirector
+from src.view.reporte_view import ReporteHistorialView
+from src.view.gestion_escuelas import GestionEscuelas
+from src.control.controlador_mensajes import ControladorMensajes
+from src.view.estilos import BTN_PRIMARY, BTN_DANGER, GROUPBOX_STYLE
+from src.view.Etiquetas_Sensores import formatear_medida
 
-# from src.view.gestion_usuarios import GestionUsuariosDirector # Necesario para el botón de gestión
-# from src.view.inicio import Inicio # Necesario para cerrar sesión
 
 class MenuDirector(QWidget):
-    def __init__(self, usuario, sensor_data_file="simulation_data.json"):
+    def __init__(self, usuario: Usuario):
         super().__init__()
-
         self.usuario = usuario
-        self.sensor_data_file = sensor_data_file
+        self.ctrl_sensores = ControladorSensores()
+        self.ctrl_actuadores = ControladorActuadores()
+        self.ctrl_mensajes = ControladorMensajes()
 
-        self.setWindowTitle("Panel del Director")
-        # Ajustamos el tamaño para el contenido de monitoreo + gestión
-        self.setGeometry(200, 150, 800, 600)
-        self.setStyleSheet("background-color:#1E1E1E; color:white;")
+        self.sensor_widgets: Dict[int, QLabel] = {}
+        self.actuador_widgets: Dict[int, QLabel] = {}
+        self.sensor_tipos: Dict[int, str] = {}
 
-        # Sensores
-        self.sensors = [
-            Sensor(id="temp1", sensor_type="temperature", data_file=self.sensor_data_file),
-            Sensor(id="smoke1", sensor_type="smoke", data_file=self.sensor_data_file),
-            Sensor(id="light1", sensor_type="light", data_file=self.sensor_data_file),
-            Sensor(id="dist1", sensor_type="distance", data_file=self.sensor_data_file)
-        ]
+        self.sistema = Sistema(sensors=[], actuators=[])
+        self.ctrl_sistema = ControladorSistema(self.sistema)
 
-        # Actuadores
-        self.actuators = [
-            Ventilador(id="fan1"),
-            Rociador(id="rociador1"),
-            LuzExterior(id="luzext1"),
-            LuzPasillo(id="luzpasillo1")
-        ]
+        self.setWindowTitle("Panel del Director - Nova Solutions")
+        self.setGeometry(200, 150, 900, 700)
+        self.setStyleSheet("background-color:#0e143b; color:white;")
 
-        self.sistema = Sistema(sensors=self.sensors, actuators=self.actuators)
-        self.ctrl_sensores = Controlador_Sensores(self.sensors)
-        self.ctrl_sistema = Controlador_Sistema(self.sistema)
+        self.init_ui()
 
-        # LAYOUT PRINCIPAL
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.actualizar_todo)
+        self.timer.start(2000)
+
+    def init_ui(self):
         layout = QVBoxLayout()
 
-        titulo = QLabel(f"Bienvenido Director General: {usuario.nombre_usuario}")
+        titulo = QLabel(f"Bienvenido Director General: {self.usuario.nombre} {self.usuario.apellido}")
         titulo.setAlignment(Qt.AlignHCenter)
-        titulo.setStyleSheet("font-size:20px; margin-bottom: 10px;")
+        titulo.setStyleSheet("font-size:20px; margin-bottom: 10px; font-weight: bold;")
         layout.addWidget(titulo)
 
-        # BOTONES DE GESTIÓN
+        body_layout = QHBoxLayout()
+        body_layout.setSpacing(12)
+
+        # Panel izquierdo: opciones
         gestion_group = QGroupBox("Opciones de Dirección")
-        gestion_layout = QHBoxLayout()
-        gestion_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
+        gestion_group.setStyleSheet(GROUPBOX_STYLE)
+        gestion_layout = QVBoxLayout()
 
-        btn_usuarios = QPushButton("👥 Gestionar Usuarios")
+        btn_usuarios = QPushButton("Gestionar Usuarios")
         btn_usuarios.clicked.connect(self.abrir_gestion_usuarios)
+        btn_usuarios.setStyleSheet(BTN_PRIMARY)
+
+        btn_escuelas = QPushButton("Gestionar Escuelas")
+        btn_escuelas.clicked.connect(self.abrir_gestion_escuelas)
+        btn_escuelas.setStyleSheet(BTN_PRIMARY)
+
+        btn_reportes = QPushButton("Ver Reportes Históricos")
+        btn_reportes.clicked.connect(self.abrir_reportes)
+        btn_reportes.setStyleSheet(BTN_PRIMARY)
+
+        self.btn_mensajes = QPushButton("Mensajes")
+        self.btn_mensajes.clicked.connect(self.abrir_mensajeria)
+        self.btn_mensajes.setStyleSheet(BTN_PRIMARY)
+
         gestion_layout.addWidget(btn_usuarios)
-
-        btn_reportes = QPushButton("📈 Ver Reportes Históricos")
+        gestion_layout.addWidget(btn_escuelas)
         gestion_layout.addWidget(btn_reportes)
-
+        gestion_layout.addWidget(self.btn_mensajes)
+        gestion_layout.addStretch()
         gestion_group.setLayout(gestion_layout)
-        layout.addWidget(gestion_group)
+        gestion_group.setFixedWidth(240)
 
+        # Panel derecho: monitoreo
+        self.status_group = QGroupBox("Monitoreo de Infraestructura (BDD)")
+        self.status_group.setStyleSheet(GROUPBOX_STYLE)
 
-        # SECCIÓN DE MONITOREO
-        status_group = QGroupBox("Estado del Sistema en Tiempo Real")
-        status_layout = QGridLayout()
-        status_group.setStyleSheet("QGroupBox { border: 1px solid #555; margin-top: 10px; }")
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet("border: none; background: transparent;")
 
-        # Lecturas de Sensores
-        status_layout.addWidget(QLabel("### 📡 LECTURAS DE SENSORES"), 0, 0, 1, 2)
+        self.container_monitor = QWidget()
+        self.layout_monitor = QVBoxLayout(self.container_monitor)
+        self.layout_monitor.setAlignment(Qt.AlignTop)
 
-        self.lbl_temp = QLabel("Temperatura: -- °C")
-        self.lbl_temp.setStyleSheet("font-weight: bold; padding: 5px;")
-        status_layout.addWidget(QLabel("🌡️ Temp"), 1, 0)
-        status_layout.addWidget(self.lbl_temp, 1, 1)
+        scroll.setWidget(self.container_monitor)
 
-        self.lbl_humo = QLabel("Nivel de Humo: --")
-        status_layout.addWidget(QLabel("💨 Humo"), 2, 0)
-        status_layout.addWidget(self.lbl_humo, 2, 1)
+        status_main_layout = QVBoxLayout()
+        status_main_layout.addWidget(scroll)
+        self.status_group.setLayout(status_main_layout)
 
-        self.lbl_luz = QLabel("Nivel de Luz: -- Lux")
-        status_layout.addWidget(QLabel("💡 Luz"), 3, 0)
-        status_layout.addWidget(self.lbl_luz, 3, 1)
+        body_layout.addWidget(gestion_group, 0)
+        body_layout.addWidget(self.status_group, 1)
+        layout.addLayout(body_layout)
 
-        self.lbl_distancia = QLabel("Distancia: -- cm")
-        status_layout.addWidget(QLabel("📏 Distancia"), 4, 0)
-        status_layout.addWidget(self.lbl_distancia, 4, 1)
-
-        # Estado de Actuadores
-        status_layout.addWidget(QLabel("### ⚙️ ESTADO DE ACTUADORES"), 5, 0, 1, 2)
-
-        self.actuator_labels = {}
-        for i, actuator in enumerate(self.actuators):
-            lbl_name = QLabel(f"{actuator.name}:")
-            lbl_state = QLabel("🔴 OFF")
-            self.actuator_labels[actuator.id] = lbl_state
-
-            row = i + 6
-            status_layout.addWidget(lbl_name, row, 0)
-            status_layout.addWidget(lbl_state, row, 1)
-
-        status_group.setLayout(status_layout)
-        layout.addWidget(status_group)
-
-        # BOTÓN SALIR
         btn_salir = QPushButton("Cerrar sesión")
         btn_salir.clicked.connect(self.cerrar_sesion)
+        btn_salir.setStyleSheet(BTN_DANGER)
         layout.addWidget(btn_salir)
 
         self.setLayout(layout)
+        self.cargar_elementos()
 
+    def cargar_elementos(self):
+        while self.layout_monitor.count():
+            item = self.layout_monitor.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
 
-        # TIMER DE ACTUALIZACIÓN
-        self.timer = QTimer(self)
-        self.timer.setInterval(1000)  # 1 segundo
-        self.timer.timeout.connect(self.actualizar)
-        self.timer.start()
+        self.sensor_widgets.clear()
+        self.actuador_widgets.clear()
+        self.sensor_tipos.clear()
 
+        lbl_sensores = QLabel("SENSORES")
+        lbl_sensores.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
+        self.layout_monitor.addWidget(lbl_sensores)
 
-    # METODOS
-    def actualizar(self):
+        self.ctrl_sensores.cargar_desde_bd()
+        for s in self.ctrl_sensores.get_all_sensors():
+            fila, valor_lbl = self._crear_fila(f"{s.sensor_type} ({s.ubicacion})")
+            self.sensor_widgets[s.id] = valor_lbl
+            self.sensor_tipos[s.id] = s.sensor_type
+            self.layout_monitor.addWidget(fila)
 
-        # El Director solo monitorea; el sistema sigue en modo automatico
+        linea = QFrame()
+        linea.setFrameShape(QFrame.HLine)
+        linea.setStyleSheet("background-color: #555;")
+        self.layout_monitor.addWidget(linea)
+
+        lbl_actuadores = QLabel("ACTUADORES")
+        lbl_actuadores.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
+        self.layout_monitor.addWidget(lbl_actuadores)
+
+        for a in self.ctrl_actuadores.get_all_con_sensor():
+            fila, estado_lbl = self._crear_fila(f"{a['nombre']} - [{a['tipo']}]")
+            self.actuador_widgets[a['id']] = estado_lbl
+            self.layout_monitor.addWidget(fila)
+
+        # Cargar actuadores en el sistema de control
+        tipo_map = {
+            "Ventilador": Ventilador,
+            "Rociador": Rociador,
+            "Luz Exterior": LuzExterior,
+            "Luz Pasillo": LuzPasillo,
+        }
+        self.sistema.actuators = []
+        for a in self.ctrl_actuadores.get_all_con_sensor():
+            cls = tipo_map.get(a['tipo'])
+            if cls:
+                self.sistema.actuators.append(
+                    cls(id=str(a['id']), id_sensor=a['id_sensor_vinculado'])
+                )
+
+    def _crear_fila(self, nombre_texto: str):
+        fila = QWidget()
+        f_layout = QHBoxLayout(fila)
+        nombre_lbl = QLabel(f"<b>{nombre_texto}</b>:")
+        valor_lbl = QLabel("...")
+        valor_lbl.setStyleSheet("color: #00ff00; font-family: monospace; font-size: 14px;")
+        f_layout.addWidget(nombre_lbl)
+        f_layout.addStretch()
+        f_layout.addWidget(valor_lbl)
+        return fila, valor_lbl
+
+    def actualizar_todo(self):
+        self.ctrl_sensores.actualizar_lecturas()
+        self.sistema.sensors = self.ctrl_sensores.get_all_sensors()
+
         self.ctrl_sistema.update()
 
-        def safe_read(sensor_type):
-            try:
-                return self.sistema.get_sensor_reading(sensor_type)
-            except RuntimeError:
-                return None
+        for id_s, label in self.sensor_widgets.items():
+            medida = self.ctrl_sensores.get_ultima_medida(id_s)
+            tipo = self.sensor_tipos.get(id_s, "")
+            texto, color = formatear_medida(tipo, medida)
+            label.setText(texto)
+            label.setStyleSheet(f"color: {color}; font-family: monospace; font-size: 14px; font-weight: bold;")
 
-        temp = safe_read("temperature")
-        smoke = safe_read("smoke")
-        light = safe_read("light")
-        distance = safe_read("distance")
+        # Refrescar labels de actuadores
+        for a in self.ctrl_actuadores.get_all_con_sensor():
+            if a['id'] in self.actuador_widgets:
+                estado_txt = "ENCENDIDO" if a['estado_actual'] == 1 else "APAGADO"
+                color = "#00ff00" if a['estado_actual'] == 1 else "#ff4444"
+                self.actuador_widgets[a['id']].setText(estado_txt)
+                self.actuador_widgets[a['id']].setStyleSheet(f"color: {color}; font-weight: bold;")
 
-        # Actualizacion de etiquetas de sensores
-        self.lbl_temp.setText(f"Temperatura: {temp:.2f} °C" if temp is not None else "Temperatura: ⚠️ ERROR (JSON)")
-        self.lbl_humo.setText(f"Nivel de Humo: {smoke:.2f}" if smoke is not None else "Nivel de Humo: ⚠️ ERROR (JSON)")
-        self.lbl_luz.setText(f"Nivel de Luz: {light:.2f} Lux" if light is not None else "Nivel de Luz: ⚠️ ERROR (JSON)")
-        self.lbl_distancia.setText(
-            f"Distancia: {distance:.2f} cm" if distance is not None else "Distancia: ⚠️ ERROR (JSON)")
+        self._actualizar_badge_mensajes()
 
-        # Actualizar el estado de los actuadores en la UI
-        for actuator in self.actuators:
-            label = self.actuator_labels.get(actuator.id)
-            if label:
-                state_text = "🟢 ON" if actuator.state else "🔴 OFF"
-                label.setText(state_text)
+    def _actualizar_badge_mensajes(self):
+        cantidad = self.ctrl_mensajes.contar_no_leidos(self.usuario.id_db)
+        if cantidad > 0:
+            self.btn_mensajes.setText(f"Mensajes  [{cantidad}]")
+        else:
+            self.btn_mensajes.setText("Mensajes")
 
     def abrir_gestion_usuarios(self):
-        # Se necesita importar la clase 'GestionUsuariosDirector'
-        from src.view.gestion_usuarios import GestionUsuariosDirector
         self.gestion = GestionUsuariosDirector(usuario=self.usuario)
         self.gestion.show()
 
+    def abrir_gestion_escuelas(self):
+        self.gestion_escuelas = GestionEscuelas()
+        self.gestion_escuelas.show()
+
+    def abrir_mensajeria(self):
+        from src.view.mensajeria_view import MensajeriaView
+        ventana_chat = MensajeriaView(self.usuario)
+        ventana_chat.exec()
+
+    def abrir_reportes(self):
+        self.reporte_view = ReporteHistorialView()
+        self.reporte_view.show()
+
     def cerrar_sesion(self):
-        # Se necesita importar la clase 'Inicio'
         from src.view.inicio import Inicio
+        self.timer.stop()
         self.inicio = Inicio()
         self.inicio.show()
         self.close()

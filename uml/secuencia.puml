@@ -1,0 +1,90 @@
+@startuml
+actor Usuario as U
+
+boundary Inicio
+boundary Login
+boundary MenuInvitado
+boundary MenuMantenimiento
+boundary MenuDirector
+boundary GestionUsuariosDirector
+boundary ReporteHistorialView
+
+control ControladorUsuarios
+control Controlador_Sistema
+control Controlador_Sensores
+
+entity Sistema
+entity Sensor
+entity Actuador
+entity Reporteador
+entity Usuario as UsuarioModel
+
+== Inicio ==
+U -> Inicio : seleccionar opción
+
+alt Entrar como Invitado
+    Inicio -> MenuInvitado : abrir()
+    loop Cada intervalo (QTimer)
+        MenuInvitado -> Controlador_Sensores : read_all()
+        Controlador_Sensores -> Sensor : read()
+        Sensor --> Controlador_Sensores : valor
+        Controlador_Sensores --> MenuInvitado : datos sensores
+    end
+
+else Iniciar sesión
+    Inicio -> Login : abrir()
+    U -> Login : introducir credenciales
+    Login -> ControladorUsuarios : autenticar(usuario, clave)
+    ControladorUsuarios -> UsuarioModel : verificar_credenciales()
+    UsuarioModel --> ControladorUsuarios : true/false
+
+    alt Credenciales válidas
+
+        alt Rol = Director
+            Login -> MenuDirector : abrir()
+            loop Cada intervalo (QTimer)
+                MenuDirector -> Controlador_Sistema : update()
+                Controlador_Sistema -> Sistema : get_temperature()
+                Sistema -> Sensor : read()
+                Sensor --> Sistema : temp
+                Sistema --> Controlador_Sistema : temp
+                Controlador_Sistema -> Actuador : set_state()
+
+                opt Registrar histórico
+                    Controlador_Sistema -> Reporteador : registrar_lectura_actual()
+                end
+            end
+
+            opt Ver reportes históricos
+                MenuDirector -> ReporteHistorialView : abrir()
+                ReporteHistorialView -> Reporteador : get_historial_sensores()
+            end
+
+            opt Gestionar usuarios
+                MenuDirector -> GestionUsuariosDirector : abrir()
+                GestionUsuariosDirector -> ControladorUsuarios : registrar/eliminar_usuario()
+            end
+
+        else Rol = Mantenimiento
+            Login -> MenuMantenimiento : abrir()
+            loop Cada intervalo (QTimer)
+                MenuMantenimiento -> Controlador_Sistema : update()
+                Controlador_Sistema -> Sistema : get_temperature()
+                Sistema -> Sensor : read()
+                Sensor --> Sistema : temp
+                Sistema --> Controlador_Sistema : temp
+                Controlador_Sistema -> Actuador : set_state()
+            end
+
+            opt Cambiar modo manual
+                MenuMantenimiento -> Sistema : mode = manual
+                MenuMantenimiento -> Sistema : manual_target = valor
+            end
+
+        end
+
+    else Credenciales inválidas
+        Login -> Login : mostrar error
+    end
+end
+@enduml

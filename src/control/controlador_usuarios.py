@@ -1,92 +1,44 @@
-import json
-import os
+from typing import List, Optional
+from src.model.basedatos import BaseDatos
 from src.model.usuario import Usuario
 
 
 class ControladorUsuarios:
     def __init__(self):
-        self.ruta_json = "usuarios.json"
-        self.usuarios = self.cargar_usuarios()
+        self.db = BaseDatos()
 
-    def cargar_usuarios(self):
-        if not os.path.exists(self.ruta_json):
-            usuarios_objects = self.crearUsuariosIniciales()
-            usuarios_json_array = self.usuariosToJson(usuarios_objects)
+    def autenticar(self, email: str, contrasena: str) -> Optional[Usuario]:
+        row = self.db.autenticar_usuario(email, contrasena)
+        return self._fila_a_usuario(row) if row else None
 
-            with open(self.ruta_json, "w", encoding="utf-8") as openFile:
-                json.dump(usuarios_json_array, openFile, indent=4)
+    def obtener_todos(self) -> List[Usuario]:
+        return [self._fila_a_usuario(row) for row in self.db.obtener_todos_usuarios()]
 
-        with open(self.ruta_json, "r", encoding="utf-8") as openFile:
-            datos = json.load(openFile)
-            return [Usuario.from_json_data(**u) for u in datos]
+    def registrar_usuario(self, email: str, nombre: str, apellido: str, contrasena: str, rol: str) -> bool:
+        tipo_db = '1' if rol == "director" else '0'
+        return self.db.registrar_usuario(nombre, contrasena, apellido, email, tipo_db)
 
-    def crearUsuariosIniciales(self):
-        usuariosIniciales = [
-            Usuario("director", "1234", "director"),
-            Usuario("mantenimiento", "abcd", "mantenimiento"),
-        ]
-        return usuariosIniciales
+    def eliminar_usuario(self, id_user: int) -> bool:
+        return self.db.dar_baja_usuario(id_user)
 
-    def usuariosToJson(self, usuarios):
-        usuarios_array = []
+    def hay_administradores(self) -> bool:
+        return self.db.hay_directores_activos()
 
-        for user in usuarios:
-            usuario_dict = {
-                "nombre_usuario": user.nombre_usuario,
-                "salt": self.asegurarHex(user.salt),
-                "contrasena": self.asegurarHex(user.contrasenaHasheada),
-                "rol": user.rol
-            }
-            usuarios_array.append(usuario_dict)
+    def obtener_usuario_por_email(self, email: str) -> Optional[Usuario]:
+        row = self.db.obtener_usuario_por_email(email)
+        return self._fila_a_usuario(row) if row else None
 
-        return usuarios_array
+    @property
+    def usuarios(self) -> List[Usuario]:
+        return self.obtener_todos()
 
-    def asegurarHex(self, dato):
-        if isinstance(dato, str):
-            return dato
-        else:
-            return dato.hex()
-
-    def asegurarBytes(self, dato):
-        if isinstance(dato, bytes):
-            return dato
-        else:
-            return bytes.fromhex(dato)
-
-    def guardar_usuarios(self):
-        datos = [
-            {
-                "nombre_usuario": u.nombre_usuario,
-                "salt": self.asegurarHex(u.salt),
-                "contrasena": self.asegurarHex(u.contrasenaHasheada),
-                "rol": u.rol
-            }
-            for u in self.usuarios
-        ]
-        with open(self.ruta_json, "w", encoding="utf-8") as openFile:
-            json.dump(datos, openFile, indent=4, ensure_ascii=False)
-
-    def autenticar(self, nombre_usuario, contrasena):
-        for usuario in self.usuarios:
-            if usuario.verificar_credenciales(nombre_usuario, contrasena):
-                return usuario
-        return None
-
-    def registrar_usuario(self, nombre_usuario, contrasena, rol):
-        if any(u.nombre_usuario == nombre_usuario.lower().strip() for u in self.usuarios):
-            print("El usuario ya existe.")
-            return False
-
-        nuevo_usuario = Usuario(nombre_usuario, contrasena, rol)
-        self.usuarios.append(nuevo_usuario)
-        self.guardar_usuarios()
-        print(f"Usuario '{nombre_usuario}' registrado correctamente.")
-        return True
-
-    def eliminar_usuario(self, nombre_usuario):
-        for usuario in self.usuarios:
-            if usuario.nombre_usuario == nombre_usuario:
-                self.usuarios.remove(usuario)
-                self.guardar_usuarios()
-                return True
-        return False
+    @staticmethod
+    def _fila_a_usuario(row: dict) -> Usuario:
+        return Usuario(
+            email=row['mail'],
+            contrasena=row.get('password', ''),
+            rol=row['tipo'],
+            nombre=row['nombre'],
+            apellido=row['apellido'],
+            id_db=row['id']
+        )
