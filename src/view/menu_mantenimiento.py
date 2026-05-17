@@ -253,9 +253,15 @@ class MenuMantenimiento(QWidget):
             est_lbl = QLabel("OFF")
             est_lbl.setStyleSheet("font-weight:bold; color: #ff4444;")
 
+            btn_baja = QPushButton("X")
+            btn_baja.setFixedSize(30, 30)
+            btn_baja.setStyleSheet("background:#883333; color:white; border-radius:15px; font-weight:bold;")
+            btn_baja.clicked.connect(lambda _, id_a=a['id']: self.eliminar_actuador(id_a))
+
             item_layout.addWidget(info)
             item_layout.addStretch()
             item_layout.addWidget(est_lbl)
+            item_layout.addWidget(btn_baja)
 
             self.actuador_db_layout.addWidget(item)
             self.actuador_labels[a['id']] = est_lbl
@@ -301,6 +307,16 @@ class MenuMantenimiento(QWidget):
             if self.ctrl_sensores.eliminar_sensor(id_s):
                 self.cargar_sensores_ui()
                 self.cargar_sensores_en_combo()
+                self.cargar_actuadores_ui()
+
+    def eliminar_actuador(self, id_a: int):
+        reply = QMessageBox.question(self, 'Confirmar', f"¿Dar de baja al actuador ID {id_a}?",
+                                     QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            if self.ctrl_actuadores.dar_baja_actuador(id_a):
+                self.cargar_actuadores_ui()
+            else:
+                QMessageBox.critical(self, "Error", "No se pudo dar de baja el actuador.")
 
     def crear_actuador(self):
         nombre = self.input_nom_act.text()

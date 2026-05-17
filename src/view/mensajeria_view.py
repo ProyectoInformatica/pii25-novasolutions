@@ -311,7 +311,15 @@ class MensajeriaView(QDialog):
         else:
             QMessageBox.critical(self, "Error", "No se pudo enviar el mensaje.")
 
+    def _detener_hilo(self):
+        if hasattr(self, '_hilo') and self._hilo.isRunning():
+            self._hilo.requestInterruption()
+            self._hilo.wait(2000)
+
+    def reject(self):
+        self._detener_hilo()
+        super().reject()
+
     def closeEvent(self, event):
-        self._hilo.requestInterruption()
-        self._hilo.wait(2000)
+        self._detener_hilo()
         super().closeEvent(event)

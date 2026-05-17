@@ -216,7 +216,6 @@ class BaseDatos:
             conexion.close()
 
     def dar_baja_sensor(self, id_sensor: int) -> bool:
-        # Baja lógica: no se borra la fila, se marca como inactivo
         conexion = self.conectar()
         if not conexion:
             return False
@@ -225,6 +224,25 @@ class BaseDatos:
             cursor.execute(
                 "UPDATE sensor SET activo = 0, fecha_baja = NOW() WHERE id = %s",
                 (id_sensor,)
+            )
+            cursor.execute(
+                "UPDATE actuador SET activo = 0, fecha_baja = NOW() WHERE id_sensor_vinculado = %s AND activo = 1",
+                (id_sensor,)
+            )
+            conexion.commit()
+            return cursor.rowcount >= 0
+        finally:
+            conexion.close()
+
+    def dar_baja_actuador(self, id_actuador: int) -> bool:
+        conexion = self.conectar()
+        if not conexion:
+            return False
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "UPDATE actuador SET activo = 0, fecha_baja = NOW() WHERE id = %s",
+                (id_actuador,)
             )
             conexion.commit()
             return cursor.rowcount > 0
