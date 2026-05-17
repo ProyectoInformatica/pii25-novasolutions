@@ -19,7 +19,6 @@ class ControladorUsuarios:
         return self.db.registrar_usuario(nombre, contrasena, apellido, email, tipo_db)
 
     def eliminar_usuario(self, id_user: int) -> bool:
-        """Baja lógica por PK. No borra la fila de la base de datos."""
         return self.db.dar_baja_usuario(id_user)
 
     def hay_administradores(self) -> bool:

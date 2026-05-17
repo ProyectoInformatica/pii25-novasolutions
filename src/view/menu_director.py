@@ -6,13 +6,17 @@ from PySide6.QtCore import QTimer, Qt
 from typing import Dict
 
 from src.model.usuario import Usuario
+from src.model.actuador import Ventilador, Rociador, LuzExterior, LuzPasillo
+from src.model.sistema import Sistema
 from src.control.controlador_sensores import ControladorSensores
 from src.control.controlador_actuadores import ControladorActuadores
+from src.control.controlador_sistema import ControladorSistema
 from src.view.gestion_usuarios import GestionUsuariosDirector
 from src.view.reporte_view import ReporteHistorialView
 from src.view.gestion_escuelas import GestionEscuelas
 from src.control.controlador_mensajes import ControladorMensajes
 from src.view.estilos import BTN_PRIMARY, BTN_DANGER, GROUPBOX_STYLE
+from src.view.Etiquetas_Sensores import formatear_medida
 
 
 class MenuDirector(QWidget):
@@ -25,6 +29,10 @@ class MenuDirector(QWidget):
 
         self.sensor_widgets: Dict[int, QLabel] = {}
         self.actuador_widgets: Dict[int, QLabel] = {}
+        self.sensor_tipos: Dict[int, str] = {}
+
+        self.sistema = Sistema(sensors=[], actuators=[])
+        self.ctrl_sistema = ControladorSistema(self.sistema)
 
         self.setWindowTitle("Panel del Director - Nova Solutions")
         self.setGeometry(200, 150, 900, 700)
@@ -114,6 +122,7 @@ class MenuDirector(QWidget):
 
         self.sensor_widgets.clear()
         self.actuador_widgets.clear()
+        self.sensor_tipos.clear()
 
         lbl_sensores = QLabel("SENSORES")
         lbl_sensores.setStyleSheet("font-weight: bold; color: #3489e2; margin-top: 10px;")
@@ -121,9 +130,9 @@ class MenuDirector(QWidget):
 
         self.ctrl_sensores.cargar_desde_bd()
         for s in self.ctrl_sensores.get_all_sensors():
-            # CORRECCIÓN: s.sensor_type en lugar de s.type
             fila, valor_lbl = self._crear_fila(f"{s.sensor_type} ({s.ubicacion})")
             self.sensor_widgets[s.id] = valor_lbl
+            self.sensor_tipos[s.id] = s.sensor_type
             self.layout_monitor.addWidget(fila)
 
         linea = QFrame()
@@ -140,6 +149,21 @@ class MenuDirector(QWidget):
             self.actuador_widgets[a['id']] = estado_lbl
             self.layout_monitor.addWidget(fila)
 
+        # Cargar actuadores en el sistema de control
+        tipo_map = {
+            "Ventilador": Ventilador,
+            "Rociador": Rociador,
+            "Luz Exterior": LuzExterior,
+            "Luz Pasillo": LuzPasillo,
+        }
+        self.sistema.actuators = []
+        for a in self.ctrl_actuadores.get_all_con_sensor():
+            cls = tipo_map.get(a['tipo'])
+            if cls:
+                self.sistema.actuators.append(
+                    cls(id=str(a['id']), id_sensor=a['id_sensor_vinculado'])
+                )
+
     def _crear_fila(self, nombre_texto: str):
         fila = QWidget()
         f_layout = QHBoxLayout(fila)
@@ -152,10 +176,19 @@ class MenuDirector(QWidget):
         return fila, valor_lbl
 
     def actualizar_todo(self):
+        self.ctrl_sensores.actualizar_lecturas()
+        self.sistema.sensors = self.ctrl_sensores.get_all_sensors()
+
+        self.ctrl_sistema.update()
+
         for id_s, label in self.sensor_widgets.items():
             medida = self.ctrl_sensores.get_ultima_medida(id_s)
-            label.setText(f"{medida:.2f}" if medida is not None else "Sin datos")
+            tipo = self.sensor_tipos.get(id_s, "")
+            texto, color = formatear_medida(tipo, medida)
+            label.setText(texto)
+            label.setStyleSheet(f"color: {color}; font-family: monospace; font-size: 14px; font-weight: bold;")
 
+        # Refrescar labels de actuadores
         for a in self.ctrl_actuadores.get_all_con_sensor():
             if a['id'] in self.actuador_widgets:
                 estado_txt = "ENCENDIDO" if a['estado_actual'] == 1 else "APAGADO"

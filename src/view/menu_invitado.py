@@ -6,6 +6,7 @@ from PySide6.QtCore import Qt, QTimer
 
 from src.control.controlador_sensores import ControladorSensores
 from src.view.estilos import BTN_PRIMARY, BTN_DANGER
+from src.view.Etiquetas_Sensores import formatear_medida  # ← nuevo
 
 CARD_STYLE = """
 QFrame#SensorCard {
@@ -34,7 +35,9 @@ class MenuInvitado(QWidget):
     def __init__(self):
         super().__init__()
         self.ctrl_sensores = ControladorSensores()
-        self.cards = {}
+        self.cards: dict[int, QLabel] = {}
+        # Guardamos el tipo de cada sensor para formatear correctamente
+        self.sensor_tipos: dict[int, str] = {}
 
         self.setWindowTitle("Monitor Público - Nova Solutions")
         self.setGeometry(200, 150, 850, 600)
@@ -94,7 +97,7 @@ class MenuInvitado(QWidget):
 
             layout_c = QVBoxLayout(card)
 
-            lbl_tipo = QLabel(f"● {s.sensor_type.upper()}")
+            lbl_tipo = QLabel(f"{s.sensor_type.upper()}")
             lbl_tipo.setObjectName("TypeLabel")
 
             lbl_ubica = QLabel(s.ubicacion)
@@ -111,6 +114,7 @@ class MenuInvitado(QWidget):
 
             self.grid_layout.addWidget(card, row, col)
             self.cards[s.id] = lbl_valor
+            self.sensor_tipos[s.id] = s.sensor_type
 
             col += 1
             if col > 2:
@@ -120,7 +124,13 @@ class MenuInvitado(QWidget):
     def actualizar_lecturas(self):
         for id_s, label in self.cards.items():
             valor = self.ctrl_sensores.get_ultima_medida(id_s)
-            label.setText(f"{valor:.1f}" if valor is not None else "N/A")
+            tipo = self.sensor_tipos.get(id_s, "")
+            texto, color = formatear_medida(tipo, valor)
+            label.setText(texto)
+            # En el invitado el ValueLabel usa stylesheet inline para el color
+            label.setStyleSheet(
+                f"font-size: 22px; font-weight: bold; color: {color};"
+            )
 
     def abrir_reportes(self):
         from src.view.reporte_view import ReporteHistorialView
