@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="918074fc-6c49-4386-aa3e-b4c1e4cead0b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/control/controlador_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_usuarios.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/basedatos.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/basedatos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/gestion_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/gestion_usuarios.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/control/controlador_mensajes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/control/controlador_mensajes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/mensajeria_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/mensajeria_view.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,15 +1,19 @@
-from typing import List, Optional
+import threading
+from typing import List
 from src.model.basedatos import BaseDatos
 from src.model.mensaje import Mensaje
+from src.model.lista_mensajes import ListaMensajes
 from src.model.usuario import Usuario
 
 
 class ControladorMensajes:
     def __init__(self):
         self.db = BaseDatos()
+        self._lock = threading.Lock()
 
     def obtener_contactos(self, id_usuario_actual: int) -> List[Usuario]:
-        filas = self.db.obtener_usuarios_activos()
+        with self._lock:
+            filas = self.db.obtener_usuarios_activos()
         contactos = []
         for row in filas:
             if row['id'] == id_usuario_actual:
@@ -24,11 +28,12 @@ class ControladorMensajes:
             ))
         return contactos
 
-    def obtener_conversacion(self, id_yo: int, id_contacto: int) -> List[Mensaje]:
-        filas = self.db.obtener_conversacion(id_yo, id_contacto)
-        mensajes = []
+    def obtener_conversacion(self, id_yo: int, id_contacto: int) -> ListaMensajes:
+        with self._lock:
+            filas = self.db.obtener_conversacion(id_yo, id_contacto)
+        lista = ListaMensajes()
         for row in filas:
-            mensajes.append(Mensaje(
+            lista.agregar(Mensaje(
                 id_mensaje=row['id_mensaje'],
                 contenido=row['contenido'],
                 hora=row['hora'],
@@ -38,18 +43,22 @@ class ControladorMensajes:
                 nombre_remitente=row['nombre_remitente'],
                 apellido_remitente=row['apellido_remitente'],
             ))
-        return mensajes
+        return lista
 
     def enviar_mensaje(self, id_remitente: int, id_destinatario: int, texto: str) -> bool:
         if not texto.strip():
             return False
-        return self.db.enviar_mensaje(id_remitente, id_destinatario, texto.strip())
+        with self._lock:
+            return self.db.enviar_mensaje(id_remitente, id_destinatario, texto.strip())
 
     def contar_no_leidos(self, id_usuario: int) -> int:
-        return self.db.contar_no_leidos(id_usuario)
+        with self._lock:
+            return self.db.contar_no_leidos(id_usuario)
 
     def contar_no_leidos_de(self, id_remitente: int, id_yo: int) -> int:
-        return self.db.contar_no_leidos_de_contacto(id_remitente, id_yo)
+        with self._lock:
+            return self.db.contar_no_leidos_de_contacto(id_remitente, id_yo)
 
     def marcar_leidos(self, id_remitente_contacto: int, id_yo: int) -> None:
-        self.db.marcar_leidos(id_remitente_contacto, id_yo)
+        with self._lock:
+            self.db.marcar_leidos(id_remitente_contacto, id_yo)
