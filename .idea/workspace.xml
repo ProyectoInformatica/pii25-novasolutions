@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="918074fc-6c49-4386-aa3e-b4c1e4cead0b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/Etiquetas_Sensores.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/Etiquetas_Sensores.py" afterDir="false" />
-    </list>
+    <list default="true" id="918074fc-6c49-4386-aa3e-b4c1e4cead0b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
